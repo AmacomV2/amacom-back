@@ -11,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 @RequestMapping("/mainHome")
 public class MainController {
 
-    @RolesAllowed("ROLE_ADMIN") //hola
+    @RolesAllowed("ROLE_ADMIN")
     @GetMapping("/despliegue")
     public String depliegue(){
         return "Correcto";

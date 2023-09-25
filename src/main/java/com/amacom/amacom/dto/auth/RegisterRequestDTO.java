@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class RegisterRequestDTO implements Serializable {
     @NotNull(message = "Campo no puede ser nulo")
     private String password;
 
-    private Long idPersona;
+    private UUID idPersona;
 
     private Long idRol;
 

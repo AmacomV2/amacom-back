@@ -4,19 +4,20 @@ import com.amacom.amacom.model.Persona;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface IPersonaService {
 
     List<Persona> getAll();
 
-    Persona findPersonaById(Long id);
+    Persona findPersonaById(UUID id);
 
     Persona createPersona(Persona persona);
 
     Persona updatePersona(Persona persona);
 
-    void deletePersonaById(Long id);
+    void deletePersonaById(UUID id);
 
 
 }

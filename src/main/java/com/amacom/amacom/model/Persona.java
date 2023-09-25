@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,10 +19,8 @@ public class Persona implements Serializable {
     private static final long serialVersionUID = 3680251739268601659L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(name = "ID_TIPO_DOCUMENTO", nullable = false)
     private Long idTipoDocumento;
 
@@ -34,14 +33,14 @@ public class Persona implements Serializable {
     @Column(name = "APELLIDO", nullable = false)
     private String apellido;
 
-    @Column(name = "GENERO", nullable = false)
-    private String genero;
+    @Column(name = "ID_GENERO", nullable = false)
+    private Long idGenero;
 
     @Column(name = "DIRECCION", nullable = false)
     private String direccion;
 
-    @Column(name = "ESTADO_CIVIL")
-    private String estadoCivil;
+    @Column(name = "ID_ESTADO_CIVIL", nullable = false)
+    private Long idEstadoCivil;
 
     @Column(name = "OCUPACION")
     private String ocupacion;
@@ -62,10 +61,13 @@ public class Persona implements Serializable {
     @Column(name = "ID_FOTO_USUARIO")
     private String linkFoto;
 
-    /*@Column(name = "ID_FOTO_USUARIO")
-    @Getter
-    private Long idFotoUsuario; */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    private Date fechaHoraCreacion;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "FECHA_HORA_MODIFICACION")
+    private Date fechaHoraModificacion;
 
     //Relaciones
 
@@ -73,5 +75,15 @@ public class Persona implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_TIPO_DOCUMENTO",insertable = false,updatable = false)
     private TipoDocumento tipoDocumento;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_ESTADO_CIVIL",insertable = false,updatable = false)
+    private EstadoCivil estadoCivil;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_GENERO",insertable = false,updatable = false)
+    private Genero genero;
 
 }

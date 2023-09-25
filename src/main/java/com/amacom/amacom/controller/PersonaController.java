@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth/persona")
+@RequestMapping("/persona")
 public class PersonaController {
 
     private IPersonaService personaService;
@@ -33,7 +34,7 @@ public class PersonaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PersonaDTO> findPersonaById(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         Persona persona = this.personaService.findPersonaById(id);
         if (persona == null) {
             return new ResponseEntity<>(new PersonaDTO(), HttpStatus.NO_CONTENT);
@@ -41,7 +42,7 @@ public class PersonaController {
         return new ResponseEntity<>(PersonaMapper.INSTANCE.toPersonaDTO(persona), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<PersonaDTO> createPersona(
             @Valid @RequestBody PersonaDTO personaDTO){
         Persona persona = PersonaMapper.INSTANCE.toPersona(personaDTO);
@@ -63,7 +64,7 @@ public class PersonaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deletePersona(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         this.personaService.deletePersonaById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }

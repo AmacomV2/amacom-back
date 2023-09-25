@@ -6,7 +6,9 @@ import com.amacom.amacom.model.auth.LoginRequest;
 import com.amacom.amacom.model.auth.RegisterRequest;
 import com.amacom.amacom.model.auth.Usuario;
 import com.amacom.amacom.model.auth.AuthResponse;
+import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.service.interfaces.auth.IAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,7 @@ import com.amacom.amacom.util.Jwt.JwtService;
 import com.amacom.amacom.repository.auth.IUsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -36,6 +39,8 @@ public class AuthServiceImpl implements IAuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+
+    private IPersonaRepository personaRepository;
 
     public AuthResponse login(LoginRequest request) {
 
@@ -55,7 +60,10 @@ public class AuthServiceImpl implements IAuthService {
 
 
 
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
+
+        var persona = this.personaRepository.findById(request.getIdPersona()).orElseThrow(DataNotFoundException::new);
 
         this.validarRegistro(request);
         Usuario user = Usuario.builder()
@@ -63,8 +71,9 @@ public class AuthServiceImpl implements IAuthService {
             .email(request.getEmail())
             .password(passwordEncoder.encode( request.getPassword()))
             .idPersona(request.getIdPersona())
+            .persona(persona)
             .enumRol(ERole.ROLE_USER)
-            .idRol(request.getIdRol())
+            .idRol(4L)
             .fechaHoraCreacion(new Date())
             .build();
         usuarioRepository.save(user);
@@ -96,5 +105,10 @@ public class AuthServiceImpl implements IAuthService {
         return Arrays.stream(ERole.values())
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toList());
+    }
+
+    @Autowired
+    public void setPersonaRepository(IPersonaRepository personaRepository) {
+        this.personaRepository = personaRepository;
     }
 }

@@ -2,6 +2,7 @@ package com.amacom.amacom.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,10 +11,10 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "TIPO_DOCUMENTO")
-public class TipoDocumento implements Serializable {
+@Table(name = "ESTADO_CIVIL")
+public class EstadoCivil implements Serializable {
 
-    private static final long serialVersionUID = 3518906028901853324L;
+    private static final long serialVersionUID = -5401910043243180613L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +34,5 @@ public class TipoDocumento implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "FECHA_HORA_MODIFICACION")
     private Date fechaHoraModificacion;
+
 }

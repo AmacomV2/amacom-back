@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeRequests(authRequest ->
                         authRequest
                                 .antMatchers("/auth/**").permitAll()
+                                .antMatchers("/persona/create").permitAll()
                                 //.antMatchers("/user/**").hasRole("ROLE_USER")
                                 //.antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                                 //.antMatchers("/moderador/**").hasRole("ROLE_MODERATOR")

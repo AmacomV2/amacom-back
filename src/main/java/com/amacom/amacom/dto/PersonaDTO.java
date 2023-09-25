@@ -1,5 +1,7 @@
 package com.amacom.amacom.dto;
 
+import com.amacom.amacom.util.ITools;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,10 +21,20 @@ public class PersonaDTO implements Serializable {
 
     private static final long serialVersionUID = -7256480951049205013L;
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
     private Long idTipoDocumento;
+    private String nombreTipoDocumento;
+
+    @NotNull(message = "Campo no puede ser nulo")
+    private Long idGenero;
+
+    private String nombreGenero;
+
+    @NotNull(message = "Campo no puede ser nulo")
+    private Long idEstadoCivil;
+    private String nombreEstadoCivil;
 
     @NotNull(message = "Campo no puede ser nulo")
     private String documento;
@@ -32,18 +45,14 @@ public class PersonaDTO implements Serializable {
     @NotNull(message = "Campo no puede ser nulo")
     private String apellido;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private String genero;
 
     @NotNull(message = "Campo no puede ser nulo")
     private String direccion;
 
-    private String estadoCivil;
-
     private String ocupacion;
 
     @NotNull(message = "Campo no puede ser nulo")
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date fechaNacimiento;
 
     @NotNull(message = "Campo no puede ser nulo")
@@ -56,5 +65,11 @@ public class PersonaDTO implements Serializable {
     private Boolean evaluacionCompletada;
 
     private String linkFoto;
+
+    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private Date fechaHoraCreacion;
+
+    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private Date fechaHoraModificacion;
 
 }

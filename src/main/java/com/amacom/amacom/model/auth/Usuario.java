@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.amacom.amacom.model.Persona;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,10 +32,10 @@ public class Usuario implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    Integer id;
+    private Long id;
 
     @Column(name = "ID_PERSONA", nullable = false)
-    private Long idPersona;
+    private UUID idPersona;
 
     @Column(name = "ID_ROL", nullable = true)
     private Long idRol;
@@ -49,11 +50,11 @@ public class Usuario implements UserDetails, Serializable {
     @Column(name = "PASSWORD", nullable = false)
     String password;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     private Date fechaHoraCreacion;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "FECHA_HORA_MODIFICACION")
     private Date fechaHoraModificacion;
 
