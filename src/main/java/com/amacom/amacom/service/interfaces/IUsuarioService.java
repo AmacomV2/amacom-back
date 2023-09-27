@@ -10,7 +10,7 @@ import java.util.UUID;
 @Service
 public interface IUsuarioService {
 
-    Persona getPersonaFromUUID(UUID idPersona);
+
 
     List<Usuario> getAll();
 

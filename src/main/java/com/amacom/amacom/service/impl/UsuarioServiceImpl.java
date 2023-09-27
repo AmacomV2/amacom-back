@@ -21,15 +21,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     private IUsuarioRepository usuarioRepository;
 
-    private IPersonaRepository personaRepository;
 
-    @Override
-    public Persona getPersonaFromUUID(UUID idPersona) {
-        if (idPersona != null) {
-            return personaRepository.findById(idPersona).orElse(null);
-        }
-        return null;
-    }
 
     @Override
     public List<Usuario> getAll() {
@@ -100,10 +92,5 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     public void setUsuarioRepository(IUsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
-    }
-
-    @Autowired
-    public void setPersonaRepository(IPersonaRepository personaRepository) {
-        this.personaRepository = personaRepository;
     }
 }

@@ -35,6 +35,14 @@ public class PersonaServiceImpl implements IPersonaService {
 
 
     @Override
+    public Persona getPersonaFromUUID(UUID idPersona) {
+        if (idPersona != null) {
+            return personaRepository.findById(idPersona).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
+    @Override
     public List<Persona> getAll() {
         return this.personaRepository.findAll();
     }

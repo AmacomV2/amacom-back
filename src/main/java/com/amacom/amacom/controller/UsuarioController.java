@@ -3,6 +3,7 @@ package com.amacom.amacom.controller;
 import com.amacom.amacom.dto.UsuarioDTO;
 import com.amacom.amacom.mapper.UsuarioMapper;
 import com.amacom.amacom.model.auth.Usuario;
+import com.amacom.amacom.service.interfaces.IPersonaService;
 import com.amacom.amacom.service.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class UsuarioController {
 
     private IUsuarioService usuarioService;
+
+    private IPersonaService personaService;
 
     @GetMapping("/getAllUsuario")
     public ResponseEntity<List<UsuarioDTO>> getAllUsuario(){
@@ -45,7 +48,7 @@ public class UsuarioController {
             @Valid @RequestBody UsuarioDTO usuarioDTO){
 
         Usuario usuario = UsuarioMapper.INSTANCE.toUsuario(usuarioDTO);
-        usuario.setPersona(this.usuarioService.getPersonaFromUUID(usuarioDTO.getIdPersona()));
+        usuario.setPersona(this.personaService.getPersonaFromUUID(usuarioDTO.getIdPersona()));
         var usuarioBD = this.usuarioService.updateUsuario(usuario);
         if (usuarioBD == null) {
             return new ResponseEntity<>(new UsuarioDTO(), HttpStatus.NO_CONTENT);
@@ -63,5 +66,10 @@ public class UsuarioController {
     @Autowired
     public void setUsuarioService(IUsuarioService usuarioService) {
         this.usuarioService = usuarioService;
+    }
+
+    @Autowired
+    public void setPersonaService(IPersonaService personaService) {
+        this.personaService = personaService;
     }
 }

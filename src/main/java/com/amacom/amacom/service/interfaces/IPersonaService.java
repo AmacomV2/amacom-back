@@ -9,6 +9,8 @@ import java.util.UUID;
 @Service
 public interface IPersonaService {
 
+    Persona getPersonaFromUUID(UUID idPersona);
+
     List<Persona> getAll();
 
     Persona findPersonaById(UUID id);
