@@ -32,6 +32,8 @@ public class PersonaServiceImpl implements IPersonaService {
 
     private EntityManager entityManager;
 
+
+
     @Override
     public List<Persona> getAll() {
         return this.personaRepository.findAll();

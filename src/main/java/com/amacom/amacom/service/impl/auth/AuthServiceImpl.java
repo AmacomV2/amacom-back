@@ -70,7 +70,6 @@ public class AuthServiceImpl implements IAuthService {
             .username(request.getUsername())
             .email(request.getEmail())
             .password(passwordEncoder.encode( request.getPassword()))
-            .idPersona(request.getIdPersona())
             .persona(persona)
             .enumRol(ERole.ROLE_USER)
             .idRol(4L)

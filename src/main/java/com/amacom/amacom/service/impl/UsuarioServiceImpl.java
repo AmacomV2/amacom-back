@@ -6,6 +6,7 @@ import com.amacom.amacom.model.Persona;
 import com.amacom.amacom.model.auth.ERole;
 import com.amacom.amacom.model.auth.RegisterRequest;
 import com.amacom.amacom.model.auth.Usuario;
+import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.repository.auth.IUsuarioRepository;
 import com.amacom.amacom.service.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
 
     private IUsuarioRepository usuarioRepository;
 
+    private IPersonaRepository personaRepository;
+
+    @Override
+    public Persona getPersonaFromUUID(UUID idPersona) {
+        if (idPersona != null) {
+            return personaRepository.findById(idPersona).orElse(null);
+        }
+        return null;
+    }
 
     @Override
     public List<Usuario> getAll() {
@@ -71,7 +82,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidacionException("Ya existe un usuario con este username o este email.");
 
-        var existsSimilarByIdPersona = this.usuarioRepository.existsByIdPersona(usuario.getId(), usuario.getIdPersona());
+        var existsSimilarByIdPersona = this.usuarioRepository.existsByIdPersona(usuario.getId(), usuario.getPersona().getId());
         if (Boolean.TRUE.equals(existsSimilarByIdPersona))
             throw new ValidacionException("Ya existe un registro diferente para esta persona.");
     }
@@ -89,5 +100,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     public void setUsuarioRepository(IUsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+    }
+
+    @Autowired
+    public void setPersonaRepository(IPersonaRepository personaRepository) {
+        this.personaRepository = personaRepository;
     }
 }

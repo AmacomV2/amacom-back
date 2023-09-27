@@ -43,7 +43,9 @@ public class UsuarioController {
     @PutMapping
     public ResponseEntity<UsuarioDTO> updatePersona(
             @Valid @RequestBody UsuarioDTO usuarioDTO){
+
         Usuario usuario = UsuarioMapper.INSTANCE.toUsuario(usuarioDTO);
+        usuario.setPersona(this.usuarioService.getPersonaFromUUID(usuarioDTO.getIdPersona()));
         var usuarioBD = this.usuarioService.updateUsuario(usuario);
         if (usuarioBD == null) {
             return new ResponseEntity<>(new UsuarioDTO(), HttpStatus.NO_CONTENT);

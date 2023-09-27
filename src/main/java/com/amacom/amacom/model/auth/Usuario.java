@@ -34,8 +34,9 @@ public class Usuario implements UserDetails, Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ID_PERSONA", nullable = false)
-    private UUID idPersona;
+    @ManyToOne
+    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    private Persona persona;
 
     @Column(name = "ID_ROL", nullable = true)
     private Long idRol;
@@ -69,12 +70,6 @@ public class Usuario implements UserDetails, Serializable {
     @JoinColumn(name = "ID_ROL",insertable = false,updatable = false)
     private Rol rol;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PERSONA",insertable = false,updatable = false)
-    private Persona persona;
-
-
     //Metodos
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,4 +91,6 @@ public class Usuario implements UserDetails, Serializable {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

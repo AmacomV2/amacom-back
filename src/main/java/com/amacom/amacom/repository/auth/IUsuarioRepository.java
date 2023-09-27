@@ -19,11 +19,12 @@ public interface IUsuarioRepository extends JpaRepository<Usuario,Long> {
             "AND (u.username = :username OR u.email = :email)")
     Boolean existsByUsernameOrEmail(Long id, String username, String email);
 
-    @Query("SELECT CASE WHEN COUNT (u) > 0 THEN TRUE ELSE FALSE END " +
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
             "FROM Usuario u " +
             "WHERE (u.id <> :id or :id is null) " +
-            "AND u.idPersona = :idPersona " )
+            "AND u.persona.id = :idPersona")
     Boolean existsByIdPersona(Long id, UUID idPersona);
+
 
     @Query("SELECT DISTINCT u " +
             "FROM Usuario u " +

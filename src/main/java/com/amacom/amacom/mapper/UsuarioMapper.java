@@ -13,6 +13,8 @@ public interface UsuarioMapper {
 
     Usuario toUsuario(UsuarioDTO usuarioDTO);
 
-    @Mapping(target = "idPersona", source = "idPersona")
+    @Mapping(target = "idPersona", source = "persona.id")
     UsuarioDTO toUsuarioDTO(Usuario usuario);
+
+
 }

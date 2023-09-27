@@ -5,10 +5,12 @@ import com.amacom.amacom.model.auth.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface IUsuarioService {
 
+    Persona getPersonaFromUUID(UUID idPersona);
 
     List<Usuario> getAll();
 
