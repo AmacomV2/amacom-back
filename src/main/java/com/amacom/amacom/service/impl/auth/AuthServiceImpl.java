@@ -1,12 +1,9 @@
 package com.amacom.amacom.service.impl.auth;
 
 import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.auth.ERole;
-import com.amacom.amacom.model.auth.LoginRequest;
-import com.amacom.amacom.model.auth.RegisterRequest;
-import com.amacom.amacom.model.auth.Usuario;
-import com.amacom.amacom.model.auth.AuthResponse;
+import com.amacom.amacom.model.auth.*;
 import com.amacom.amacom.repository.IPersonaRepository;
+import com.amacom.amacom.repository.IRolRepository;
 import com.amacom.amacom.service.interfaces.auth.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +39,8 @@ public class AuthServiceImpl implements IAuthService {
     private final AuthenticationManager authenticationManager;
 
     private IPersonaRepository personaRepository;
+
+    private IRolRepository rolRepository;
 
     public AuthResponse login(LoginRequest request) {
 
@@ -65,14 +65,22 @@ public class AuthServiceImpl implements IAuthService {
 
         var persona = this.personaRepository.findById(request.getIdPersona()).orElseThrow(DataNotFoundException::new);
 
+        Rol rol;
+        if(request.getIdRol() != null){
+            rol = this.rolRepository.findById(request.getIdRol()).orElse(null);
+        }else{
+            rol = this.rolRepository.findRolByDescripcion("USUARIO");
+        }
+
         this.validarRegistro(request);
         Usuario user = Usuario.builder()
+            .id(UUID.randomUUID())
             .username(request.getUsername())
             .email(request.getEmail())
             .password(passwordEncoder.encode( request.getPassword()))
             .persona(persona)
-            .enumRol(ERole.ROLE_USER)
-            .idRol(4L)
+            .rol(rol)
+            .enumRol(rol.getEnumRol())
             .fechaHoraCreacion(new Date())
             .build();
         usuarioRepository.save(user);
@@ -109,5 +117,10 @@ public class AuthServiceImpl implements IAuthService {
     @Autowired
     public void setPersonaRepository(IPersonaRepository personaRepository) {
         this.personaRepository = personaRepository;
+    }
+
+    @Autowired
+    public void setRolRepository(IRolRepository rolRepository) {
+        this.rolRepository = rolRepository;
     }
 }

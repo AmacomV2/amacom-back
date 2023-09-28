@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Persona;
 import com.amacom.amacom.model.auth.ERole;
 import com.amacom.amacom.model.auth.RegisterRequest;
@@ -22,6 +23,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private IUsuarioRepository usuarioRepository;
 
 
+    @Override
+    public Usuario getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return usuarioRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
 
     @Override
     public List<Usuario> getAll() {
@@ -29,7 +38,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public Usuario findUsuarioById(Long id) {
+    public Usuario findUsuarioById(UUID id) {
         return this.usuarioRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -37,24 +46,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public Usuario updateUsuario(Usuario usuario) {
         this.validarRegistro(usuario);
         var usuarioBD = this.usuarioRepository.findById(usuario.getId()).orElseThrow(DataNotFoundException::new);
-        usuarioBD.setIdRol(usuario.getIdRol());
-        if(usuario.getIdRol() != null){
-            if(usuario.getIdRol() == 1){
-                usuarioBD.setEnumRol(ERole.ROLE_ADMIN);
-            }
-            if(usuario.getIdRol() == 2){
-                usuarioBD.setEnumRol(ERole.ROLE_SUPER_ADMIN);
-            }
-            if(usuario.getIdRol() == 3){
-                usuarioBD.setEnumRol(ERole.ROLE_ENFERMERIA);
-            }
-            if(usuario.getIdRol() == 4){
-                usuarioBD.setEnumRol(ERole.ROLE_USER);
-            }
-        }
-        else {
-            usuarioBD.setEnumRol(ERole.ROLE_USER);
-        }
+        usuarioBD.setRol(usuario.getRol());
+        usuarioBD.setEnumRol(usuario.getRol().getEnumRol());
         usuarioBD.setUsername(usuario.getUsername());
         usuarioBD.setEmail(usuario.getEmail());
         usuarioBD.setFechaHoraModificacion(new Date());
@@ -62,7 +55,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public void deleteUsuarioById(Long id) {
+    public void deleteUsuarioById(UUID id) {
         var usuarioBD = this.usuarioRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.usuarioRepository.deleteById(usuarioBD.getId());
     }

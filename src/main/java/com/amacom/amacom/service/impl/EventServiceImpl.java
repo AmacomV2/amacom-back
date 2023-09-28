@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Event;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.Persona;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class EventServiceImpl implements IEventService {
@@ -27,7 +29,15 @@ public class EventServiceImpl implements IEventService {
 
 
     @Override
-    public Event findById(Long id) {
+    public Event getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return eventRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
+    @Override
+    public Event findById(UUID id) {
         return this.eventRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -35,8 +45,10 @@ public class EventServiceImpl implements IEventService {
     @Override
     public Event create(Event event) {
         this.validarCreacion(event);
+        event.setId(UUID.randomUUID());
         event.setFechaHoraCreacion(new Date());
         var eventBD = this.eventRepository.save(event);
+        this.entityManager.flush();
         this.entityManager.refresh(eventBD);
         return eventBD;
     }
@@ -46,18 +58,18 @@ public class EventServiceImpl implements IEventService {
     public Event update(Event event) {
         this.validarCreacion(event);
         var eventBD = this.eventRepository.findById(event.getId()).orElseThrow(DataNotFoundException::new);
-        eventBD.setIdTipoEvento(event.getIdTipoEvento());
+        eventBD.setTipoEvento(event.getTipoEvento());
         eventBD.setTitulo(event.getTitulo());
         eventBD.setDescripcion(event.getDescripcion());
         eventBD.setComienzo(event.getComienzo());
         eventBD.setFin(event.getFin());
         eventBD.setEstadoEvento(event.getEstadoEvento());
         eventBD.setFechaHoraModificacion(new Date());
-        return this.setValoresDTO(eventBD);
+        return this.eventRepository.save(eventBD);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         var eventBD = this.eventRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.eventRepository.deleteById(eventBD.getId());
     }
@@ -73,17 +85,6 @@ public class EventServiceImpl implements IEventService {
         var existsSimilar = this.eventRepository.existsByTitulo(event.getId(), event.getTitulo());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidacionException("Ya existe un registro con este titulo.");
-    }
-
-
-    private Event setValoresDTO(Event event){
-
-        var eventSaved = this.eventRepository.save(event);
-        var tipoEvento = this.tipoEventoRepository.findById(eventSaved.getIdTipoEvento()).orElseThrow(DataNotFoundException::new);
-        if(tipoEvento!= null){
-            eventSaved.setTipoEvento(tipoEvento);
-        }
-        return eventSaved;
     }
 
 

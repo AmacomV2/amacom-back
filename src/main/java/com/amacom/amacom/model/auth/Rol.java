@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -17,9 +18,8 @@ public class Rol implements Serializable {
     private static final long serialVersionUID = 4448364954833682456L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "NOMBRE")
     private String nombre;

@@ -25,5 +25,5 @@ public class RegisterRequest implements Serializable {
 
     private UUID idPersona;
 
-    private Long idRol;
+    private UUID idRol;
 }

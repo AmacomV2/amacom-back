@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,12 +20,12 @@ public class Institution implements Serializable {
     private static final long serialVersionUID = 1491571920947412552L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_TIPO_INSITUCION", nullable = false)
-    private Long idTipoInstitucion;
+    @ManyToOne
+    @JoinColumn(name = "ID_TIPO_INSITUCION", referencedColumnName = "ID")
+    private TipoInstitucion tipoInstitucion;
 
     @Column(name = "NOMBRE")
     private String nombre;
@@ -39,10 +40,5 @@ public class Institution implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_TIPO_INSITUCION",insertable = false,updatable = false)
-    private TipoInstitucion tipoInstitucion;
 
 }

@@ -18,9 +18,8 @@ public class LogBook implements Serializable {
     private static final long serialVersionUID = 7552610927189085219L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")

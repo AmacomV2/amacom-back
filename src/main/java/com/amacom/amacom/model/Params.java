@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PARAMS")
@@ -18,9 +19,8 @@ public class Params implements Serializable {
     private static final long serialVersionUID = -1760088231036927881L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

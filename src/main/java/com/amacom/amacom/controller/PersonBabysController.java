@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/personBabys")
@@ -26,7 +27,7 @@ public class PersonBabysController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PersonBabysDTO> findById(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         PersonBabys personBabys = this.personBabysService.findById(id);
         if (personBabys == null) {
             return new ResponseEntity<>(new PersonBabysDTO(), HttpStatus.NO_CONTENT);
@@ -65,7 +66,7 @@ public class PersonBabysController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         this.personBabysService.deleteById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }

@@ -15,12 +15,17 @@ public class EventHasPersonsDTO implements Serializable {
 
     private static final long serialVersionUID = 3445418192544864166L;
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
     private UUID idPersona;
 
+    private String nombrePersona;
+
+
     @NotNull(message = "Campo no puede ser nulo")
-    private Long idEvento;
+    private UUID idEvent;
+
+    private String tituloEvent;
 
 }

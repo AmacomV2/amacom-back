@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Event;
 import com.amacom.amacom.model.EventHasPersons;
 import com.amacom.amacom.model.PersonBabys;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
@@ -27,9 +29,17 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
 
     private EntityManager entityManager;
 
+    @Override
+    public EventHasPersons getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return eventHasPersonsRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
 
     @Override
-    public EventHasPersons findById(Long id) {
+    public EventHasPersons findById(UUID id) {
         return this.eventHasPersonsRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -37,7 +47,9 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
     @Override
     public EventHasPersons create(EventHasPersons eventHasPersons) {
         this.validarCreacion(eventHasPersons);
+        eventHasPersons.setId(UUID.randomUUID());
         var eventHasPersonsBD = this.eventHasPersonsRepository.save(eventHasPersons);
+        this.entityManager.flush();
         this.entityManager.refresh(eventHasPersonsBD);
         return eventHasPersonsBD;
     }
@@ -47,30 +59,20 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
         this.validarCreacion(eventHasPersons);
         var eventHasPersonsBD = this.eventHasPersonsRepository.findById(eventHasPersons.getId()).orElseThrow(DataNotFoundException::new);
         eventHasPersonsBD.setPersona(eventHasPersons.getPersona());
-        eventHasPersonsBD.setIdEvento(eventHasPersons.getIdEvento());
-        return this.setValoresDTO(eventHasPersonsBD);
+        eventHasPersonsBD.setEvent(eventHasPersons.getEvent());
+        return this.eventHasPersonsRepository.save(eventHasPersonsBD);
     }
 
     private void validarCreacion(EventHasPersons eventHasPersons){
-        var existsSimilar = this.eventHasPersonsRepository.existsByIdPersonaAndIdEvento(eventHasPersons.getId(), eventHasPersons.getPersona().getId(), eventHasPersons.getIdEvento());
+            var existsSimilar = this.eventHasPersonsRepository.existsByIdPersonaAndIdEvento(eventHasPersons.getId(), eventHasPersons.getPersona().getId(), eventHasPersons.getEvent().getId());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidacionException("Ya existe un registro para esta persona y este evento.");
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         var eventHasPersonsBD = this.eventHasPersonsRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.eventHasPersonsRepository.deleteById(eventHasPersonsBD.getId());
-    }
-
-    private EventHasPersons setValoresDTO(EventHasPersons eventHasPersons){
-
-        var eventHasPersonsSaved = this.eventHasPersonsRepository.save(eventHasPersons);
-        var event = this.eventRepository.findById(eventHasPersonsSaved.getIdEvento()).orElseThrow(DataNotFoundException::new);
-        if(event!= null){
-            eventHasPersonsSaved.setEvento(event);
-        }
-        return eventHasPersonsSaved;
     }
 
     @Autowired

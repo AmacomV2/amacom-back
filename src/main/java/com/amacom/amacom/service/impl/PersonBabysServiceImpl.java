@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.model.Persona;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class PersonBabysServiceImpl implements IPersonBabysService {
@@ -25,7 +27,16 @@ public class PersonBabysServiceImpl implements IPersonBabysService {
     private EntityManager entityManager;
 
     @Override
-    public PersonBabys findById(Long id) {
+    public PersonBabys getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return personBabysRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
+
+    @Override
+    public PersonBabys findById(UUID id) {
         return this.personBabysRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -33,8 +44,10 @@ public class PersonBabysServiceImpl implements IPersonBabysService {
     @Override
     public PersonBabys create(PersonBabys personBabys) {
         this.validarCreacion(personBabys);
+        personBabys.setId(UUID.randomUUID());
         personBabys.setFechaHoraCreacion(new Date());
         var personBabysBD = this.personBabysRepository.save(personBabys);
+        this.entityManager.flush();
         this.entityManager.refresh(personBabysBD);
         return personBabysBD;
     }
@@ -55,7 +68,7 @@ public class PersonBabysServiceImpl implements IPersonBabysService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         var generoBD = this.personBabysRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.personBabysRepository.deleteById(generoBD.getId());
     }

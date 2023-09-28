@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "TIPO_SITUACION")
@@ -18,9 +19,8 @@ public class TipoSituacion implements Serializable {
     private static final long serialVersionUID = 1810044760869215616L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;

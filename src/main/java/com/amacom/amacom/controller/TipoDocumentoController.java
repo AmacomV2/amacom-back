@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,7 +36,7 @@ public class TipoDocumentoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TipoDocumentoDTO> findById(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         TipoDocumento tipoDocumento = this.tipoDocumentoService.findById(id);
         if (tipoDocumento == null) {
             return new ResponseEntity<>(new TipoDocumentoDTO(), HttpStatus.NO_CONTENT);
@@ -65,7 +66,7 @@ public class TipoDocumentoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         this.tipoDocumentoService.deleteById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }

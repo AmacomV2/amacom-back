@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "DIAGNOSTIC")
@@ -18,12 +19,12 @@ public class Diagnosis implements Serializable {
     private static final long serialVersionUID = 2550690869610717045L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_SITUACION_PERSONA", nullable = false)
-    private Long idSituacionPersona;
+    @ManyToOne
+    @JoinColumn(name = "ID_SITUACION_PERSONA", referencedColumnName = "ID")
+    private PersonSituation personSituation;
 
     @Column(name = "RESULTADO_CONSULTA")
     private String resultadoConsulta;
@@ -35,10 +36,5 @@ public class Diagnosis implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "ESTADO_CONSULTA")
     private EEstadoConsulta eEstadoConsulta;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SITUACION_PERSONA",insertable = false,updatable = false)
-    private PersonSituation situacionPersona;
 }
 

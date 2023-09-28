@@ -25,8 +25,9 @@ public class RegisterRequestDTO implements Serializable {
     @NotNull(message = "Campo no puede ser nulo")
     private String password;
 
+    @NotNull(message = "Campo no puede ser nulo")
     private UUID idPersona;
 
-    private Long idRol;
+    private UUID idRol;
 
 }

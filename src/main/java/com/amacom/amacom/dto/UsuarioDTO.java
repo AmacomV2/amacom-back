@@ -26,13 +26,14 @@ public class UsuarioDTO implements Serializable {
 
 
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
     private UUID idPersona;
 
 
-    private Long idRol;
+    @NotNull(message = "Campo no puede ser nulo")
+    private UUID idRol;
 
 
     @NotNull(message = "Campo no puede ser nulo")

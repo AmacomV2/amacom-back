@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "DIAGNOSIS_HAS_SUBJECT")
@@ -18,25 +19,15 @@ public class DiagnosisHasSubject implements Serializable {
     private static final long serialVersionUID = 4981997479012943765L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_DIAGNOSIS", nullable = false)
-    private Long idDiagnosis;
-
-    @Column(name = "ID_SUBJECT", nullable = false)
-    private Long idSubject;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_DIAGNOSIS",insertable = false,updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_DIAGNOSIS", referencedColumnName = "ID")
     private Diagnosis diagnosis;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SUBJECT",insertable = false,updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
     private Subject subject;
 }
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
@@ -20,22 +21,24 @@ public class PersonSituation implements Serializable {
     private static final long serialVersionUID = 5551518673194641952L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
     private Persona persona;
 
-    @Column(name = "ID_USUARIO_CREA", nullable = false)
-    private Long idUsuarioCrea;
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
+    private Usuario usuario;
 
-    @Column(name = "ID_SUBJECT", nullable = false)
-    private Long idSubject;
+    @ManyToOne
+    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    private Subject subject;
 
-    @Column(name = "ID_SITUATION_TYPE", nullable = false)
-    private Long idTipoSituacion;
+    @ManyToOne
+    @JoinColumn(name = "ID_SITUATION_TYPE", referencedColumnName = "ID")
+    private TipoSituacion tipoSituacion;
 
     @Column(name = "DESCRIPCION")
     private String descripcion;
@@ -60,19 +63,4 @@ public class PersonSituation implements Serializable {
 
     @Column(name = "EVALUACION_ENFERMERIA")
     private String evaluacionEnfermeria;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_USUARIO_CREA",insertable = false,updatable = false)
-    private Usuario usuario;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SUBJECT",insertable = false,updatable = false)
-    private Subject subject;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SITUATION_TYPE",insertable = false,updatable = false)
-    private TipoSituacion tipoSituacion;
 }

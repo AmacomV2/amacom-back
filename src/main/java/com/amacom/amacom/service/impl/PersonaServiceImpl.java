@@ -69,13 +69,13 @@ public class PersonaServiceImpl implements IPersonaService {
     public Persona updatePersona(Persona persona) {
         this.validarCreacionPersona(persona);
         var personaBD = this.personaRepository.findById(persona.getId()).orElseThrow(DataNotFoundException::new);
-        personaBD.setIdTipoDocumento(personaBD.getIdTipoDocumento());
+        personaBD.setTipoDocumento(personaBD.getTipoDocumento());
         personaBD.setDocumento(persona.getDocumento());
         personaBD.setNombre(persona.getNombre());
         personaBD.setApellido(persona.getApellido());
         personaBD.setGenero(persona.getGenero());
         personaBD.setDireccion(persona.getDireccion());
-        personaBD.setIdEstadoCivil(persona.getIdEstadoCivil());
+        personaBD.setEstadoCivil(persona.getEstadoCivil());
         personaBD.setOcupacion(persona.getOcupacion());
         personaBD.setFechaNacimiento(persona.getFechaNacimiento());
         personaBD.setConsentimiento(persona.getConsentimiento());
@@ -83,7 +83,7 @@ public class PersonaServiceImpl implements IPersonaService {
         personaBD.setEvaluacionCompletada(persona.getEvaluacionCompletada());
         personaBD.setLinkFoto(persona.getLinkFoto());
         personaBD.setFechaHoraModificacion(new Date());
-        return this.setValoresDTO(personaBD);
+        return this.personaRepository.save(personaBD);
     }
 
     @Override
@@ -97,24 +97,6 @@ public class PersonaServiceImpl implements IPersonaService {
         var existsSimilar = this.personaRepository.existsByDocumento(persona.getId(), persona.getDocumento());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidacionException("Ya existe una persona con este numero de documento");
-    }
-
-    private Persona setValoresDTO(Persona persona){
-
-        var personaSaved = this.personaRepository.save(persona);
-        var tipoDocumento = this.tipoDocumentoRepository.findById(personaSaved.getIdTipoDocumento()).orElseThrow(DataNotFoundException::new);
-        var estadoCivil = this.estadoCivilRepository.findById(personaSaved.getIdEstadoCivil()).orElseThrow(DataNotFoundException::new);
-        var genero = this.generoRepository.findById(personaSaved.getIdGenero()).orElseThrow(DataNotFoundException::new);
-        if(tipoDocumento!= null){
-            personaSaved.setTipoDocumento(tipoDocumento);
-        }
-        if(estadoCivil!= null){
-            personaSaved.setEstadoCivil(estadoCivil);
-        }
-        if(genero!= null){
-            personaSaved.setGenero(genero);
-        }
-        return personaSaved;
     }
 
     @Autowired

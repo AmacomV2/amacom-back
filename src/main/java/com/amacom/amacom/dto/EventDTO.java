@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,13 +20,13 @@ public class EventDTO implements Serializable {
 
     private static final long serialVersionUID = 3445418192544864166L;
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
-    private Long idTipoEvento;
+    private UUID idTipoEvento;
     private String nombreTipoEvento;
 
-    private Long idUsuarioCrea;
+    private UUID idUsuarioCrea;
 
     private String titulo;
 

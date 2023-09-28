@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "FEELINGS")
@@ -18,9 +19,8 @@ public class Feelings implements Serializable {
     private static final long serialVersionUID = -5862576302502380715L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;

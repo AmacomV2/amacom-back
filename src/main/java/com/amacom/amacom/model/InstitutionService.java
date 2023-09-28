@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,34 +20,20 @@ public class InstitutionService implements Serializable {
     private static final long serialVersionUID = 5187833655453018675L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_USUARIO_CREA")
-    private Long idUsuarioCrea;
-
-    @Column(name = "ID_SERVICIO")
-    private Long idServicio;
-
-    @Column(name = "ID_INSTITUCION")
-    private Long idInstitucion;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_USUARIO_CREA",insertable = false,updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
     private Usuario usuario;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SERVICIO",insertable = false,updatable = false)
-    private Services servicio;
+    @ManyToOne
+    @JoinColumn(name = "ID_SERVICIO", referencedColumnName = "ID")
+    private Services services;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_INSTITUCION",insertable = false,updatable = false)
-    private Institution institucion;
+    @ManyToOne
+    @JoinColumn(name = "ID_INSTITUCION", referencedColumnName = "ID")
+    private Institution institution;
 
 
 }

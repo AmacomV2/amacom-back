@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,7 +36,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> findUsuarioById(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         Usuario usuario = this.usuarioService.findUsuarioById(id);
         if (usuario == null) {
             return new ResponseEntity<>(new UsuarioDTO(), HttpStatus.NO_CONTENT);
@@ -58,7 +59,7 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUsuario(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         this.usuarioService.deleteUsuarioById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }

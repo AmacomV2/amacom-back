@@ -18,7 +18,7 @@ public class PersonBabysDTO implements Serializable {
 
     private static final long serialVersionUID = 1806980354878713001L;
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
     private UUID idPadre;

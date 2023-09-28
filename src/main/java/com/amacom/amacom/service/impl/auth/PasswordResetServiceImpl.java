@@ -41,8 +41,8 @@ public class PasswordResetServiceImpl implements IPasswordResetService {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Código de recuperación de contraseña ");
-        message.setText("Tu código de recuperación de contraseña es: " + code);
+        message.setSubject("Código de recuperación de contraseña Amacom");
+        message.setText("Tu código de recuperación de contraseña Amacom es: " + code);
         javaMailSender.send(message);
     }
 

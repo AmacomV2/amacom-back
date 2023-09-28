@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,8 +22,18 @@ public class Persona implements Serializable {
     @Id
     @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
-    @Column(name = "ID_TIPO_DOCUMENTO", nullable = false)
-    private Long idTipoDocumento;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_TIPO_DOCUMENTO", referencedColumnName = "ID")
+    private TipoDocumento tipoDocumento;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_ESTADO_CIVIL", referencedColumnName = "ID")
+    private EstadoCivil estadoCivil;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_GENERO", referencedColumnName = "ID")
+    private Genero genero;
 
     @Column(name = "DOCUMENTO", nullable = false)
     private String documento;
@@ -33,14 +44,9 @@ public class Persona implements Serializable {
     @Column(name = "APELLIDO", nullable = false)
     private String apellido;
 
-    @Column(name = "ID_GENERO", nullable = false)
-    private Long idGenero;
-
     @Column(name = "DIRECCION", nullable = false)
     private String direccion;
 
-    @Column(name = "ID_ESTADO_CIVIL", nullable = false)
-    private Long idEstadoCivil;
 
     @Column(name = "OCUPACION")
     private String ocupacion;
@@ -69,21 +75,7 @@ public class Persona implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     private Date fechaHoraModificacion;
 
-    //Relaciones
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_TIPO_DOCUMENTO",insertable = false,updatable = false)
-    private TipoDocumento tipoDocumento;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ESTADO_CIVIL",insertable = false,updatable = false)
-    private EstadoCivil estadoCivil;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_GENERO",insertable = false,updatable = false)
-    private Genero genero;
-
+    @Formula("CONCAT(NOMBRE, ' ', APELLIDO)")
+    private String nombreAndApellido;
 }

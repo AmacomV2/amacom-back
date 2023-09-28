@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.TipoEvento;
 import com.amacom.amacom.repository.ITipoEventoRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TipoEventoServiceImpl implements ITipoEventoService {
@@ -22,6 +24,14 @@ public class TipoEventoServiceImpl implements ITipoEventoService {
     private EntityManager entityManager;
 
 
+    @Override
+    public TipoEvento getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return tipoEventoRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
 
     @Override
     public List<TipoEvento> getAll() {
@@ -29,7 +39,7 @@ public class TipoEventoServiceImpl implements ITipoEventoService {
     }
 
     @Override
-    public TipoEvento findById(Long id) {
+    public TipoEvento findById(UUID id) {
         return this.tipoEventoRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -37,8 +47,10 @@ public class TipoEventoServiceImpl implements ITipoEventoService {
     @Override
     public TipoEvento create(TipoEvento tipoEvento) {
         this.validarCreacion(tipoEvento);
+        tipoEvento.setId(UUID.randomUUID());
         tipoEvento.setFechaHoraCreacion(new Date());
         var tipoEventoBD = this.tipoEventoRepository.save(tipoEvento);
+        this.entityManager.flush();
         this.entityManager.refresh(tipoEventoBD);
         return tipoEventoBD;
     }
@@ -55,7 +67,7 @@ public class TipoEventoServiceImpl implements ITipoEventoService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         var tipoEventoBD = this.tipoEventoRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.tipoEventoRepository.deleteById(tipoEventoBD.getId());
     }

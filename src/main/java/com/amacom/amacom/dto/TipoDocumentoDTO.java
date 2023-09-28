@@ -10,6 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,11 +19,10 @@ public class TipoDocumentoDTO implements Serializable {
 
     private static final long serialVersionUID = 7324465497983867130L;
 
-    private Long id;
+    private UUID id;
 
     private String nombre;
 
-    private String codigo;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date fechaHoraCreacion;

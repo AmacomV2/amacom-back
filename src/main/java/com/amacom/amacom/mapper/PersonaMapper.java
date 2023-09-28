@@ -20,6 +20,9 @@ public interface PersonaMapper {
     @Mapping(target = "nombreTipoDocumento", source = "tipoDocumento.nombre")
     @Mapping(target = "nombreGenero", source = "genero.nombre")
     @Mapping(target = "nombreEstadoCivil", source = "estadoCivil.nombre")
+    @Mapping(target = "idTipoDocumento", source = "tipoDocumento.id")
+    @Mapping(target = "idGenero", source = "genero.id")
+    @Mapping(target = "idEstadoCivil", source = "estadoCivil.id")
     PersonaDTO toPersonaDTO(Persona persona);
 
 }

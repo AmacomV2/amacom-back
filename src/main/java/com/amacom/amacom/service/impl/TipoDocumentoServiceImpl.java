@@ -2,6 +2,7 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Persona;
 import com.amacom.amacom.model.TipoDocumento;
 import com.amacom.amacom.repository.ITipoDocumentoRepository;
@@ -23,12 +24,20 @@ public class TipoDocumentoServiceImpl implements ITipoDocumentoService {
     private EntityManager entityManager;
 
     @Override
+    public TipoDocumento getEntityFromUUID(UUID uuid) {
+        if (uuid != null) {
+            return tipoDocumentoRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
+        }
+        return null;
+    }
+
+    @Override
     public List<TipoDocumento> getAll() {
         return this.tipoDocumentoRepository.findAll();
     }
 
     @Override
-    public TipoDocumento findById(Long id) {
+    public TipoDocumento findById(UUID id) {
         return this.tipoDocumentoRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
@@ -36,8 +45,10 @@ public class TipoDocumentoServiceImpl implements ITipoDocumentoService {
     @Override
     public TipoDocumento create(TipoDocumento tipoDocumento) {
         this.validarCreacion(tipoDocumento);
+        tipoDocumento.setId(UUID.randomUUID());
         tipoDocumento.setFechaHoraCreacion(new Date());
         var tipoDocumentoBD = this.tipoDocumentoRepository.save(tipoDocumento);
+        this.entityManager.flush();
         this.entityManager.refresh(tipoDocumentoBD);
         return tipoDocumentoBD;
     }
@@ -48,13 +59,12 @@ public class TipoDocumentoServiceImpl implements ITipoDocumentoService {
         this.validarCreacion(tipoDocumento);
         var tipoDocumentoBD = this.tipoDocumentoRepository.findById(tipoDocumento.getId()).orElseThrow(DataNotFoundException::new);
         tipoDocumentoBD.setNombre(tipoDocumento.getNombre());
-        tipoDocumentoBD.setCodigo(tipoDocumento.getCodigo());
         tipoDocumentoBD.setFechaHoraModificacion(new Date());
         return this.tipoDocumentoRepository.save(tipoDocumentoBD);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         var tipoDocumentoBD = this.tipoDocumentoRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.tipoDocumentoRepository.deleteById(tipoDocumentoBD.getId());
     }

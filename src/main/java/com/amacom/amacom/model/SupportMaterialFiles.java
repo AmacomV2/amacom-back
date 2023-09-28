@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "SUPPORT_MATERIAL_FILES")
@@ -19,13 +20,12 @@ public class SupportMaterialFiles implements Serializable {
     private static final long serialVersionUID = -2972339910667614070L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_SUPPORT_MATERIAL")
-    private Long idSupportMaterial;
-
+    @ManyToOne
+    @JoinColumn(name = "ID_SUPPORT_MATERIAL", referencedColumnName = "ID")
+    private SupportMaterial supportMaterial;
 
     @Column(name = "PATH")
     private String path;
@@ -38,9 +38,5 @@ public class SupportMaterialFiles implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SUPPORT_MATERIAL",insertable = false,updatable = false)
-    private SupportMaterial supportMaterial;
 
 }

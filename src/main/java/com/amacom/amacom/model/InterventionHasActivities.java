@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "INTERVENTION_HAS_ACTIVITIES")
@@ -18,31 +19,21 @@ public class InterventionHasActivities implements Serializable {
     private static final long serialVersionUID = -5688539495634138818L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_ACTIVITY", nullable = false)
-    private Long idActivity;
+    @ManyToOne
+    @JoinColumn(name = "ID_ACTIVITY", referencedColumnName = "ID")
+    private Activity activity;
 
-    @Column(name = "ID_INTERVENTION", nullable = false)
-    private Long idIntervention;
+    @ManyToOne
+    @JoinColumn(name = "ID_INTERVENTION", referencedColumnName = "ID")
+    private Intervention intervention;
 
     @Column(name = "ESTADO")
     private String estado;
 
     @Column(name = "DESCRIPCION")
     private String descripcion;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ACTIVITY",insertable = false,updatable = false)
-    private Activity activity;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_INTERVENTION",insertable = false,updatable = false)
-    private Intervention intervention;
 
 }

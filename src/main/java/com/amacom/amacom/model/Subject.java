@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "SUBJECT")
@@ -19,18 +20,22 @@ public class Subject implements Serializable {
     private static final long serialVersionUID = -7956521051265369329L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_SUBJECT_PARENT", referencedColumnName = "ID")
+    private Subject subjectParent;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_RESULTADOS_ASOCIADOS", referencedColumnName = "ID")
+    private Result resultadosAsociados;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;
 
     @Column(name = "INDICACION_VALIDEZ")
     private String indicacionValidez;
-
-    @Column(name = "ID_SUBJECT_PARENT")
-    private Long idSubjectParent;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,18 +45,5 @@ public class Subject implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
 
-    @Column(name = "ID_RESULTADOS_ASOCIADOS")
-    private Long idResultadosAsociados;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SUBJECT_PARENT",insertable = false,updatable = false)
-    private Subject subjectParent;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_RESULTADOS_ASOCIADOS",insertable = false,updatable = false)
-    private Result resultadosAsociados;
 }
 

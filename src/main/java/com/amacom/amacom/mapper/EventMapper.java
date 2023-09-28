@@ -14,5 +14,7 @@ public interface EventMapper {
     Event toEvent(EventDTO eventDTO);
 
     @Mapping(target = "nombreTipoEvento", source = "tipoEvento.nombre")
+    @Mapping(target = "idTipoEvento", source = "tipoEvento.id")
+    @Mapping(target = "idUsuarioCrea", source = "usuario.id")
     EventDTO toEventDTO(Event event);
 }

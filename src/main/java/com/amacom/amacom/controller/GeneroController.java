@@ -40,7 +40,7 @@ public class GeneroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GeneroDTO> findById(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         Genero genero = this.generoService.findById(id);
         if (genero == null) {
             return new ResponseEntity<>(new GeneroDTO(), HttpStatus.NO_CONTENT);
@@ -70,7 +70,7 @@ public class GeneroController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
-            @PathVariable(value = "id") Long id){
+            @PathVariable(value = "id") UUID id){
         this.generoService.deleteById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }

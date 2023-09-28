@@ -10,20 +10,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IUsuarioRepository extends JpaRepository<Usuario,Long> {
+public interface IUsuarioRepository extends JpaRepository<Usuario,UUID> {
     Optional<Usuario> findByUsername(String username);
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
             "FROM Usuario u " +
             "WHERE (u.id <> :id or :id is null) " +
             "AND (u.username = :username OR u.email = :email)")
-    Boolean existsByUsernameOrEmail(Long id, String username, String email);
+    Boolean existsByUsernameOrEmail(UUID id, String username, String email);
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
             "FROM Usuario u " +
             "WHERE (u.id <> :id or :id is null) " +
             "AND u.persona.id = :idPersona")
-    Boolean existsByIdPersona(Long id, UUID idPersona);
+    Boolean existsByIdPersona(UUID id, UUID idPersona);
 
 
     @Query("SELECT DISTINCT u " +
@@ -35,5 +35,5 @@ public interface IUsuarioRepository extends JpaRepository<Usuario,Long> {
             "FROM Usuario u " +
             "WHERE (u.id <> :id or :id is null) " +
             "AND u.email = :email")
-    Boolean emailExists(Long id, String email);
+    Boolean emailExists(UUID id, String email);
 }

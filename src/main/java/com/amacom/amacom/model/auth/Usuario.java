@@ -30,16 +30,16 @@ public class Usuario implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 6285576422865023099L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_ROL", referencedColumnName = "ID")
+    private Rol rol;
 
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
     private Persona persona;
-
-    @Column(name = "ID_ROL", nullable = true)
-    private Long idRol;
 
     @Basic
     @Column(name = "USERNAME", nullable = false)
@@ -63,12 +63,6 @@ public class Usuario implements UserDetails, Serializable {
     ERole enumRol;
 
 
-    //Relaciones
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ROL",insertable = false,updatable = false)
-    private Rol rol;
 
     //Metodos
     @Override

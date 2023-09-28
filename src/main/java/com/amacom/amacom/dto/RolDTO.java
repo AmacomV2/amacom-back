@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class RolDTO implements Serializable {
 
     private static final long serialVersionUID = 7573542501383314915L;
 
-    private Long id;
+    private UUID id;
 
     private String nombre;
 

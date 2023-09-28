@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "RESULT_HAS_INDICATOR")
@@ -18,24 +19,16 @@ public class ResultHasIndicator implements Serializable {
     private static final long serialVersionUID = -7094155733232886844L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_RESULT", nullable = false)
-    private Long idResult;
-
-    @Column(name = "ID_INDICATOR", nullable = false)
-    private Long idIndicator;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_RESULT",insertable = false,updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_RESULT", referencedColumnName = "ID")
     private Result result;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_INDICATOR",insertable = false,updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_INDICATOR", referencedColumnName = "ID")
     private Indicator indicator;
+
 }
 

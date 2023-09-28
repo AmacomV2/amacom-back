@@ -1,5 +1,6 @@
 package com.amacom.amacom.service.interfaces;
 
+import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.Persona;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,13 @@ public interface IGeneroService {
 
     List<Genero> getAll();
 
-    Genero findById(Long id);
+    Genero findById(UUID id);
 
     Genero create(Genero genero);
 
     Genero update(Genero genero);
 
-    void deleteById(Long id);
+    void deleteById(UUID id);
+
+    Genero getEntityFromUUID(UUID uuid);
 }

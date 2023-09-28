@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "EVENT")
@@ -20,15 +21,16 @@ public class Event implements Serializable {
     private static final long serialVersionUID = -6253118475380318681L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_TIPO_EVENTO")
-    private Long idTipoEvento;
+    @ManyToOne
+    @JoinColumn(name = "ID_TIPO_EVENTO", referencedColumnName = "ID")
+    private TipoEvento tipoEvento;
 
-    @Column(name = "ID_USUARIO_CREA")
-    private Long idUsuarioCrea;
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
+    private Usuario usuario;
 
     @Column(name = "TITULO")
     private String titulo;
@@ -55,15 +57,4 @@ public class Event implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_TIPO_EVENTO",insertable = false,updatable = false)
-    private TipoEvento tipoEvento;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_USUARIO_CREA",insertable = false,updatable = false)
-    private Usuario usuario;
 }

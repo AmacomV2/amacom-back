@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "REWARD")
@@ -19,12 +20,12 @@ public class Reward implements Serializable {
     private static final long serialVersionUID = 6531493661054997902L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(name = "ID_SUBJECT", nullable = false)
-    private Long idSubject;
+    @ManyToOne
+    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    private Subject subject;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;
@@ -48,10 +49,4 @@ public class Reward implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
-
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SUBJECT",insertable = false,updatable = false)
-    private Subject subject;
 }

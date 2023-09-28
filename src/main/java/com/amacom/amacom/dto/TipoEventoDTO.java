@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class TipoEventoDTO implements Serializable {
 
     private static final long serialVersionUID = 7914923759382170663L;
 
-    private Long id;
+    private UUID id;
 
     @NotNull(message = "Campo no puede ser nulo")
     private String nombre;

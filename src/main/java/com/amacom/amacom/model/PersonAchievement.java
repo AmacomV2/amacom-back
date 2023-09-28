@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PERSON_ACHIEVEMENT")
@@ -19,9 +20,8 @@ public class PersonAchievement implements Serializable {
     private static final long serialVersionUID = -6424297099692066046L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PUNTAJE")
@@ -31,8 +31,9 @@ public class PersonAchievement implements Serializable {
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
     private Persona persona;
 
-    @Column(name = "ID_ACHIEVEMENT", nullable = false)
-    private Long idAchievement;
+    @ManyToOne
+    @JoinColumn(name = "ID_ACHIEVEMENT", referencedColumnName = "ID")
+    private Achievement achievement;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,11 +42,6 @@ public class PersonAchievement implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ACHIEVEMENT",insertable = false,updatable = false)
-    private Achievement achievement;
 
 }
 
