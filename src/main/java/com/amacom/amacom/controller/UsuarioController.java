@@ -34,7 +34,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> findPersonaById(
+    public ResponseEntity<UsuarioDTO> findUsuarioById(
             @PathVariable(value = "id") Long id){
         Usuario usuario = this.usuarioService.findUsuarioById(id);
         if (usuario == null) {
@@ -44,7 +44,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<UsuarioDTO> updatePersona(
+    public ResponseEntity<UsuarioDTO> updateUsuario(
             @Valid @RequestBody UsuarioDTO usuarioDTO){
 
         Usuario usuario = UsuarioMapper.INSTANCE.toUsuario(usuarioDTO);
@@ -57,7 +57,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deletePersona(
+    public ResponseEntity<Boolean> deleteUsuario(
             @PathVariable(value = "id") Long id){
         this.usuarioService.deleteUsuarioById(id);
         return ResponseEntity.ok(Boolean.TRUE);

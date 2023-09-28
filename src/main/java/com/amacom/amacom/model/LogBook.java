@@ -40,8 +40,5 @@ public class LogBook implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
 
-
-
-
 }
 

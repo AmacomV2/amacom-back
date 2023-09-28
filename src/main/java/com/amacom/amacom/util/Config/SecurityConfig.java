@@ -37,6 +37,10 @@ public class SecurityConfig {
                         authRequest
                                 .antMatchers("/auth/**").permitAll()
                                 .antMatchers("/persona/create").permitAll()
+                                .antMatchers("/swagger-ui/**").permitAll()
+                                .antMatchers("/swagger-ui.html").permitAll()
+                                .antMatchers("/v2/**").permitAll()
+                                .antMatchers("/webjars/**", "/swagger-resources/**").permitAll()
                                 //.antMatchers("/user/**").hasRole("ROLE_USER")
                                 //.antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                                 //.antMatchers("/moderador/**").hasRole("ROLE_MODERATOR")
