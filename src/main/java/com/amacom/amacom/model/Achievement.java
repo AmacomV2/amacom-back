@@ -1,36 +1,33 @@
 package com.amacom.amacom.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "LOGBOOK")
-public class LogBook implements Serializable {
+@AllArgsConstructor
+@Table(name = "ACHIEVEMENT")
+public class Achievement implements Serializable {
 
-    private static final long serialVersionUID = 7552610927189085219L;
+    private static final long serialVersionUID = 772109806342522558L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
+    @Column(name = "ID_SUBJECT", nullable = false)
+    private Long idSubjet;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;
-
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,7 +38,9 @@ public class LogBook implements Serializable {
     private Date fechaHoraModificacion;
 
 
-
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_SUBJECT",insertable = false,updatable = false)
+    private Subject subject;
 
 }
-

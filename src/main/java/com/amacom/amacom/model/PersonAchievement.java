@@ -1,36 +1,38 @@
 package com.amacom.amacom.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 @Entity
+@Table(name = "PERSON_ACHIEVEMENT")
 @Data
 @NoArgsConstructor
-@Table(name = "LOGBOOK")
-public class LogBook implements Serializable {
+@AllArgsConstructor
+public class PersonAchievement implements Serializable {
 
-    private static final long serialVersionUID = 7552610927189085219L;
+    private static final long serialVersionUID = -6424297099692066046L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PUNTAJE")
+    private EPuntaje puntaje;
+
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
     private Persona persona;
 
-    @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
-
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name = "ID_ACHIEVEMENT", nullable = false)
+    private Long idAchievement;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,8 +42,10 @@ public class LogBook implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
 
-
-
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_ACHIEVEMENT",insertable = false,updatable = false)
+    private Achievement achievement;
 
 }
 
