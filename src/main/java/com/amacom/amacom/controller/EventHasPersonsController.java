@@ -1,10 +1,13 @@
 package com.amacom.amacom.controller;
 
 import com.amacom.amacom.dto.EventHasPersonsDTO;
+import com.amacom.amacom.dto.GeneroDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
 import com.amacom.amacom.mapper.EventHasPersonsMapper;
+import com.amacom.amacom.mapper.GeneroMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
 import com.amacom.amacom.model.EventHasPersons;
+import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.service.interfaces.IEventHasPersonsService;
 import com.amacom.amacom.service.interfaces.IEventService;
@@ -15,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/eventHasPersons")
@@ -27,6 +33,18 @@ public class EventHasPersonsController {
 
     private IEventService eventService;
 
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<EventHasPersonsDTO>> getAll(
+            @RequestParam(name = "idEvent" ) UUID idEvent
+    ){
+        List<EventHasPersons> eventHasPersonsList = this.eventHasPersonsService.getAll(idEvent);
+        if (eventHasPersonsList == null || eventHasPersonsList.isEmpty()) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(eventHasPersonsList.stream()
+                .map(EventHasPersonsMapper.INSTANCE::toEventHasPersonsDTO).collect(Collectors.toList()), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventHasPersonsDTO> findById(

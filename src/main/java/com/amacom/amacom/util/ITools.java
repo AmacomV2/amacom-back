@@ -1,8 +1,14 @@
 package com.amacom.amacom.util;
 
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public interface ITools {
@@ -44,6 +50,19 @@ public interface ITools {
 
         return ok;
     }
+
+    static Pageable getPageRequest(Pageable pageable, Map<String, String> clavesToSort) {
+        Sort sort = Sort.unsorted();
+
+        Sort.Order s;
+        for(Iterator var3 = pageable.getSort().iterator(); var3.hasNext(); sort = sort.and(Sort.by(s.getDirection(), new String[]{(String)clavesToSort.get(s.getProperty())}))) {
+            s = (Sort.Order)var3.next();
+        }
+
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+    }
+
+
 
     static String getStringFecha(Date aFecha) {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");

@@ -37,8 +37,4 @@ public class Achievement implements Serializable {
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraModificacion;
-
-
-
-
 }

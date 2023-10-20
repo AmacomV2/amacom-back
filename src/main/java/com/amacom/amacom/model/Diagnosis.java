@@ -31,7 +31,7 @@ public class Diagnosis implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ALERTA_CONSULTA")
-    private EAlertaConsulta alertaConsulta;
+    private EAlertaConsulta eAlertaConsulta;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ESTADO_CONSULTA")

@@ -35,5 +35,4 @@ public class InstitutionService implements Serializable {
     @JoinColumn(name = "ID_INSTITUCION", referencedColumnName = "ID")
     private Institution institution;
 
-
 }

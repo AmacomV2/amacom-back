@@ -6,6 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public interface PersonBabysMapper {
 
@@ -17,4 +20,13 @@ public interface PersonBabysMapper {
     @Mapping(target = "idPadre", source = "padre.id")
     @Mapping(target = "idBebe", source = "bebe.id")
     PersonBabysDTO toPersonBabysDTO(PersonBabys personBabys);
+
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        return clavesToSort;
+    }
+
+
 }

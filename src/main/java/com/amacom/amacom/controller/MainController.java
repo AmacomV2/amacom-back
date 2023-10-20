@@ -17,4 +17,6 @@ public class MainController {
         return "Correcto";
     }
 
+    //dirección Swagger http://localhost:8080/api/swagger-ui.html#
+
 }

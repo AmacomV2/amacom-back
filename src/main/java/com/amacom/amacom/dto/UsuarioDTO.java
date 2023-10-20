@@ -6,6 +6,7 @@ import com.amacom.amacom.model.auth.ERole;
 import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.util.ITools;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,8 +24,6 @@ import java.util.UUID;
 public class UsuarioDTO implements Serializable {
 
     private static final long serialVersionUID = -4751522369108865599L;
-
-
 
     private UUID id;
 

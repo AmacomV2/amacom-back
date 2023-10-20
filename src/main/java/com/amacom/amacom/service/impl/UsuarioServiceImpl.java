@@ -11,6 +11,10 @@ import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.repository.auth.IUsuarioRepository;
 import com.amacom.amacom.service.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -29,6 +33,23 @@ public class UsuarioServiceImpl implements IUsuarioService {
             return usuarioRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
         }
         return null;
+    }
+
+
+    @Override
+    public Page<Usuario> findUsuario(UUID idPersona, String query, Pageable pageable){
+
+        Page<Usuario> usuarioPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("username").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            usuarioPage = this.usuarioRepository.findUsuario(idPersona, query, pageableDefault);
+        }
+        else{
+            usuarioPage = this.usuarioRepository.findUsuario(idPersona, query, pageable);
+        }
+        return usuarioPage;
     }
 
 

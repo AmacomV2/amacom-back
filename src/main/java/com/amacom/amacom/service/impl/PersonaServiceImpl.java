@@ -9,6 +9,10 @@ import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.repository.ITipoDocumentoRepository;
 import com.amacom.amacom.service.interfaces.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +27,25 @@ public class PersonaServiceImpl implements IPersonaService {
 
     private IPersonaRepository personaRepository;
 
-    private IEstadoCivilRepository estadoCivilRepository;
-
-    private ITipoDocumentoRepository tipoDocumentoRepository;
-
-    private IGeneroRepository generoRepository;
-
 
     private EntityManager entityManager;
 
+
+    @Override
+    public Page<Persona> findPersona( String query, Pageable pageable){
+
+        Page<Persona> personaPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("nombreAndApellido").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            personaPage = this.personaRepository.findPersona(query, pageableDefault);
+        }
+        else{
+            personaPage = this.personaRepository.findPersona( query, pageable);
+        }
+        return personaPage;
+    }
 
 
     @Override
@@ -102,21 +116,6 @@ public class PersonaServiceImpl implements IPersonaService {
     @Autowired
     public void setPersonaRepository(IPersonaRepository personaRepository) {
         this.personaRepository = personaRepository;
-    }
-
-    @Autowired
-    public void setEstadoCivilRepository(IEstadoCivilRepository estadoCivilRepository) {
-        this.estadoCivilRepository = estadoCivilRepository;
-    }
-
-    @Autowired
-    public void setTipoDocumentoRepository(ITipoDocumentoRepository tipoDocumentoRepository) {
-        this.tipoDocumentoRepository = tipoDocumentoRepository;
-    }
-
-    @Autowired
-    public void setGeneroRepository(IGeneroRepository generoRepository) {
-        this.generoRepository = generoRepository;
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,6 +38,10 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
         return null;
     }
 
+    @Override
+    public List<EventHasPersons> getAll(UUID idEvent) {
+        return this.eventHasPersonsRepository.findAllByIdEvent(idEvent);
+    }
 
     @Override
     public EventHasPersons findById(UUID id) {

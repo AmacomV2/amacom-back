@@ -23,6 +23,8 @@ public class PersonaDTO implements Serializable {
 
     private UUID id;
 
+    private String nombreAndApellido;
+
     @NotNull(message = "Campo no puede ser nulo")
     private UUID idTipoDocumento;
     private String nombreTipoDocumento;

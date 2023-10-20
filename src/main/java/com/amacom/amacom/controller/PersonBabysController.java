@@ -1,14 +1,19 @@
 package com.amacom.amacom.controller;
 
 
+import com.amacom.amacom.dto.LogBookDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.mapper.LogBookMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.model.Persona;
 import com.amacom.amacom.service.interfaces.IPersonBabysService;
 import com.amacom.amacom.service.interfaces.IPersonaService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +28,22 @@ public class PersonBabysController {
     private IPersonBabysService personBabysService;
 
     private IPersonaService personaService;
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<PersonBabysDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idPersona", required = false) UUID idPersona,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var personBabysPage = this.personBabysService.findPersonBabys(idPersona, query, ITools.getPageRequest(pageable, PersonBabysMapper.getClavesToSort()));
+
+        if (personBabysPage == null || personBabysPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(personBabysPage
+                .map(PersonBabysMapper.INSTANCE::toPersonBabysDTO), HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/{id}")

@@ -2,14 +2,15 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.EstadoCivil;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Persona;
+import com.amacom.amacom.model.*;
 import com.amacom.amacom.repository.IPersonBabysRepository;
 import com.amacom.amacom.repository.IPersonaRepository;
 import com.amacom.amacom.service.interfaces.IPersonBabysService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,23 @@ public class PersonBabysServiceImpl implements IPersonBabysService {
             return personBabysRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
         }
         return null;
+    }
+
+
+    @Override
+    public Page<PersonBabys> findPersonBabys(UUID idPersona, String query, Pageable pageable){
+
+        Page<PersonBabys> personBabysPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("bebe.nombreAndApellido").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            personBabysPage = this.personBabysRepository.findPersonBabys(idPersona, query, pageableDefault);
+        }
+        else{
+            personBabysPage = this.personBabysRepository.findPersonBabys(idPersona, query, pageable);
+        }
+        return personBabysPage;
     }
 
 

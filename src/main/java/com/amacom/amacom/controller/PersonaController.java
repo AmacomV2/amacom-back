@@ -8,7 +8,10 @@ import com.amacom.amacom.service.interfaces.IEstadoCivilService;
 import com.amacom.amacom.service.interfaces.IGeneroService;
 import com.amacom.amacom.service.interfaces.IPersonaService;
 import com.amacom.amacom.service.interfaces.ITipoDocumentoService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,21 @@ public class PersonaController {
     private IGeneroService generoService;
 
     private IEstadoCivilService estadoCivilService;
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<PersonaDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var personaPage = this.personaService.findPersona(query, ITools.getPageRequest(pageable, PersonaMapper.getClavesToSort()));
+
+        if (personaPage == null || personaPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(personaPage
+                .map(PersonaMapper
+                        .INSTANCE::toPersonaDTO), HttpStatus.OK);
+    }
 
     @GetMapping("/getAllPersona")
     public ResponseEntity<List<PersonaDTO>> getAllPersona(){
