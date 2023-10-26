@@ -4,10 +4,15 @@ import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.PersonBabys;
+import com.amacom.amacom.model.Persona;
 import com.amacom.amacom.model.TipoInstitucion;
 import com.amacom.amacom.repository.ITipoInstitucionRepository;
 import com.amacom.amacom.service.interfaces.ITipoInstitucionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +35,23 @@ public class TipoInstitucionServiceImpl implements ITipoInstitucionService {
         }
         return null;
     }
+
+    @Override
+    public Page<TipoInstitucion> findTipoInstitucion(String query, Pageable pageable){
+
+        Page<TipoInstitucion> tipoInstitucionPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            tipoInstitucionPage = this.tipoInstitucionRepository.findTipoInstitucion(query, pageableDefault);
+        }
+        else{
+            tipoInstitucionPage = this.tipoInstitucionRepository.findTipoInstitucion( query, pageable);
+        }
+        return tipoInstitucionPage;
+    }
+
 
     @Override
     public TipoInstitucion findById(UUID id) {

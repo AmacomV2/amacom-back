@@ -9,6 +9,10 @@ import com.amacom.amacom.repository.IInstitutionRepository;
 import com.amacom.amacom.service.interfaces.IInstitutionService;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +36,20 @@ public class InstitutionServiceImpl implements IInstitutionService {
         return null;
     }
 
+    @Override
+    public Page<Institution> findInstitution(UUID idTipoInstitucion, String query, Pageable pageable) {
+        Page<Institution> institutionPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            institutionPage = this.institutionRepository.findInstitution(idTipoInstitucion, query, pageableDefault);
+        }
+        else{
+            institutionPage = this.institutionRepository.findInstitution(idTipoInstitucion, query, pageable);
+        }
+        return institutionPage;
+    }
 
     @Override
     public Institution findById(UUID id) {

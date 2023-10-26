@@ -1,7 +1,9 @@
 package com.amacom.amacom.controller;
 
+import com.amacom.amacom.dto.InstitutionDTO;
 import com.amacom.amacom.dto.InstitutionServiceDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
+import com.amacom.amacom.mapper.InstitutionMapper;
 import com.amacom.amacom.mapper.InstitutionServiceMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
 import com.amacom.amacom.model.InstitutionService;
@@ -10,7 +12,10 @@ import com.amacom.amacom.service.interfaces.IInstitutionService;
 import com.amacom.amacom.service.interfaces.IInstitutionServiceService;
 import com.amacom.amacom.service.interfaces.IServicesService;
 import com.amacom.amacom.service.interfaces.IUsuarioService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +35,23 @@ public class InstitutionServiceController {
 
     private IInstitutionService institutionService;
 
+
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<InstitutionServiceDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idInstitution", required = false) UUID idInstitution,
+            @RequestParam(name = "idService", required = false) UUID idService,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var institutionServicePage = this.institutionServiceService.findInstitutionService(idInstitution, idService, query, ITools.getPageRequest(pageable, InstitutionServiceMapper.getClavesToSort()));
+
+        if (institutionServicePage == null || institutionServicePage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(institutionServicePage
+                .map(InstitutionServiceMapper.INSTANCE::toInstitutionServiceDTO), HttpStatus.OK);
+    }
 
 
     @GetMapping("/{id}")

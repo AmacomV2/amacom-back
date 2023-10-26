@@ -2,11 +2,16 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.InstitutionService;
 import com.amacom.amacom.model.InstitutionServicePerson;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.repository.IInstitutionServicePersonRepository;
 import com.amacom.amacom.service.interfaces.IInstitutionServicePersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +33,21 @@ public class InstitutionServicePersonServiceImpl implements IInstitutionServiceP
             return institutionServicePersonRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
         }
         return null;
+    }
+
+    @Override
+    public Page<InstitutionServicePerson> findInstitutionServicePerson(UUID idInstitutionService, UUID idPersona, String query, Pageable pageable) {
+        Page<InstitutionServicePerson> institutionServicePersonPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("institutionService.institution.nombre").ascending().and(Sort.by("institutionService.institution.fechaHoraCreacion").descending()));
+            institutionServicePersonPage = this.institutionServicePersonRepository.findInstitutionServicePerson(idInstitutionService, idPersona, query, pageableDefault);
+        }
+        else{
+            institutionServicePersonPage = this.institutionServicePersonRepository.findInstitutionServicePerson(idInstitutionService, idPersona, query, pageable);
+        }
+        return institutionServicePersonPage;
     }
 
     @Override

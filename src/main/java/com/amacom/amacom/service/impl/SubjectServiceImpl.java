@@ -2,16 +2,22 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.InstitutionServicePerson;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.model.Subject;
 import com.amacom.amacom.repository.ISubjectRepository;
 import com.amacom.amacom.service.interfaces.ISubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,10 +36,39 @@ public class SubjectServiceImpl implements ISubjectService {
         return null;
     }
 
+    @Override
+    public Page<Subject> findSubjectList(List<UUID> idSubjectList, String query, Pageable pageable) {
+        Page<Subject> subjectPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            subjectPage = this.subjectRepository.findSubjectList(idSubjectList, query, pageableDefault);
+        }
+        else{
+            subjectPage = this.subjectRepository.findSubjectList(idSubjectList, query, pageable);
+        }
+        return subjectPage;
+    }
 
     @Override
     public Subject findById(UUID id) {
         return this.subjectRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<Subject> findSubject(UUID idSubjectParent, String nombre, String query, Pageable pageable) {
+        Page<Subject> subjectPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            subjectPage = this.subjectRepository.findSubject(idSubjectParent, nombre, query, pageableDefault);
+        }
+        else{
+            subjectPage = this.subjectRepository.findSubject(idSubjectParent, nombre, query, pageable);
+        }
+        return subjectPage;
     }
 
     @Transactional

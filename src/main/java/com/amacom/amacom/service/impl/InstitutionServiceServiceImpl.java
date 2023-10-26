@@ -2,12 +2,17 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.Institution;
 import com.amacom.amacom.model.InstitutionService;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.repository.IInstitutionServiceRepository;
 import com.amacom.amacom.service.interfaces.IInstitutionService;
 import com.amacom.amacom.service.interfaces.IInstitutionServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +40,21 @@ public class InstitutionServiceServiceImpl implements IInstitutionServiceService
     @Override
     public InstitutionService findById(UUID id) {
         return this.institutionServiceRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<InstitutionService> findInstitutionService(UUID idInstitution, UUID idService, String query, Pageable pageable) {
+        Page<InstitutionService> institutionServicePage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("institution.nombre").ascending().and(Sort.by("institution.fechaHoraCreacion").descending()));
+            institutionServicePage = this.institutionServiceRepository.findInstitutionService(idInstitution, idService, query, pageableDefault);
+        }
+        else{
+            institutionServicePage = this.institutionServiceRepository.findInstitutionService(idInstitution, idService, query, pageable);
+        }
+        return institutionServicePage;
     }
 
     @Transactional

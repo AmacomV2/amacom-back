@@ -6,6 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public interface EventMapper {
 
@@ -17,4 +20,13 @@ public interface EventMapper {
     @Mapping(target = "idTipoEvento", source = "tipoEvento.id")
     @Mapping(target = "idUsuarioCrea", source = "usuario.id")
     EventDTO toEventDTO(Event event);
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("nombreTipoEvento", "tipoEvento.nombre");
+        clavesToSort.put("titulo", "titulo");
+        return clavesToSort;
+    }
+
+
 }

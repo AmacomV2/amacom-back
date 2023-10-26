@@ -6,6 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public interface SupportMaterialFilesMapper {
 
@@ -15,4 +18,12 @@ public interface SupportMaterialFilesMapper {
 
     @Mapping(target = "idSupportMaterial", source = "supportMaterial.id")
     SupportMaterialFilesDTO toSupportMaterialFilesDTO(SupportMaterialFiles supportMaterialFiles);
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("path", "path");
+        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        return clavesToSort;
+    }
+
 }

@@ -2,13 +2,18 @@ package com.amacom.amacom.controller;
 
 import com.amacom.amacom.dto.InstitutionDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
+import com.amacom.amacom.dto.TipoInstitucionDTO;
 import com.amacom.amacom.mapper.InstitutionMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
+import com.amacom.amacom.mapper.TipoInstitucionMapper;
 import com.amacom.amacom.model.Institution;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.service.interfaces.IInstitutionService;
 import com.amacom.amacom.service.interfaces.ITipoInstitucionService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +28,22 @@ public class InstitutionController {
     private IInstitutionService institutionService;
 
     private ITipoInstitucionService tipoInstitucionService;
+
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<InstitutionDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idTipoInstitucion", required = false) UUID idTipoInstitucion,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var institutionPage = this.institutionService.findInstitution(idTipoInstitucion, query, ITools.getPageRequest(pageable, InstitutionMapper.getClavesToSort()));
+
+        if (institutionPage == null || institutionPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(institutionPage
+                .map(InstitutionMapper.INSTANCE::toInstitutionDTO), HttpStatus.OK);
+    }
 
 
     @GetMapping("/{id}")

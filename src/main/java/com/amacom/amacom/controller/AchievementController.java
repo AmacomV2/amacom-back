@@ -9,7 +9,10 @@ import com.amacom.amacom.model.Achievement;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.service.interfaces.IAchievementService;
 import com.amacom.amacom.service.interfaces.ISubjectService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,22 @@ public class AchievementController {
     private IAchievementService achievementService;
 
     private ISubjectService subjectService;
+
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<AchievementDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idSubject", required = false) UUID idSubject,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var achievementPage = this.achievementService.findAchievement(idSubject, query, ITools.getPageRequest(pageable, AchievementMapper.getClavesToSort()));
+
+        if (achievementPage == null || achievementPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(achievementPage
+                .map(AchievementMapper.INSTANCE::toAchievementDTO), HttpStatus.OK);
+    }
 
 
     @GetMapping("/{id}")

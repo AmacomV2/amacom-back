@@ -2,11 +2,16 @@ package com.amacom.amacom.service.impl;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidacionException;
+import com.amacom.amacom.model.Achievement;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.model.SupportMaterialFiles;
 import com.amacom.amacom.repository.ISupportMaterialFilesRepository;
 import com.amacom.amacom.service.interfaces.ISupportMaterialFilesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +34,21 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
         return null;
     }
 
+
+    @Override
+    public Page<SupportMaterialFiles> findSupportMaterialFiles(UUID idSupportMaterial, String query, Pageable pageable) {
+        Page<SupportMaterialFiles> supportMaterialFilesPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("path").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial, query, pageableDefault);
+        }
+        else{
+            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial, query, pageable);
+        }
+        return supportMaterialFilesPage;
+    }
 
     @Override
     public SupportMaterialFiles findById(UUID id) {

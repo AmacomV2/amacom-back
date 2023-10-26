@@ -10,6 +10,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public interface InstitutionServicePersonMapper {
 
@@ -21,4 +24,10 @@ public interface InstitutionServicePersonMapper {
     @Mapping(target = "idInstitutionService", source = "institutionService.id")
     InstitutionServicePersonDTO toInstitutionServicePersonDTO(InstitutionServicePerson institutionServicePerson);
 
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("idInstitutionService", "institutionService.id");
+        return clavesToSort;
+    }
 }

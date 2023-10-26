@@ -5,6 +5,9 @@ import com.amacom.amacom.model.Services;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public interface ServicesMapper {
 
@@ -13,5 +16,12 @@ public interface ServicesMapper {
     Services toServices(ServicesDTO servicesDTO);
 
     ServicesDTO toServicesDTO(Services services);
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("nombre", "nombre");
+        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        return clavesToSort;
+    }
 
 }

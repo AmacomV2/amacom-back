@@ -1,7 +1,9 @@
 package com.amacom.amacom.controller;
 
+import com.amacom.amacom.dto.InstitutionServiceDTO;
 import com.amacom.amacom.dto.InstitutionServicePersonDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
+import com.amacom.amacom.mapper.InstitutionServiceMapper;
 import com.amacom.amacom.mapper.InstitutionServicePersonMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
 import com.amacom.amacom.model.InstitutionServicePerson;
@@ -9,7 +11,10 @@ import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.service.interfaces.IInstitutionServicePersonService;
 import com.amacom.amacom.service.interfaces.IInstitutionServiceService;
 import com.amacom.amacom.service.interfaces.IPersonaService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +32,22 @@ public class InstitutionServicePersonController {
 
     private IInstitutionServiceService institutionServiceService;
 
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<InstitutionServicePersonDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idInstitutionService") UUID idInstitutionService,
+            @RequestParam(name = "idPersona", required = false) UUID idPersona,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var institutionServicePersonPage = this.institutionServicePersonService.findInstitutionServicePerson(idInstitutionService, idPersona, query, ITools.getPageRequest(pageable, InstitutionServicePersonMapper.getClavesToSort()));
+
+        if (institutionServicePersonPage == null || institutionServicePersonPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(institutionServicePersonPage
+                .map(InstitutionServicePersonMapper.INSTANCE::toInstitutionServicePersonDTO), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<InstitutionServicePersonDTO> findById(

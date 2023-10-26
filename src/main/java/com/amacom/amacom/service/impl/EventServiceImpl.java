@@ -6,11 +6,16 @@ import com.amacom.amacom.model.EstadoCivil;
 import com.amacom.amacom.model.Event;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.Persona;
+import com.amacom.amacom.model.auth.Usuario;
 import com.amacom.amacom.repository.IEventRepository;
 import com.amacom.amacom.repository.ITipoEventoRepository;
 import com.amacom.amacom.service.interfaces.IEventService;
 import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +45,32 @@ public class EventServiceImpl implements IEventService {
     public Event findById(UUID id) {
         return this.eventRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
+
+
+    @Override
+    public Page<Event> findEvent(UUID idCreatedBy, UUID idUsuario, Date fechaDesde, Date fechaHasta, String query, Pageable pageable){
+
+        Page<Event> eventPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("titulo").ascending().and(Sort.by("comienzo").descending()));
+            if(idCreatedBy != null){
+                eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageableDefault);
+            }else{
+                eventPage = this.eventRepository.findEvent(idUsuario, fechaDesde, fechaHasta, query, pageableDefault);
+            }
+        }
+        else{
+            if(idCreatedBy != null){
+                eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageable);
+            }else{
+                eventPage = this.eventRepository.findEvent(idUsuario, fechaDesde, fechaHasta, query, pageable);
+            }
+        }
+        return eventPage;
+    }
+
 
     @Transactional
     @Override

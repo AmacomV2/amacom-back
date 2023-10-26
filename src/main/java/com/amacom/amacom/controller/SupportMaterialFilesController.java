@@ -1,14 +1,19 @@
 package com.amacom.amacom.controller;
 
+import com.amacom.amacom.dto.AchievementDTO;
 import com.amacom.amacom.dto.PersonBabysDTO;
 import com.amacom.amacom.dto.SupportMaterialFilesDTO;
+import com.amacom.amacom.mapper.AchievementMapper;
 import com.amacom.amacom.mapper.PersonBabysMapper;
 import com.amacom.amacom.mapper.SupportMaterialFilesMapper;
 import com.amacom.amacom.model.PersonBabys;
 import com.amacom.amacom.model.SupportMaterialFiles;
 import com.amacom.amacom.service.interfaces.ISupportMaterialFilesService;
 import com.amacom.amacom.service.interfaces.ISupportMaterialService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +28,22 @@ public class SupportMaterialFilesController {
     private ISupportMaterialFilesService supportMaterialFilesService;
 
     private ISupportMaterialService supportMaterialService;
+
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<SupportMaterialFilesDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idSupportMaterial", required = false) UUID idSupportMaterial,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var supportMaterialFilesPage = this.supportMaterialFilesService.findSupportMaterialFiles(idSupportMaterial, query, ITools.getPageRequest(pageable, SupportMaterialFilesMapper.getClavesToSort()));
+
+        if (supportMaterialFilesPage == null || supportMaterialFilesPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(supportMaterialFilesPage
+                .map(SupportMaterialFilesMapper.INSTANCE::toSupportMaterialFilesDTO), HttpStatus.OK);
+    }
 
 
     @GetMapping("/{id}")

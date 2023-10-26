@@ -2,12 +2,17 @@ package com.amacom.amacom.controller;
 
 import com.amacom.amacom.dto.GeneroDTO;
 import com.amacom.amacom.dto.SupportMaterialDTO;
+import com.amacom.amacom.dto.SupportMaterialFilesDTO;
 import com.amacom.amacom.mapper.GeneroMapper;
+import com.amacom.amacom.mapper.SupportMaterialFilesMapper;
 import com.amacom.amacom.mapper.SupportMaterialMapper;
 import com.amacom.amacom.model.Genero;
 import com.amacom.amacom.model.SupportMaterial;
 import com.amacom.amacom.service.interfaces.ISupportMaterialService;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,21 @@ import java.util.UUID;
 public class SupportMaterialController {
 
     private ISupportMaterialService supportMaterialService;
+
+    @GetMapping("/consulta")
+    public ResponseEntity<Page<SupportMaterialDTO>> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "idSubject", required = false) UUID idSubject,
+            @RequestParam(name = "query", required = false) String query) {
+
+        var supportMaterialPage = this.supportMaterialService.findSupportMaterial(idSubject, query, ITools.getPageRequest(pageable, SupportMaterialMapper.getClavesToSort()));
+
+        if (supportMaterialPage == null || supportMaterialPage.getContent().isEmpty()) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(supportMaterialPage
+                .map(SupportMaterialMapper.INSTANCE::toSupportMaterialDTO), HttpStatus.OK);
+    }
 
 
     @GetMapping("/{id}")
