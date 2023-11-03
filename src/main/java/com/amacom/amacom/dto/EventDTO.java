@@ -31,7 +31,7 @@ public class EventDTO implements Serializable {
 
     private UUID createdBy;
 
-    private String titulo;
+    private String title;
 
     private String description;
 

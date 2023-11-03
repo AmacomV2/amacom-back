@@ -16,34 +16,34 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
         Optional<User> findByUsername(String username);
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
-                        "FROM Usuario u " +
+                        "FROM User u " +
                         "WHERE (u.id <> :id or :id is null) " +
                         "AND (u.username = :username OR u.email = :email)")
         Boolean existsByUsernameOrEmail(UUID id, String username, String email);
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
-                        "FROM Usuario u " +
+                        "FROM User u " +
                         "WHERE (u.id <> :id or :id is null) " +
-                        "AND u.person.id = :personId")
-        Boolean existsByPersonId(UUID id, UUID personId);
+                        "AND u.person.id = :idPerson")
+        Boolean existsByPersonId(UUID id, UUID idPerson);
 
         @Query("SELECT DISTINCT u " +
-                        "FROM Usuario u " +
+                        "FROM User u " +
                         "WHERE u.email = :email ")
         User findByEmail(String email);
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
-                        "FROM Usuario u " +
+                        "FROM User u " +
                         "WHERE (u.id <> :id or :id is null) " +
                         "AND u.email = :email")
         Boolean emailExists(UUID id, String email);
 
         @Query("SELECT t " +
-                        "FROM Usuario t " +
-                        "WHERE (t.person.id = :personId OR :personId IS NULL) " +
-                        "AND CONCAT(UPPER(REPLACE(t.username, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.person.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
+                        "FROM User t " +
+                        "WHERE (t.person.id = :idPerson OR :idPerson IS NULL) " +
+                        "AND CONCAT(UPPER(REPLACE(t.username, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.person.fullName, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
-        Page<User> findUsuario(UUID personId, String query, Pageable pageable);
+        Page<User> findUser(UUID idPerson, String query, Pageable pageable);
 
 }

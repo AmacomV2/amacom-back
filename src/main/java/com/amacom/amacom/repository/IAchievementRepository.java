@@ -17,7 +17,7 @@ public interface IAchievementRepository extends JpaRepository<Achievement, UUID>
                         "FROM Achievement p " +
                         "WHERE (p.id <> :id or :id is null) " +
                         "AND p.name = :name ")
-        Boolean existsByNombre(UUID id, String name);
+        Boolean existByName(UUID id, String name);
 
         @Query("SELECT t " +
                         "FROM Achievement t " +

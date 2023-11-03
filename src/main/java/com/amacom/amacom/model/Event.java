@@ -43,7 +43,7 @@ public class Event implements Serializable {
     private User usuario;
 
     @Column(name = "TITULO")
-    private String titulo;
+    private String title;
 
     @Column(name = "DESCRIPCION")
     private String description;

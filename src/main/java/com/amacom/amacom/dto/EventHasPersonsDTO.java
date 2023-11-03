@@ -26,6 +26,6 @@ public class EventHasPersonsDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID idEvent;
 
-    private String tituloEvent;
+    private String name;
 
 }

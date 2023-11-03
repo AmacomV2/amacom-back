@@ -26,11 +26,11 @@ public class SubjectDTO implements Serializable {
     private UUID parentId;
 
     @NotNull(message = "Field cannot be null")
-    private UUID idResultadosAsociados;
+    private UUID idAssociatedResults;
 
     private String name;
 
-    private String indicacionValidez;
+    private String validityIndicator;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date createdAt;

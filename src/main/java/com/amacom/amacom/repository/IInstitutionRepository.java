@@ -17,11 +17,11 @@ public interface IInstitutionRepository extends JpaRepository<Institution, UUID>
                         "FROM Institution p " +
                         "WHERE (p.id <> :id or :id is null) " +
                         "AND p.name = :name ")
-        Boolean existsByNombre(UUID id, String name);
+        Boolean existByName(UUID id, String name);
 
         @Query("SELECT t " +
                         "FROM Institution t " +
-                        "WHERE (t.typeInstitucion.id = :institutionTypeId OR :institutionTypeId IS NULL) " +
+                        "WHERE (t.institutionType.id = :institutionTypeId OR :institutionTypeId IS NULL) " +
                         "AND CONCAT(UPPER(REPLACE(t.name , 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")

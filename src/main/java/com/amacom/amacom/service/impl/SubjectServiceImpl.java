@@ -81,10 +81,10 @@ public class SubjectServiceImpl implements ISubjectService {
     @Override
     public Subject update(Subject subject) {
         var subjectBD = this.subjectRepository.findById(subject.getId()).orElseThrow(DataNotFoundException::new);
-        subjectBD.setSubjectParent(subject.getSubjectParent());
-        subjectBD.setResultadosAsociados(subject.getResultadosAsociados());
+        subjectBD.setParent(subject.getParent());
+        subjectBD.setAssociatedResults(subject.getAssociatedResults());
         subjectBD.setName(subject.getName());
-        subjectBD.setIndicacionValidez(subject.getIndicacionValidez());
+        subjectBD.setValidityIndicator(subject.getValidityIndicator());
         subjectBD.setUpdatedAt(new Date());
         return this.subjectRepository.save(subjectBD);
     }

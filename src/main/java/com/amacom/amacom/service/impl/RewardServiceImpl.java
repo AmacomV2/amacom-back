@@ -69,7 +69,7 @@ public class RewardServiceImpl implements IRewardService {
 
     private void validateCreation(Reward reward) {
 
-        var existsSimilar = this.rewardRepository.existsByNombre(reward.getId(), reward.getName());
+        var existsSimilar = this.rewardRepository.existByName(reward.getId(), reward.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

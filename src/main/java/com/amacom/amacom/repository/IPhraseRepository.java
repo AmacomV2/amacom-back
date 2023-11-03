@@ -1,11 +1,12 @@
 package com.amacom.amacom.repository;
 
-import com.amacom.amacom.model.Phrase;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Phrase;
 
 @Repository
 public interface IPhraseRepository extends JpaRepository<Phrase, UUID> {
@@ -14,6 +15,6 @@ public interface IPhraseRepository extends JpaRepository<Phrase, UUID> {
             "FROM Phrase p " +
             "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
-    Boolean existsByNombre(UUID id, String name);
+    Boolean existByName(UUID id, String name);
 
 }

@@ -15,5 +15,5 @@ public interface IDocumentTypeRepository extends JpaRepository<DocumentType, UUI
             "FROM DocumentType p " +
             "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
-    Boolean existsByNombre(UUID id, String name);
+    Boolean existByName(UUID id, String name);
 }

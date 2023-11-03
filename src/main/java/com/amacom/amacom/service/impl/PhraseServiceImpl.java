@@ -65,7 +65,7 @@ public class PhraseServiceImpl implements IPhraseService {
 
     private void validateCreation(Phrase phrase) {
 
-        var existsSimilar = this.phraseRepository.existsByNombre(phrase.getId(), phrase.getName());
+        var existsSimilar = this.phraseRepository.existByName(phrase.getId(), phrase.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

@@ -51,7 +51,7 @@ public class EventServiceImpl implements IEventService {
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("titulo").ascending().and(Sort.by("start").descending()));
+                    Sort.by("title").ascending().and(Sort.by("start").descending()));
             if (idCreatedBy != null) {
                 eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageableDefault);
             } else {
@@ -84,7 +84,7 @@ public class EventServiceImpl implements IEventService {
         this.validateCreation(event);
         var eventBD = this.eventRepository.findById(event.getId()).orElseThrow(DataNotFoundException::new);
         eventBD.setEventType(event.getEventType());
-        eventBD.setTitulo(event.getTitulo());
+        eventBD.setTitle(event.getTitle());
         eventBD.setDescription(event.getDescription());
         eventBD.setStart(event.getStart());
         eventBD.setEnd(event.getEnd());
@@ -106,9 +106,9 @@ public class EventServiceImpl implements IEventService {
                         event.getEnd(), ">"))
             throw new ValidationException("La fecha fin es menor que la fecha de start.");
 
-        var existsSimilar = this.eventRepository.existsByTitulo(event.getId(), event.getTitulo());
+        var existsSimilar = this.eventRepository.existsByTitle(event.getId(), event.getTitle());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidationException("Ya existe un registro con este titulo.");
+            throw new ValidationException("Ya existe un registro con este title.");
     }
 
     @Autowired

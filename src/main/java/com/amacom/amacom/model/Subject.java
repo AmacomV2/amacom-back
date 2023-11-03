@@ -32,17 +32,17 @@ public class Subject implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_SUBJECT_PARENT", referencedColumnName = "ID")
-    private Subject subjectParent;
+    private Subject parent;
 
     @ManyToOne
     @JoinColumn(name = "ID_RESULTADOS_ASOCIADOS", referencedColumnName = "ID")
-    private Result resultadosAsociados;
+    private Result associatedResults;
 
     @Column(name = "NOMBRE", nullable = false)
     private String name;
 
     @Column(name = "INDICACION_VALIDEZ")
-    private String indicacionValidez;
+    private String validityIndicator;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

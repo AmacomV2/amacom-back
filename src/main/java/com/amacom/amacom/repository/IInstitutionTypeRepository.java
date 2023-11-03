@@ -14,16 +14,16 @@ import com.amacom.amacom.model.InstitutionType;
 public interface IInstitutionTypeRepository extends JpaRepository<InstitutionType, UUID> {
 
         @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
-                        "FROM TypeInstitucion p " +
+                        "FROM InstitutionType p " +
                         "WHERE (p.id <> :id or :id is null) " +
                         "AND p.name = :name ")
-        Boolean existsByNombre(UUID id, String name);
+        Boolean existByName(UUID id, String name);
 
         @Query("SELECT t " +
-                        "FROM TypeInstitucion t " +
+                        "FROM InstitutionType t " +
                         "WHERE CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
-        Page<InstitutionType> findTypeInstitucion(String query, Pageable pageable);
+        Page<InstitutionType> findInstitutionType(String query, Pageable pageable);
 
 }

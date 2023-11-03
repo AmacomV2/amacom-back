@@ -42,9 +42,9 @@ public class InstitutionTypeServiceImpl implements IInstitutionTypeService {
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                     Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
-            typeInstitutionPage = this.typeInstitutionRepository.findTypeInstitucion(query, pageableDefault);
+            typeInstitutionPage = this.typeInstitutionRepository.findInstitutionType(query, pageableDefault);
         } else {
-            typeInstitutionPage = this.typeInstitutionRepository.findTypeInstitucion(query, pageable);
+            typeInstitutionPage = this.typeInstitutionRepository.findInstitutionType(query, pageable);
         }
         return typeInstitutionPage;
     }
@@ -85,7 +85,7 @@ public class InstitutionTypeServiceImpl implements IInstitutionTypeService {
 
     private void validateCreation(InstitutionType typeInstitution) {
 
-        var existsSimilar = this.typeInstitutionRepository.existsByNombre(typeInstitution.getId(),
+        var existsSimilar = this.typeInstitutionRepository.existByName(typeInstitution.getId(),
                 typeInstitution.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");

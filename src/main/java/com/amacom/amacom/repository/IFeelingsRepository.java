@@ -15,6 +15,6 @@ public interface IFeelingsRepository extends JpaRepository<Feelings, UUID> {
             "FROM Feelings p " +
             "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
-    Boolean existsByNombre(UUID id, String name);
+    Boolean existByName(UUID id, String name);
 
 }

@@ -71,7 +71,7 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
 
     private void validateCreation(DocumentType documentType) {
 
-        var existsSimilar = this.documentTypeRepository.existsByNombre(documentType.getId(),
+        var existsSimilar = this.documentTypeRepository.existByName(documentType.getId(),
                 documentType.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");

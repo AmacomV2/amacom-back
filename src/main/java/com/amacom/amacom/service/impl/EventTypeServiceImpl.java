@@ -72,9 +72,11 @@ public class EventTypeServiceImpl implements IEventTypeService {
 
     private void validateCreation(EventType eventType) {
 
-        var existsSimilar = this.eventTypeRepository.existsByNombre(eventType.getId(), eventType.getName());
-        if (Boolean.TRUE.equals(existsSimilar))
+        var existsSimilar = this.eventTypeRepository.existByName(eventType.getId(), eventType.getName());
+        if (Boolean.TRUE.equals(existsSimilar)) {
+
             throw new ValidationException("Ya existe un registro con este name");
+        }
     }
 
     @Autowired

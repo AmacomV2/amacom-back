@@ -66,7 +66,7 @@ public class SituationTypeServiceImpl implements ISituationTypeService {
 
     private void validateCreation(SituationType situationType) {
 
-        var existsSimilar = this.situationTypeRepository.existsByNombre(situationType.getId(),
+        var existsSimilar = this.situationTypeRepository.existByName(situationType.getId(),
                 situationType.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");

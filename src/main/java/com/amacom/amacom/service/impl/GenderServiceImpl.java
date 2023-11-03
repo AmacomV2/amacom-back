@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.Gender;
-import com.amacom.amacom.repository.IGeneroRepository;
+import com.amacom.amacom.repository.IGenderRepository;
 import com.amacom.amacom.service.interfaces.IGenderService;
 
 @Service
 public class GenderServiceImpl implements IGenderService {
 
-    private IGeneroRepository genderRepository;
+    private IGenderRepository genderRepository;
 
     private EntityManager entityManager;
 
@@ -70,13 +70,13 @@ public class GenderServiceImpl implements IGenderService {
 
     private void validateCreation(Gender gender) {
 
-        var existsSimilar = this.genderRepository.existsByNombre(gender.getId(), gender.getName());
+        var existsSimilar = this.genderRepository.existByName(gender.getId(), gender.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }
 
     @Autowired
-    public void setGenderRepository(IGeneroRepository genderRepository) {
+    public void setGenderRepository(IGenderRepository genderRepository) {
         this.genderRepository = genderRepository;
     }
 

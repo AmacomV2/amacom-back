@@ -35,8 +35,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "USUARIO")
 public class User implements UserDetails {
-
-    private static final long serialVersionUID = 6285576422865023099L;
     @Id
     @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;

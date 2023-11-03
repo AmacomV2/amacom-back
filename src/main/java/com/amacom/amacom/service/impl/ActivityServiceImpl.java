@@ -65,7 +65,7 @@ public class ActivityServiceImpl implements IActivityService {
 
     private void validateCreation(Activity activity) {
 
-        var existsSimilar = this.activityRepository.existsByNombre(activity.getId(), activity.getName());
+        var existsSimilar = this.activityRepository.existByName(activity.getId(), activity.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

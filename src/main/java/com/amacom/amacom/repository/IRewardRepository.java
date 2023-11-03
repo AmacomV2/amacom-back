@@ -1,11 +1,12 @@
 package com.amacom.amacom.repository;
 
-import com.amacom.amacom.model.Reward;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Reward;
 
 @Repository
 public interface IRewardRepository extends JpaRepository<Reward, UUID> {
@@ -14,6 +15,6 @@ public interface IRewardRepository extends JpaRepository<Reward, UUID> {
             "FROM Reward p " +
             "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
-    Boolean existsByNombre(UUID id, String name);
+    Boolean existByName(UUID id, String name);
 
 }

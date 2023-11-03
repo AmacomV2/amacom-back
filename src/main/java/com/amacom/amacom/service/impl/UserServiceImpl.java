@@ -38,9 +38,9 @@ public class UserServiceImpl implements IUserService {
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                     Sort.by("username").ascending().and(Sort.by("createdAt").descending()));
-            usersPage = this.userRepository.findUsuario(personId, query, pageableDefault);
+            usersPage = this.userRepository.findUser(personId, query, pageableDefault);
         } else {
-            usersPage = this.userRepository.findUsuario(personId, query, pageable);
+            usersPage = this.userRepository.findUser(personId, query, pageable);
         }
         return usersPage;
     }

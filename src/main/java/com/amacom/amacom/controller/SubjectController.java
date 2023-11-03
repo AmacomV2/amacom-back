@@ -82,7 +82,7 @@ public class SubjectController {
         Subject subject = SubjectMapper.INSTANCE.toSubject(subjectDTO);
 
         if (subjectDTO.getParentId() != null) {
-            subject.setSubjectParent(this.subjectService.getEntityFromUUID(subjectDTO.getParentId()));
+            subject.setParent(this.subjectService.getEntityFromUUID(subjectDTO.getParentId()));
         }
 
         var subjectBD = this.subjectService.create(subject);
@@ -97,7 +97,7 @@ public class SubjectController {
         Subject subject = SubjectMapper.INSTANCE.toSubject(subjectDTO);
 
         if (subjectDTO.getParentId() != null) {
-            subject.setSubjectParent(this.subjectService.getEntityFromUUID(subjectDTO.getParentId()));
+            subject.setParent(this.subjectService.getEntityFromUUID(subjectDTO.getParentId()));
         }
 
         var subjectBD = this.subjectService.update(subject);

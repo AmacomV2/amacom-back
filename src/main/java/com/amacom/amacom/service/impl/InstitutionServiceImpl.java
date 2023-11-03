@@ -70,7 +70,7 @@ public class InstitutionServiceImpl implements IInstitutionService {
         this.validateCreation(institution);
         var institutionBD = this.institutionRepository.findById(institution.getId())
                 .orElseThrow(DataNotFoundException::new);
-        institutionBD.setTypeInstitucion(institution.getTypeInstitucion());
+        institutionBD.setInstitutionType(institution.getInstitutionType());
         institutionBD.setName(institution.getName());
         institutionBD.setDescription(institution.getDescription());
         institutionBD.setUpdatedAt(new Date());
@@ -85,7 +85,7 @@ public class InstitutionServiceImpl implements IInstitutionService {
 
     private void validateCreation(Institution institution) {
 
-        var existsSimilar = this.institutionRepository.existsByNombre(institution.getId(), institution.getName());
+        var existsSimilar = this.institutionRepository.existByName(institution.getId(), institution.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

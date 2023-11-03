@@ -32,7 +32,7 @@ public class InstitutionController {
 
     private IInstitutionService institutionService;
 
-    private IInstitutionTypeService typeInstitucionService;
+    private IInstitutionTypeService institutionTypeService;
 
     @GetMapping("/consulta")
     public ResponseEntity<Page<InstitutionDTO>> findPageable(
@@ -66,8 +66,8 @@ public class InstitutionController {
 
         Institution institution = InstitutionMapper.INSTANCE.toInstitution(institutionDTO);
 
-        institution.setTypeInstitucion(
-                this.typeInstitucionService.getEntityFromUUID(institutionDTO.getInstitutionTypeId()));
+        institution.setInstitutionType(
+                this.institutionTypeService.getEntityFromUUID(institutionDTO.getInstitutionTypeId()));
 
         var institutionBD = this.institutionService.create(institution);
         if (institutionBD == null)
@@ -80,8 +80,8 @@ public class InstitutionController {
             @Valid @RequestBody InstitutionDTO institutionDTO) {
         Institution institution = InstitutionMapper.INSTANCE.toInstitution(institutionDTO);
 
-        institution.setTypeInstitucion(
-                this.typeInstitucionService.getEntityFromUUID(institutionDTO.getInstitutionTypeId()));
+        institution.setInstitutionType(
+                this.institutionTypeService.getEntityFromUUID(institutionDTO.getInstitutionTypeId()));
 
         var institutionBD = this.institutionService.update(institution);
         if (institutionBD == null) {
@@ -103,7 +103,7 @@ public class InstitutionController {
     }
 
     @Autowired
-    public void setTypeInstitucionService(IInstitutionTypeService typeInstitucionService) {
-        this.typeInstitucionService = typeInstitucionService;
+    public void setInstitutionTypeService(IInstitutionTypeService institutionTypeService) {
+        this.institutionTypeService = institutionTypeService;
     }
 }

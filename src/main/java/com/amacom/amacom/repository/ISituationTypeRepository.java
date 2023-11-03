@@ -12,9 +12,9 @@ import com.amacom.amacom.model.SituationType;
 public interface ISituationTypeRepository extends JpaRepository<SituationType, UUID> {
 
     @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
-            "FROM TypeSituacion p " +
+            "FROM SituationType p " +
             "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
-    Boolean existsByNombre(UUID id, String name);
+    Boolean existByName(UUID id, String name);
 
 }

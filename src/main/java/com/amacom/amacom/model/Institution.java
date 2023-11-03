@@ -32,7 +32,7 @@ public class Institution implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_TIPO_INSITUCION", referencedColumnName = "ID")
-    private InstitutionType typeInstitucion;
+    private InstitutionType institutionType;
 
     @Column(name = "NOMBRE")
     private String name;

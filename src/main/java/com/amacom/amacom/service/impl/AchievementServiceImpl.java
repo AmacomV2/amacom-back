@@ -84,7 +84,7 @@ public class AchievementServiceImpl implements IAchievementService {
 
     private void validateCreation(Achievement achievement) {
 
-        var existsSimilar = this.achievementRepository.existsByNombre(achievement.getId(), achievement.getName());
+        var existsSimilar = this.achievementRepository.existByName(achievement.getId(), achievement.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

@@ -25,7 +25,7 @@ public interface EventMapper {
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
         clavesToSort.put("eventTypeName", "eventType.name");
-        clavesToSort.put("titulo", "titulo");
+        clavesToSort.put("title", "title");
         return clavesToSort;
     }
 

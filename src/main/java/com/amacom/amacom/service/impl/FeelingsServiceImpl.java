@@ -66,7 +66,7 @@ public class FeelingsServiceImpl implements IFeelingsService {
 
     private void validateCreation(Feelings feelings) {
 
-        var existsSimilar = this.feelingsRepository.existsByNombre(feelings.getId(), feelings.getName());
+        var existsSimilar = this.feelingsRepository.existByName(feelings.getId(), feelings.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }

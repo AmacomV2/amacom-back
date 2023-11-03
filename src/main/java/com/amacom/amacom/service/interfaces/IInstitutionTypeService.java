@@ -15,9 +15,9 @@ public interface IInstitutionTypeService {
 
     Page<InstitutionType> findInstitutionType(String query, Pageable pageable);
 
-    InstitutionType create(InstitutionType typeInstitucion);
+    InstitutionType create(InstitutionType institutionType);
 
-    InstitutionType update(InstitutionType typeInstitucion);
+    InstitutionType update(InstitutionType institutionType);
 
     void deleteById(UUID id);
 

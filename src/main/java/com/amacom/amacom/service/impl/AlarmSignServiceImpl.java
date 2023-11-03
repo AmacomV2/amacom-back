@@ -68,7 +68,7 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
 
     private void validateCreation(AlarmSign alarmSign) {
 
-        var existsSimilar = this.alarmSignRepository.existsByNombre(alarmSign.getId(), alarmSign.getName());
+        var existsSimilar = this.alarmSignRepository.existByName(alarmSign.getId(), alarmSign.getName());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Ya existe un registro con este name");
     }
