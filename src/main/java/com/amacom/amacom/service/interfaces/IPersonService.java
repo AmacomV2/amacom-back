@@ -20,6 +20,8 @@ public interface IPersonService {
 
     Person findPersonById(UUID id);
 
+    Person findPersonByUser(String username);
+
     Person createPerson(Person person);
 
     Person updatePerson(Person person);

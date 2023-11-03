@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amacom.amacom.dto.auth.AuthResponseDTO;
 import com.amacom.amacom.dto.auth.LoginRequestDTO;
 import com.amacom.amacom.dto.auth.RegisterRequestDTO;
 import com.amacom.amacom.dto.response.ErrorDTO;
@@ -45,16 +44,17 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
             AuthResponse response = this.IAuthService
                     .login(LoginRequestMapper.INSTANCE.toLoginRequest(loginRequestDTO));
             if (response == null) {
-                return new ResponseEntity<>(new AuthResponseDTO(), HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(new ErrorDTO("Wrong credentials."), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(AuthResponseMapper.INSTANCE.toAuthResponseDTO(response), HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessDTO(AuthResponseMapper.INSTANCE.toAuthResponseDTO(response)),
+                    HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new AuthResponseDTO(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

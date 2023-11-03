@@ -11,7 +11,7 @@ public class ErrorDTO extends ResponseDTO {
      * 
      */
     public ErrorDTO() {
-        super(null, false, "Error");
+        super(null, false, "Error.");
     }
 
     /**
@@ -21,6 +21,15 @@ public class ErrorDTO extends ResponseDTO {
      */
     public ErrorDTO(String message) {
         super(null, false, message);
+    }
+
+    /**
+     * Create a { ErrorDTO} with a message only.
+     * 
+     * @param message the message
+     */
+    public ErrorDTO(Exception e) {
+        super(e, false, e.getLocalizedMessage());
     }
 
     /**

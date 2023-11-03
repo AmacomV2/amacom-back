@@ -19,12 +19,15 @@ import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.Person;
 import com.amacom.amacom.repository.IPersonRepository;
+import com.amacom.amacom.repository.auth.IUserRepository;
 import com.amacom.amacom.service.interfaces.IPersonService;
 
 @Service
 public class PersonServiceImpl implements IPersonService {
 
     private IPersonRepository personRepository;
+
+    private IUserRepository usersRepository;
 
     private EntityManager entityManager;
 
@@ -49,6 +52,13 @@ public class PersonServiceImpl implements IPersonService {
             return personRepository.findById(personId).orElseThrow(DataNotFoundException::new);
         }
         return null;
+    }
+
+    @Override
+    public Person findPersonByUser(String username) {
+        this.setUserRepository(usersRepository);
+        var userData = this.usersRepository.findByUsername(username);
+        return this.findPersonById(userData.get().getId());
     }
 
     @Override
@@ -112,8 +122,13 @@ public class PersonServiceImpl implements IPersonService {
         this.personRepository = personRepository;
     }
 
+    public void setUserRepository(IUserRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
+
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
 }

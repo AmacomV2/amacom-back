@@ -3,10 +3,12 @@ package com.amacom.amacom.util;
 import org.springframework.lang.Nullable;
 
 public enum ErrorCodes {
-
+    // TODO: Map all kind of errors here
     UNIQUE_VALUES_REQUIRED(100, "Non unique values detected, try changing them."),
 
-    ERROR_CREATING_RECORD(102, "Error on saving record into DB.");
+    ERROR_CREATING_RECORD(102, "Error on saving record into DB."),
+
+    ERROR_QUERY_DB(102, "Error on executing query into DB.");
 
     private static final ErrorCodes[] VALUES;
 
