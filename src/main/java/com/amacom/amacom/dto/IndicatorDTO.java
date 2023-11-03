@@ -1,14 +1,11 @@
 package com.amacom.amacom.dto;
 
-import com.amacom.amacom.util.ITools;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,7 +16,6 @@ public class IndicatorDTO implements Serializable {
 
     private UUID id;
 
-
-    private String nombre;
+    private String name;
 
 }

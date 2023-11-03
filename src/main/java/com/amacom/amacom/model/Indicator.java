@@ -22,7 +22,6 @@ public class Indicator implements Serializable {
     private UUID id;
 
     @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
+    private String name;
 
 }
-

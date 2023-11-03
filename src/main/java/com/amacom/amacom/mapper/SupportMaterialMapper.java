@@ -1,12 +1,13 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.SupportMaterialDTO;
-import com.amacom.amacom.model.SupportMaterial;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amacom.amacom.dto.SupportMaterialDTO;
+import com.amacom.amacom.model.SupportMaterial;
 
 @Mapper
 public interface SupportMaterialMapper {
@@ -19,9 +20,9 @@ public interface SupportMaterialMapper {
 
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("nombre", "nombre");
-        clavesToSort.put("descripcion", "descripcion");
-        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        clavesToSort.put("name", "name");
+        clavesToSort.put("description", "description");
+        clavesToSort.put("createdAt", "createdAt");
         return clavesToSort;
     }
 

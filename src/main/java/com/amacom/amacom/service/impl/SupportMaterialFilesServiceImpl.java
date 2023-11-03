@@ -1,12 +1,10 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Achievement;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.SupportMaterialFiles;
-import com.amacom.amacom.repository.ISupportMaterialFilesRepository;
-import com.amacom.amacom.service.interfaces.ISupportMaterialFilesService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.SupportMaterialFiles;
+import com.amacom.amacom.repository.ISupportMaterialFilesRepository;
+import com.amacom.amacom.service.interfaces.ISupportMaterialFilesService;
 
 @Service
 public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesService {
@@ -34,18 +33,19 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
         return null;
     }
 
-
     @Override
-    public Page<SupportMaterialFiles> findSupportMaterialFiles(UUID idSupportMaterial, String query, Pageable pageable) {
+    public Page<SupportMaterialFiles> findSupportMaterialFiles(UUID idSupportMaterial, String query,
+            Pageable pageable) {
         Page<SupportMaterialFiles> supportMaterialFilesPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("path").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial, query, pageableDefault);
-        }
-        else{
-            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial, query, pageable);
+                    Sort.by("path").ascending().and(Sort.by("createdAt").descending()));
+            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial,
+                    query, pageableDefault);
+        } else {
+            supportMaterialFilesPage = this.supportMaterialFilesRepository.findSupportMaterialFiles(idSupportMaterial,
+                    query, pageable);
         }
         return supportMaterialFilesPage;
     }
@@ -59,7 +59,7 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
     @Override
     public SupportMaterialFiles create(SupportMaterialFiles supportMaterialFiles) {
         supportMaterialFiles.setId(UUID.randomUUID());
-        supportMaterialFiles.setFechaHoraCreacion(new Date());
+        supportMaterialFiles.setCreatedAt(new Date());
         var supportMaterialFilesBD = this.supportMaterialFilesRepository.save(supportMaterialFiles);
         this.entityManager.flush();
         this.entityManager.refresh(supportMaterialFilesBD);
@@ -68,16 +68,18 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
 
     @Override
     public SupportMaterialFiles update(SupportMaterialFiles supportMaterialFiles) {
-        var supportMaterialFilesBD = this.supportMaterialFilesRepository.findById(supportMaterialFiles.getId()).orElseThrow(DataNotFoundException::new);
+        var supportMaterialFilesBD = this.supportMaterialFilesRepository.findById(supportMaterialFiles.getId())
+                .orElseThrow(DataNotFoundException::new);
         supportMaterialFilesBD.setSupportMaterial(supportMaterialFiles.getSupportMaterial());
         supportMaterialFilesBD.setPath(supportMaterialFiles.getPath());
-        supportMaterialFilesBD.setFechaHoraModificacion(new Date());
+        supportMaterialFilesBD.setUpdatedAt(new Date());
         return this.supportMaterialFilesRepository.save(supportMaterialFilesBD);
     }
 
     @Override
     public void deleteById(UUID id) {
-        var supportMaterialFilesBD = this.supportMaterialFilesRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        var supportMaterialFilesBD = this.supportMaterialFilesRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new);
         this.supportMaterialFilesRepository.deleteById(supportMaterialFilesBD.getId());
     }
 

@@ -1,15 +1,25 @@
 package com.amacom.amacom.model;
 
-import com.amacom.amacom.model.auth.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.amacom.amacom.model.auth.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
@@ -26,11 +36,11 @@ public class PersonSituation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
-    private Usuario usuario;
+    private User usuario;
 
     @ManyToOne
     @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
@@ -38,29 +48,29 @@ public class PersonSituation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_SITUATION_TYPE", referencedColumnName = "ID")
-    private TipoSituacion tipoSituacion;
+    private SituationType situationType;
 
     @Column(name = "DESCRIPCION")
-    private String descripcion;
+    private String description;
 
     @Column(name = "PRIMER_PENSAMIENTO")
-    private String primerPensamiento;
+    private String firstThought;
 
     @Column(name = "COMPORTAMIENTO")
-    private String comportamiento;
+    private String behavior;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "GRADO_AFECTACION")
-    private EGradoAfectacion gradoAfectacion;
+    private EAffectationDegree affectationDegree;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
+    private Date createdAt;
 
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    private Date updatedAt;
 
     @Column(name = "EVALUACION_ENFERMERIA")
-    private String evaluacionEnfermeria;
+    private String nursingAssessment;
 }

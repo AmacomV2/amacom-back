@@ -1,19 +1,19 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Activity;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IActivityRepository;
-import com.amacom.amacom.service.interfaces.IActivityService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Activity;
+import com.amacom.amacom.repository.IActivityRepository;
+import com.amacom.amacom.service.interfaces.IActivityService;
 
 @Service
 public class ActivityServiceImpl implements IActivityService {
@@ -21,7 +21,6 @@ public class ActivityServiceImpl implements IActivityService {
     private IActivityRepository activityRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Activity getEntityFromUUID(UUID uuid) {
@@ -31,7 +30,6 @@ public class ActivityServiceImpl implements IActivityService {
         return null;
     }
 
-
     @Override
     public Activity findById(UUID id) {
         return this.activityRepository.findById(id).orElseThrow(DataNotFoundException::new);
@@ -40,9 +38,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Transactional
     @Override
     public Activity create(Activity activity) {
-        this.validarCreacion(activity);
+        this.validateCreation(activity);
         activity.setId(UUID.randomUUID());
-        activity.setFechaHoraCreacion(new Date());
+        activity.setCreatedAt(new Date());
         var activityBD = this.activityRepository.save(activity);
         this.entityManager.flush();
         this.entityManager.refresh(activityBD);
@@ -51,11 +49,11 @@ public class ActivityServiceImpl implements IActivityService {
 
     @Override
     public Activity update(Activity activity) {
-        this.validarCreacion(activity);
+        this.validateCreation(activity);
         var activityBD = this.activityRepository.findById(activity.getId()).orElseThrow(DataNotFoundException::new);
-        activityBD.setNombre(activity.getNombre());
-        activityBD.setDescripcion(activity.getDescripcion());
-        activityBD.setFechaHoraModificacion(new Date());
+        activityBD.setName(activity.getName());
+        activityBD.setDescription(activity.getDescription());
+        activityBD.setUpdatedAt(new Date());
         return this.activityRepository.save(activityBD);
     }
 
@@ -65,18 +63,17 @@ public class ActivityServiceImpl implements IActivityService {
         this.activityRepository.deleteById(activityBD.getId());
     }
 
-    private void validarCreacion(Activity activity){
+    private void validateCreation(Activity activity) {
 
-        var existsSimilar = this.activityRepository.existsByNombre(activity.getId(), activity.getNombre());
+        var existsSimilar = this.activityRepository.existsByNombre(activity.getId(), activity.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
 
     @Autowired
     public void setActivityRepository(IActivityRepository activityRepository) {

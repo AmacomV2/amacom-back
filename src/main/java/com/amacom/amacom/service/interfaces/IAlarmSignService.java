@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.AlarmSign;
-import com.amacom.amacom.model.Genero;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.AlarmSign;
 
 @Service
 public interface IAlarmSignService {
@@ -18,6 +18,5 @@ public interface IAlarmSignService {
     void deleteById(UUID id);
 
     AlarmSign getEntityFromUUID(UUID uuid);
-
 
 }

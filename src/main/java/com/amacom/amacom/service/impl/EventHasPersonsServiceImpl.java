@@ -1,30 +1,28 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.EstadoCivil;
-import com.amacom.amacom.model.Event;
-import com.amacom.amacom.model.EventHasPersons;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IEventHasPersonsRepository;
-import com.amacom.amacom.repository.IEventRepository;
-import com.amacom.amacom.repository.IPersonaRepository;
-import com.amacom.amacom.service.interfaces.IEventHasPersonsService;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.EventHasPersons;
+import com.amacom.amacom.repository.IEventHasPersonsRepository;
+import com.amacom.amacom.repository.IEventRepository;
+import com.amacom.amacom.repository.IPersonRepository;
+import com.amacom.amacom.service.interfaces.IEventHasPersonsService;
 
 @Service
 public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
 
     private IEventHasPersonsRepository eventHasPersonsRepository;
 
-    private IPersonaRepository personaRepository;
+    private IPersonRepository personRepository;
 
     private IEventRepository eventRepository;
 
@@ -51,7 +49,7 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
     @Transactional
     @Override
     public EventHasPersons create(EventHasPersons eventHasPersons) {
-        this.validarCreacion(eventHasPersons);
+        this.validateCreation(eventHasPersons);
         eventHasPersons.setId(UUID.randomUUID());
         var eventHasPersonsBD = this.eventHasPersonsRepository.save(eventHasPersons);
         this.entityManager.flush();
@@ -61,17 +59,19 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
 
     @Override
     public EventHasPersons update(EventHasPersons eventHasPersons) {
-        this.validarCreacion(eventHasPersons);
-        var eventHasPersonsBD = this.eventHasPersonsRepository.findById(eventHasPersons.getId()).orElseThrow(DataNotFoundException::new);
-        eventHasPersonsBD.setPersona(eventHasPersons.getPersona());
+        this.validateCreation(eventHasPersons);
+        var eventHasPersonsBD = this.eventHasPersonsRepository.findById(eventHasPersons.getId())
+                .orElseThrow(DataNotFoundException::new);
+        eventHasPersonsBD.setPerson(eventHasPersons.getPerson());
         eventHasPersonsBD.setEvent(eventHasPersons.getEvent());
         return this.eventHasPersonsRepository.save(eventHasPersonsBD);
     }
 
-    private void validarCreacion(EventHasPersons eventHasPersons){
-            var existsSimilar = this.eventHasPersonsRepository.existsByIdPersonaAndIdEvento(eventHasPersons.getId(), eventHasPersons.getPersona().getId(), eventHasPersons.getEvent().getId());
+    public void validateCreation(EventHasPersons eventHasPersons) {
+        var existsSimilar = this.eventHasPersonsRepository.existsByPersonIdAndIdEvento(eventHasPersons.getId(),
+                eventHasPersons.getPerson().getId(), eventHasPersons.getEvent().getId());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro para esta persona y este evento.");
+            throw new ValidationException("Ya existe un registro para esta person y este evento.");
     }
 
     @Override
@@ -81,8 +81,8 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
     }
 
     @Autowired
-    public void setPersonaRepository(IPersonaRepository personaRepository) {
-        this.personaRepository = personaRepository;
+    public void setPersonRepository(IPersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @Autowired

@@ -19,8 +19,8 @@ public interface ServicesMapper {
 
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("nombre", "nombre");
-        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        clavesToSort.put("name", "name");
+        clavesToSort.put("createdAt", "createdAt");
         return clavesToSort;
     }
 

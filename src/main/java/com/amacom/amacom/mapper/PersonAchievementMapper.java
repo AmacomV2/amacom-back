@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.PersonAchievementDTO;
-import com.amacom.amacom.model.PersonAchievement;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.PersonAchievementDTO;
+import com.amacom.amacom.model.PersonAchievement;
 
 @Mapper
 public interface PersonAchievementMapper {
@@ -13,7 +14,7 @@ public interface PersonAchievementMapper {
 
     PersonAchievement toPersonAchievement(PersonAchievementDTO personAchievementDTO);
 
-    @Mapping(target = "idPersona", source = "persona.id")
+    @Mapping(target = "personId", source = "person.id")
     @Mapping(target = "idAchievement", source = "achievement.id")
     PersonAchievementDTO toPersonAchievementDTO(PersonAchievement personAchievement);
 

@@ -1,19 +1,19 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Reward;
-import com.amacom.amacom.repository.IRewardRepository;
-import com.amacom.amacom.service.interfaces.IRewardService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Reward;
+import com.amacom.amacom.repository.IRewardRepository;
+import com.amacom.amacom.service.interfaces.IRewardService;
 
 @Service
 public class RewardServiceImpl implements IRewardService {
@@ -21,7 +21,6 @@ public class RewardServiceImpl implements IRewardService {
     private IRewardRepository rewardRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Reward getEntityFromUUID(UUID uuid) {
@@ -31,7 +30,6 @@ public class RewardServiceImpl implements IRewardService {
         return null;
     }
 
-
     @Override
     public Reward findById(UUID id) {
         return this.rewardRepository.findById(id).orElseThrow(DataNotFoundException::new);
@@ -40,9 +38,9 @@ public class RewardServiceImpl implements IRewardService {
     @Transactional
     @Override
     public Reward create(Reward reward) {
-        this.validarCreacion(reward);
+        this.validateCreation(reward);
         reward.setId(UUID.randomUUID());
-        reward.setFechaHoraCreacion(new Date());
+        reward.setCreatedAt(new Date());
         var rewardBD = this.rewardRepository.save(reward);
         this.entityManager.flush();
         this.entityManager.refresh(rewardBD);
@@ -51,15 +49,15 @@ public class RewardServiceImpl implements IRewardService {
 
     @Override
     public Reward update(Reward reward) {
-        this.validarCreacion(reward);
+        this.validateCreation(reward);
         var rewardBD = this.rewardRepository.findById(reward.getId()).orElseThrow(DataNotFoundException::new);
         rewardBD.setSubject(reward.getSubject());
-        rewardBD.setNombre(reward.getNombre());
-        rewardBD.setDescripcion(reward.getDescripcion());
-        rewardBD.setPuntajeMinimo(reward.getPuntajeMinimo());
-        rewardBD.setPuntajeMaximo(reward.getPuntajeMaximo());
-        rewardBD.setNivel(reward.getNivel());
-        rewardBD.setFechaHoraModificacion(new Date());
+        rewardBD.setName(reward.getName());
+        rewardBD.setDescription(reward.getDescription());
+        rewardBD.setMinScore(reward.getMinScore());
+        rewardBD.setMaxScore(reward.getMaxScore());
+        rewardBD.setLevel(reward.getLevel());
+        rewardBD.setUpdatedAt(new Date());
         return this.rewardRepository.save(rewardBD);
     }
 
@@ -69,12 +67,11 @@ public class RewardServiceImpl implements IRewardService {
         this.rewardRepository.deleteById(rewardBD.getId());
     }
 
+    private void validateCreation(Reward reward) {
 
-    private void validarCreacion(Reward reward){
-
-        var existsSimilar = this.rewardRepository.existsByNombre(reward.getId(), reward.getNombre());
+        var existsSimilar = this.rewardRepository.existsByNombre(reward.getId(), reward.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
 
     @Autowired

@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.EventHasPersonsDTO;
-import com.amacom.amacom.model.EventHasPersons;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.EventHasPersonsDTO;
+import com.amacom.amacom.model.EventHasPersons;
 
 @Mapper
 public interface EventHasPersonsMapper {
@@ -13,9 +14,9 @@ public interface EventHasPersonsMapper {
 
     EventHasPersons toEventHasPersons(EventHasPersonsDTO eventHasPersonsDTO);
 
-    @Mapping(target = "nombrePersona", source = "persona.nombreAndApellido")
+    @Mapping(target = "personName", source = "person.name")
     @Mapping(target = "tituloEvent", source = "event.titulo")
-    @Mapping(target = "idPersona", source = "persona.id")
+    @Mapping(target = "personId", source = "person.id")
     @Mapping(target = "idEvent", source = "event.id")
     EventHasPersonsDTO toEventHasPersonsDTO(EventHasPersons eventHasPersons);
 }

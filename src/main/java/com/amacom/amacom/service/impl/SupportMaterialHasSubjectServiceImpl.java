@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.SupportMaterialHasSubject;
-import com.amacom.amacom.repository.ISupportMaterialHasSubjectRepository;
-import com.amacom.amacom.service.interfaces.ISupportMaterialHasSubjectService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.SupportMaterialHasSubject;
+import com.amacom.amacom.repository.ISupportMaterialHasSubjectRepository;
+import com.amacom.amacom.service.interfaces.ISupportMaterialHasSubjectService;
 
 @Service
 public class SupportMaterialHasSubjectServiceImpl implements ISupportMaterialHasSubjectService {
@@ -46,7 +45,8 @@ public class SupportMaterialHasSubjectServiceImpl implements ISupportMaterialHas
 
     @Override
     public SupportMaterialHasSubject update(SupportMaterialHasSubject supportMaterialHasSubject) {
-        var supportMaterialHasSubjectBD = this.supportMaterialHasSubjectRepository.findById(supportMaterialHasSubject.getId()).orElseThrow(DataNotFoundException::new);
+        var supportMaterialHasSubjectBD = this.supportMaterialHasSubjectRepository
+                .findById(supportMaterialHasSubject.getId()).orElseThrow(DataNotFoundException::new);
         supportMaterialHasSubjectBD.setSupportMaterial(supportMaterialHasSubject.getSupportMaterial());
         supportMaterialHasSubjectBD.setSubject(supportMaterialHasSubject.getSubject());
         return this.supportMaterialHasSubjectRepository.save(supportMaterialHasSubjectBD);
@@ -54,7 +54,8 @@ public class SupportMaterialHasSubjectServiceImpl implements ISupportMaterialHas
 
     @Override
     public void deleteById(UUID id) {
-        var supportMaterialHasSubjectBD = this.supportMaterialHasSubjectRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        var supportMaterialHasSubjectBD = this.supportMaterialHasSubjectRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new);
         this.supportMaterialHasSubjectRepository.deleteById(supportMaterialHasSubjectBD.getId());
     }
 
@@ -64,7 +65,8 @@ public class SupportMaterialHasSubjectServiceImpl implements ISupportMaterialHas
     }
 
     @Autowired
-    public void setSupportMaterialHasSubjectRepository(ISupportMaterialHasSubjectRepository supportMaterialHasSubjectRepository) {
+    public void setSupportMaterialHasSubjectRepository(
+            ISupportMaterialHasSubjectRepository supportMaterialHasSubjectRepository) {
         this.supportMaterialHasSubjectRepository = supportMaterialHasSubjectRepository;
     }
 

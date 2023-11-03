@@ -1,16 +1,10 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.EstadoCivil;
-import com.amacom.amacom.model.Event;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Persona;
-import com.amacom.amacom.model.auth.Usuario;
-import com.amacom.amacom.repository.IEventRepository;
-import com.amacom.amacom.repository.ITipoEventoRepository;
-import com.amacom.amacom.service.interfaces.IEventService;
-import com.amacom.amacom.util.ITools;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +13,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Event;
+import com.amacom.amacom.repository.IEventRepository;
+import com.amacom.amacom.repository.IEventTypeRepository;
+import com.amacom.amacom.service.interfaces.IEventService;
+import com.amacom.amacom.util.ITools;
 
 @Service
 public class EventServiceImpl implements IEventService {
@@ -30,8 +28,7 @@ public class EventServiceImpl implements IEventService {
 
     private EntityManager entityManager;
 
-    private ITipoEventoRepository tipoEventoRepository;
-
+    private IEventTypeRepository eventTypeRepository;
 
     @Override
     public Event getEntityFromUUID(UUID uuid) {
@@ -46,56 +43,53 @@ public class EventServiceImpl implements IEventService {
         return this.eventRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
-
     @Override
-    public Page<Event> findEvent(UUID idCreatedBy, UUID idUsuario, Date fechaDesde, Date fechaHasta, String query, Pageable pageable){
+    public Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date fechaDesde, Date fechaHasta, String query,
+            Pageable pageable) {
 
         Page<Event> eventPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("titulo").ascending().and(Sort.by("comienzo").descending()));
-            if(idCreatedBy != null){
+                    Sort.by("titulo").ascending().and(Sort.by("start").descending()));
+            if (idCreatedBy != null) {
                 eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageableDefault);
-            }else{
-                eventPage = this.eventRepository.findEvent(idUsuario, fechaDesde, fechaHasta, query, pageableDefault);
+            } else {
+                eventPage = this.eventRepository.findEvent(userId, fechaDesde, fechaHasta, query, pageableDefault);
             }
-        }
-        else{
-            if(idCreatedBy != null){
+        } else {
+            if (idCreatedBy != null) {
                 eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageable);
-            }else{
-                eventPage = this.eventRepository.findEvent(idUsuario, fechaDesde, fechaHasta, query, pageable);
+            } else {
+                eventPage = this.eventRepository.findEvent(userId, fechaDesde, fechaHasta, query, pageable);
             }
         }
         return eventPage;
     }
 
-
     @Transactional
     @Override
     public Event create(Event event) {
-        this.validarCreacion(event);
+        this.validateCreation(event);
         event.setId(UUID.randomUUID());
-        event.setFechaHoraCreacion(new Date());
+        event.setCreatedAt(new Date());
         var eventBD = this.eventRepository.save(event);
         this.entityManager.flush();
         this.entityManager.refresh(eventBD);
         return eventBD;
     }
 
-
     @Override
     public Event update(Event event) {
-        this.validarCreacion(event);
+        this.validateCreation(event);
         var eventBD = this.eventRepository.findById(event.getId()).orElseThrow(DataNotFoundException::new);
-        eventBD.setTipoEvento(event.getTipoEvento());
+        eventBD.setEventType(event.getEventType());
         eventBD.setTitulo(event.getTitulo());
-        eventBD.setDescripcion(event.getDescripcion());
-        eventBD.setComienzo(event.getComienzo());
-        eventBD.setFin(event.getFin());
-        eventBD.setEstadoEvento(event.getEstadoEvento());
-        eventBD.setFechaHoraModificacion(new Date());
+        eventBD.setDescription(event.getDescription());
+        eventBD.setStart(event.getStart());
+        eventBD.setEnd(event.getEnd());
+        eventBD.setEventStatus(event.getEventStatus());
+        eventBD.setUpdatedAt(new Date());
         return this.eventRepository.save(eventBD);
     }
 
@@ -105,20 +99,17 @@ public class EventServiceImpl implements IEventService {
         this.eventRepository.deleteById(eventBD.getId());
     }
 
-    private void validarCreacion(Event event){
+    private void validateCreation(Event event) {
 
-        if (event.getFin() != null &&
-                ITools.isFechaAMayorIgualQueFechaB(event.getComienzo(),
-                        event.getFin(), ">"))
-            throw new ValidacionException("La fecha fin es menor que la fecha de comienzo.");
-
+        if (event.getEnd() != null &&
+                ITools.isFechaAMayorIgualQueFechaB(event.getStart(),
+                        event.getEnd(), ">"))
+            throw new ValidationException("La fecha fin es menor que la fecha de start.");
 
         var existsSimilar = this.eventRepository.existsByTitulo(event.getId(), event.getTitulo());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este titulo.");
+            throw new ValidationException("Ya existe un registro con este titulo.");
     }
-
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
@@ -131,7 +122,7 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Autowired
-    public void setTipoEventoRepository(ITipoEventoRepository tipoEventoRepository) {
-        this.tipoEventoRepository = tipoEventoRepository;
+    public void setEventTypeRepository(IEventTypeRepository eventTypeRepository) {
+        this.eventTypeRepository = eventTypeRepository;
     }
 }

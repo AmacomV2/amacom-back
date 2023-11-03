@@ -24,12 +24,10 @@ public class Params implements Serializable {
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
+    private Date createdAt;
 
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
-
+    private Date updatedAt;
 
 }
-

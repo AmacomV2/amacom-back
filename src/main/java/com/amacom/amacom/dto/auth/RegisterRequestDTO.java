@@ -1,12 +1,13 @@
 package com.amacom.amacom.dto.auth;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,18 +16,17 @@ public class RegisterRequestDTO implements Serializable {
 
     private static final long serialVersionUID = -2432380621627365836L;
 
-
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     private String username;
 
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     private String email;
 
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     private String password;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idPersona;
+    @NotNull(message = "Field cannot be null")
+    private UUID personId;
 
     private UUID idRol;
 

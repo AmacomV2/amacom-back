@@ -1,12 +1,10 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Achievement;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IAchievementRepository;
-import com.amacom.amacom.service.interfaces.IAchievementService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +13,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Achievement;
+import com.amacom.amacom.repository.IAchievementRepository;
+import com.amacom.amacom.service.interfaces.IAchievementService;
 
 @Service
 public class AchievementServiceImpl implements IAchievementService {
@@ -25,7 +25,6 @@ public class AchievementServiceImpl implements IAchievementService {
     private IAchievementRepository achievementRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Achievement getEntityFromUUID(UUID uuid) {
@@ -35,18 +34,16 @@ public class AchievementServiceImpl implements IAchievementService {
         return null;
     }
 
-
     @Override
-    public Page<Achievement> findAchievement(UUID idSubject, String query, Pageable pageable) {
+    public Page<Achievement> findAchievement(UUID subjectId, String query, Pageable pageable) {
         Page<Achievement> achievementPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            achievementPage = this.achievementRepository.findAchievement(idSubject, query, pageableDefault);
-        }
-        else{
-            achievementPage = this.achievementRepository.findAchievement(idSubject, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            achievementPage = this.achievementRepository.findAchievement(subjectId, query, pageableDefault);
+        } else {
+            achievementPage = this.achievementRepository.findAchievement(subjectId, query, pageable);
         }
         return achievementPage;
     }
@@ -59,9 +56,9 @@ public class AchievementServiceImpl implements IAchievementService {
     @Transactional
     @Override
     public Achievement create(Achievement achievement) {
-        this.validarCreacion(achievement);
+        this.validateCreation(achievement);
         achievement.setId(UUID.randomUUID());
-        achievement.setFechaHoraCreacion(new Date());
+        achievement.setCreatedAt(new Date());
         var achievementBD = this.achievementRepository.save(achievement);
         this.entityManager.flush();
         this.entityManager.refresh(achievementBD);
@@ -70,11 +67,12 @@ public class AchievementServiceImpl implements IAchievementService {
 
     @Override
     public Achievement update(Achievement achievement) {
-        this.validarCreacion(achievement);
-        var achievementBD = this.achievementRepository.findById(achievement.getId()).orElseThrow(DataNotFoundException::new);
+        this.validateCreation(achievement);
+        var achievementBD = this.achievementRepository.findById(achievement.getId())
+                .orElseThrow(DataNotFoundException::new);
         achievementBD.setSubject(achievement.getSubject());
-        achievementBD.setNombre(achievement.getNombre());
-        achievementBD.setFechaHoraModificacion(new Date());
+        achievementBD.setName(achievement.getName());
+        achievementBD.setUpdatedAt(new Date());
         return this.achievementRepository.save(achievementBD);
     }
 
@@ -84,11 +82,11 @@ public class AchievementServiceImpl implements IAchievementService {
         this.achievementRepository.deleteById(achievementBD.getId());
     }
 
-    private void validarCreacion(Achievement achievement){
+    private void validateCreation(Achievement achievement) {
 
-        var existsSimilar = this.achievementRepository.existsByNombre(achievement.getId(), achievement.getNombre());
+        var existsSimilar = this.achievementRepository.existsByNombre(achievement.getId(), achievement.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
 
     @Autowired

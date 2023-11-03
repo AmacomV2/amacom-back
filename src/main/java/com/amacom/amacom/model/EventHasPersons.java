@@ -1,14 +1,18 @@
 package com.amacom.amacom.model;
 
-import com.amacom.amacom.model.auth.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "EVENT_HAS_PERSONS")
@@ -25,7 +29,7 @@ public class EventHasPersons implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID")

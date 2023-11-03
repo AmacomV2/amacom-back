@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.InterventionHasActivities;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IInterventionHasActivitiesRepository;
-import com.amacom.amacom.service.interfaces.IInterventionHasActivitiesService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.InterventionHasActivities;
+import com.amacom.amacom.repository.IInterventionHasActivitiesRepository;
+import com.amacom.amacom.service.interfaces.IInterventionHasActivitiesService;
 
 @Service
 public class InterventionHasActivitiesServiceImpl implements IInterventionHasActivitiesService {
@@ -21,7 +20,6 @@ public class InterventionHasActivitiesServiceImpl implements IInterventionHasAct
 
     private EntityManager entityManager;
 
-
     @Override
     public InterventionHasActivities getEntityFromUUID(UUID uuid) {
         if (uuid != null) {
@@ -29,7 +27,6 @@ public class InterventionHasActivitiesServiceImpl implements IInterventionHasAct
         }
         return null;
     }
-
 
     @Override
     public InterventionHasActivities findById(UUID id) {
@@ -48,20 +45,21 @@ public class InterventionHasActivitiesServiceImpl implements IInterventionHasAct
 
     @Override
     public InterventionHasActivities update(InterventionHasActivities interventionHasActivities) {
-        var interventionHasActivitiesBD = this.interventionHasActivitiesRepository.findById(interventionHasActivities.getId()).orElseThrow(DataNotFoundException::new);
+        var interventionHasActivitiesBD = this.interventionHasActivitiesRepository
+                .findById(interventionHasActivities.getId()).orElseThrow(DataNotFoundException::new);
         interventionHasActivitiesBD.setActivity(interventionHasActivities.getActivity());
         interventionHasActivitiesBD.setIntervention(interventionHasActivities.getIntervention());
-        interventionHasActivitiesBD.setEstado(interventionHasActivities.getEstado());
-        interventionHasActivitiesBD.setDescripcion(interventionHasActivities.getDescripcion());
+        interventionHasActivitiesBD.setStatus(interventionHasActivities.getStatus());
+        interventionHasActivitiesBD.setDescription(interventionHasActivities.getDescription());
         return this.interventionHasActivitiesRepository.save(interventionHasActivitiesBD);
     }
 
     @Override
     public void deleteById(UUID id) {
-        var interventionHasActivitiesBD = this.interventionHasActivitiesRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        var interventionHasActivitiesBD = this.interventionHasActivitiesRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new);
         this.interventionHasActivitiesRepository.deleteById(interventionHasActivitiesBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
@@ -69,7 +67,8 @@ public class InterventionHasActivitiesServiceImpl implements IInterventionHasAct
     }
 
     @Autowired
-    public void setInterventionHasActivitiesRepository(IInterventionHasActivitiesRepository interventionHasActivitiesRepository) {
+    public void setInterventionHasActivitiesRepository(
+            IInterventionHasActivitiesRepository interventionHasActivitiesRepository) {
         this.interventionHasActivitiesRepository = interventionHasActivitiesRepository;
     }
 }

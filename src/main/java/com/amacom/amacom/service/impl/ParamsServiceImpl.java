@@ -1,18 +1,18 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Params;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IParamsRepository;
-import com.amacom.amacom.service.interfaces.IParamsService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Params;
+import com.amacom.amacom.repository.IParamsRepository;
+import com.amacom.amacom.service.interfaces.IParamsService;
 
 @Service
 public class ParamsServiceImpl implements IParamsService {
@@ -29,7 +29,6 @@ public class ParamsServiceImpl implements IParamsService {
         return null;
     }
 
-
     @Override
     public Params findById(UUID id) {
         return this.paramsRepository.findById(id).orElseThrow(DataNotFoundException::new);
@@ -39,7 +38,7 @@ public class ParamsServiceImpl implements IParamsService {
     @Override
     public Params create(Params params) {
         params.setId(UUID.randomUUID());
-        params.setFechaHoraCreacion(new Date());
+        params.setCreatedAt(new Date());
         var paramsBD = this.paramsRepository.save(params);
         this.entityManager.flush();
         this.entityManager.refresh(paramsBD);
@@ -49,17 +48,15 @@ public class ParamsServiceImpl implements IParamsService {
     @Override
     public Params update(Params params) {
         var paramsBD = this.paramsRepository.findById(params.getId()).orElseThrow(DataNotFoundException::new);
-        paramsBD.setFechaHoraModificacion(new Date());
+        paramsBD.setUpdatedAt(new Date());
         return this.paramsRepository.save(paramsBD);
     }
-
 
     @Override
     public void deleteById(UUID id) {
         var paramsBD = this.paramsRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.paramsRepository.deleteById(paramsBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

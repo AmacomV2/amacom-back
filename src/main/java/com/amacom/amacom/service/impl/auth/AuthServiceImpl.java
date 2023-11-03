@@ -1,51 +1,60 @@
 package com.amacom.amacom.service.impl.auth;
 
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.auth.*;
-import com.amacom.amacom.repository.IPersonaRepository;
-import com.amacom.amacom.repository.IRolRepository;
-import com.amacom.amacom.service.interfaces.auth.IAuthService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import com.amacom.amacom.exception.DataNotFoundException;
-import org.springframework.security.core.GrantedAuthority;
-
-import com.amacom.amacom.util.Jwt.JwtService;
-
-import com.amacom.amacom.repository.auth.IUsuarioRepository;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.auth.AuthResponse;
+import com.amacom.amacom.model.auth.ERole;
+import com.amacom.amacom.model.auth.LoginRequest;
+import com.amacom.amacom.model.auth.RegisterRequest;
+import com.amacom.amacom.model.auth.Rol;
+import com.amacom.amacom.model.auth.User;
+import com.amacom.amacom.repository.IPersonRepository;
+import com.amacom.amacom.repository.IRolRepository;
+import com.amacom.amacom.repository.auth.IUserRepository;
+import com.amacom.amacom.service.interfaces.auth.IAuthService;
+import com.amacom.amacom.util.Jwt.JwtService;
+
+import lombok.RequiredArgsConstructor;
+
+@Configuration
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
 
-    private final IUsuarioRepository usuarioRepository;
+    private final IUserRepository usuarioRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    private IPersonaRepository personaRepository;
+    private IPersonRepository personRepository;
 
     private IRolRepository rolRepository;
 
     public AuthResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = usuarioRepository.findByUsername(request.getUsername()).orElseThrow(DataNotFoundException::new);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+        UserDetails user = usuarioRepository.findByUsername(request.getUsername())
+                .orElseThrow(DataNotFoundException::new);
         List<String> roles = user.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -58,31 +67,29 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
     }
 
-
-
     @Transactional
     public AuthResponse register(RegisterRequest request) {
 
-        var persona = this.personaRepository.findById(request.getIdPersona()).orElseThrow(DataNotFoundException::new);
+        var person = this.personRepository.findById(request.getPersonId()).orElseThrow(DataNotFoundException::new);
 
         Rol rol;
-        if(request.getIdRol() != null){
+        if (request.getIdRol() != null) {
             rol = this.rolRepository.findById(request.getIdRol()).orElse(null);
-        }else{
-            rol = this.rolRepository.findRolByDescripcion("USUARIO");
+        } else {
+            rol = this.rolRepository.findRolByDescription("USUARIO");
         }
 
         this.validarRegistro(request);
-        Usuario user = Usuario.builder()
-            .id(UUID.randomUUID())
-            .username(request.getUsername())
-            .email(request.getEmail())
-            .password(passwordEncoder.encode( request.getPassword()))
-            .persona(persona)
-            .rol(rol)
-            .enumRol(rol.getEnumRol())
-            .fechaHoraCreacion(new Date())
-            .build();
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .person(person)
+                .rol(rol)
+                .enumRol(rol.getEnumRol())
+                .createdAt(new Date())
+                .build();
         usuarioRepository.save(user);
 
         List<String> roles = user.getAuthorities()
@@ -91,20 +98,21 @@ public class AuthServiceImpl implements IAuthService {
                 .collect(Collectors.toList());
 
         return AuthResponse.builder()
-            .accesToken(jwtService.getAccessToken(user, roles ))
-            .build();
+                .accesToken(jwtService.getAccessToken(user, roles))
+                .build();
 
     }
 
-    private void validarRegistro(RegisterRequest request){
+    private void validarRegistro(RegisterRequest request) {
 
-        var existsSimilar = this.usuarioRepository.existsByUsernameOrEmail(null, request.getUsername(), request.getEmail());
+        var existsSimilar = this.usuarioRepository.existsByUsernameOrEmail(null, request.getUsername(),
+                request.getEmail());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un usuario con este username o este email.");
+            throw new ValidationException("Email or username already in use.");
 
-        var existsSimilarByIdPersona = this.usuarioRepository.existsByIdPersona(null, request.getIdPersona());
-        if (Boolean.TRUE.equals(existsSimilarByIdPersona))
-            throw new ValidacionException("Ya existe un registro para esta persona.");
+        var existsSimilarByPersonId = this.usuarioRepository.existsByPersonId(null, request.getPersonId());
+        if (Boolean.TRUE.equals(existsSimilarByPersonId))
+            throw new ValidationException("Person already have a registered user.");
     }
 
     @Bean
@@ -115,8 +123,8 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Autowired
-    public void setPersonaRepository(IPersonaRepository personaRepository) {
-        this.personaRepository = personaRepository;
+    public void setPersonRepository(IPersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @Autowired

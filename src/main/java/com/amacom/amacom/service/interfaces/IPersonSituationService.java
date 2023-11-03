@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonSituation;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.PersonSituation;
 
 @Service
 public interface IPersonSituationService {
@@ -18,6 +18,5 @@ public interface IPersonSituationService {
     void deleteById(UUID id);
 
     PersonSituation getEntityFromUUID(UUID uuid);
-
 
 }

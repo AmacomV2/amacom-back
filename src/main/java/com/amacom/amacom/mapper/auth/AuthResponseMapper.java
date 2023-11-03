@@ -1,21 +1,24 @@
 package com.amacom.amacom.mapper.auth;
 
-import com.amacom.amacom.dto.auth.AuthResponseDTO;
-import com.amacom.amacom.model.auth.AuthResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.auth.AuthResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
+import com.amacom.amacom.model.auth.AuthResponse;
 
 @Mapper
 public interface AuthResponseMapper {
 
     AuthResponseMapper INSTANCE = Mappers.getMapper(AuthResponseMapper.class);
 
+    // DTO TO ENTITY
+    AuthResponse toAuthResponse(AuthResponseDTO personDTO);
 
-    //DTO TO ENTITY
-    AuthResponse toAuthResponse(AuthResponseDTO personaDTO);
+    // ENTITY TO DTO
 
-    //ENTITY TO DTO
+    AuthResponseDTO toAuthResponseDTO(AuthResponse person);
 
-    AuthResponseDTO toAuthResponseDTO(AuthResponse persona);
+    SuccessDTO toOkResponseDTO(AuthResponse personDTO);
 
 }

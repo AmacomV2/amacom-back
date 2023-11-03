@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.SupportMaterialHasSubjectDTO;
-import com.amacom.amacom.model.SupportMaterialHasSubject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.SupportMaterialHasSubjectDTO;
+import com.amacom.amacom.model.SupportMaterialHasSubject;
 
 @Mapper
 public interface SupportMaterialHasSubjectMapper {
@@ -13,7 +14,7 @@ public interface SupportMaterialHasSubjectMapper {
 
     SupportMaterialHasSubject toSupportMaterialHasSubject(SupportMaterialHasSubjectDTO supportMaterialHasSubjectDTO);
 
-    @Mapping(target = "idSubject", source = "subject.id")
+    @Mapping(target = "subjectId", source = "subject.id")
     @Mapping(target = "idSupportMaterial", source = "supportMaterial.id")
     SupportMaterialHasSubjectDTO toSupportMaterialHasSubjectDTO(SupportMaterialHasSubject supportMaterialHasSubject);
 }

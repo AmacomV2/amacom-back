@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.InterventionDTO;
-import com.amacom.amacom.model.Intervention;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.InterventionDTO;
+import com.amacom.amacom.model.Intervention;
 
 @Mapper
 public interface InterventionMapper {
@@ -13,6 +14,6 @@ public interface InterventionMapper {
 
     Intervention toIntervention(InterventionDTO interventionDTO);
 
-    @Mapping(target = "idDiagnosis", source = "diagnosis.id")
+    @Mapping(target = "diagnosisId", source = "diagnosis.id")
     InterventionDTO toInterventionDTO(Intervention intervention);
 }

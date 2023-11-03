@@ -1,17 +1,20 @@
 package com.amacom.amacom.dto;
 
-import com.amacom.amacom.model.EEstadoEvento;
-import com.amacom.amacom.util.ITools;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
+import com.amacom.amacom.model.EEventStatus;
+import com.amacom.amacom.util.ITools;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -22,31 +25,30 @@ public class EventDTO implements Serializable {
 
     private UUID id;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idTipoEvento;
-    private String nombreTipoEvento;
+    @NotNull(message = "Field cannot be null")
+    private UUID eventTypeId;
+    private String eventTypeName;
 
-    private UUID idUsuarioCrea;
+    private UUID createdBy;
 
     private String titulo;
 
-    private String descripcion;
+    private String description;
 
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date comienzo;
-
+    private Date start;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date fin;
 
     @Enumerated(EnumType.STRING)
-    private EEstadoEvento estadoEvento;
+    private EEventStatus eventStatus;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraCreacion;
+    private Date createdAt;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraModificacion;
+    private Date updatedAt;
 
 }

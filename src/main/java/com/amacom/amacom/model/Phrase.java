@@ -23,18 +23,17 @@ public class Phrase implements Serializable {
     private UUID id;
 
     @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
+    private String name;
 
     @Column(name = "VALIDEZ_INDICACION")
     private String validezIndicacion;
 
     @Column(name = "FECHA_HORA_CREACION", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
+    private Date createdAt;
 
     @Column(name = "FECHA_HORA_MODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    private Date updatedAt;
 
 }
-

@@ -22,7 +22,7 @@ public interface SupportMaterialFilesMapper {
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
         clavesToSort.put("path", "path");
-        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        clavesToSort.put("createdAt", "createdAt");
         return clavesToSort;
     }
 

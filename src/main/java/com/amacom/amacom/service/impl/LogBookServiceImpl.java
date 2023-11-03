@@ -1,12 +1,10 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.LogBook;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Persona;
-import com.amacom.amacom.repository.ILogBookRepository;
-import com.amacom.amacom.service.interfaces.ILogBookService;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.LogBook;
+import com.amacom.amacom.repository.ILogBookRepository;
+import com.amacom.amacom.service.interfaces.ILogBookService;
 
 @Service
 public class LogBookServiceImpl implements ILogBookService {
@@ -26,19 +25,17 @@ public class LogBookServiceImpl implements ILogBookService {
 
     private EntityManager entityManager;
 
-
     @Override
-    public Page<LogBook> findLogBook(UUID idPersona, String query, Pageable pageable){
+    public Page<LogBook> findLogBook(UUID personId, String query, Pageable pageable) {
 
         Page<LogBook> logBookPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            logBookPage = this.logBookRepository.findLogBook(idPersona, query, pageableDefault);
-        }
-        else{
-            logBookPage = this.logBookRepository.findLogBook(idPersona, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            logBookPage = this.logBookRepository.findLogBook(personId, query, pageableDefault);
+        } else {
+            logBookPage = this.logBookRepository.findLogBook(personId, query, pageable);
         }
         return logBookPage;
     }
@@ -60,7 +57,7 @@ public class LogBookServiceImpl implements ILogBookService {
     @Override
     public LogBook create(LogBook logBook) {
         logBook.setId(UUID.randomUUID());
-        logBook.setFechaHoraCreacion(new Date());
+        logBook.setCreatedAt(new Date());
         var logBookBD = this.logBookRepository.save(logBook);
         this.entityManager.flush();
         this.entityManager.refresh(logBookBD);
@@ -70,10 +67,10 @@ public class LogBookServiceImpl implements ILogBookService {
     @Override
     public LogBook update(LogBook logBook) {
         var logBookBD = this.logBookRepository.findById(logBook.getId()).orElseThrow(DataNotFoundException::new);
-        logBookBD.setPersona(logBook.getPersona());
-        logBookBD.setNombre(logBook.getNombre());
-        logBookBD.setDescripcion(logBook.getDescripcion());
-        logBookBD.setFechaHoraModificacion(new Date());
+        logBookBD.setPerson(logBook.getPerson());
+        logBookBD.setName(logBook.getName());
+        logBookBD.setDescription(logBook.getDescription());
+        logBookBD.setUpdatedAt(new Date());
         return this.logBookRepository.save(logBookBD);
     }
 

@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.PersonSituationHasFeelings;
-import com.amacom.amacom.repository.IPersonSituationHasFeelingsRepository;
-import com.amacom.amacom.service.interfaces.IPersonSituationHasFeelingsService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.PersonSituationHasFeelings;
+import com.amacom.amacom.repository.IPersonSituationHasFeelingsRepository;
+import com.amacom.amacom.service.interfaces.IPersonSituationHasFeelingsService;
 
 @Service
 public class PersonSituationHasFeelingsServiceImpl implements IPersonSituationHasFeelingsService {
@@ -46,7 +45,8 @@ public class PersonSituationHasFeelingsServiceImpl implements IPersonSituationHa
 
     @Override
     public PersonSituationHasFeelings update(PersonSituationHasFeelings personSituationHasFeelings) {
-        var personSituationHasFeelingsBD = this.personSituationHasFeelingsRepository.findById(personSituationHasFeelings.getId()).orElseThrow(DataNotFoundException::new);
+        var personSituationHasFeelingsBD = this.personSituationHasFeelingsRepository
+                .findById(personSituationHasFeelings.getId()).orElseThrow(DataNotFoundException::new);
         personSituationHasFeelingsBD.setPersonSituation(personSituationHasFeelings.getPersonSituation());
         personSituationHasFeelingsBD.setFeelings(personSituationHasFeelings.getFeelings());
         personSituationHasFeelingsBD.setPriority(personSituationHasFeelings.getPriority());
@@ -55,7 +55,8 @@ public class PersonSituationHasFeelingsServiceImpl implements IPersonSituationHa
 
     @Override
     public void deleteById(UUID id) {
-        var personSituationHasFeelingsBD = this.personSituationHasFeelingsRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        var personSituationHasFeelingsBD = this.personSituationHasFeelingsRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new);
         this.personSituationHasFeelingsRepository.deleteById(personSituationHasFeelingsBD.getId());
     }
 
@@ -65,7 +66,8 @@ public class PersonSituationHasFeelingsServiceImpl implements IPersonSituationHa
     }
 
     @Autowired
-    public void setPersonSituationHasFeelingsRepository(IPersonSituationHasFeelingsRepository personSituationHasFeelingsRepository) {
+    public void setPersonSituationHasFeelingsRepository(
+            IPersonSituationHasFeelingsRepository personSituationHasFeelingsRepository) {
         this.personSituationHasFeelingsRepository = personSituationHasFeelingsRepository;
     }
 

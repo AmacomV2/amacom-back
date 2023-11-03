@@ -1,13 +1,14 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.InstitutionServiceDTO;
-import com.amacom.amacom.model.InstitutionService;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amacom.amacom.dto.InstitutionServiceDTO;
+import com.amacom.amacom.model.InstitutionService;
 
 @Mapper
 public interface InstitutionServiceMapper {
@@ -16,7 +17,7 @@ public interface InstitutionServiceMapper {
 
     InstitutionService toInstitutionService(InstitutionServiceDTO institutionServiceDTO);
 
-    @Mapping(target = "idUsuario", source = "usuario.id")
+    @Mapping(target = "userId", source = "usuario.id")
     @Mapping(target = "idServices", source = "services.id")
     @Mapping(target = "idInstitution", source = "institution.id")
     InstitutionServiceDTO toInstitutionServiceDTO(InstitutionService institutionService);

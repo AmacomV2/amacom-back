@@ -1,12 +1,11 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.InstitutionServicePerson;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Subject;
-import com.amacom.amacom.repository.ISubjectRepository;
-import com.amacom.amacom.service.interfaces.ISubjectService;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Subject;
+import com.amacom.amacom.repository.ISubjectRepository;
+import com.amacom.amacom.service.interfaces.ISubjectService;
 
 @Service
 public class SubjectServiceImpl implements ISubjectService {
@@ -26,7 +25,6 @@ public class SubjectServiceImpl implements ISubjectService {
     private ISubjectRepository subjectRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Subject getEntityFromUUID(UUID uuid) {
@@ -37,16 +35,15 @@ public class SubjectServiceImpl implements ISubjectService {
     }
 
     @Override
-    public Page<Subject> findSubjectList(List<UUID> idSubjectList, String query, Pageable pageable) {
+    public Page<Subject> findSubjectList(List<UUID> subjectIdList, String query, Pageable pageable) {
         Page<Subject> subjectPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            subjectPage = this.subjectRepository.findSubjectList(idSubjectList, query, pageableDefault);
-        }
-        else{
-            subjectPage = this.subjectRepository.findSubjectList(idSubjectList, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            subjectPage = this.subjectRepository.findSubjectList(subjectIdList, query, pageableDefault);
+        } else {
+            subjectPage = this.subjectRepository.findSubjectList(subjectIdList, query, pageable);
         }
         return subjectPage;
     }
@@ -57,16 +54,15 @@ public class SubjectServiceImpl implements ISubjectService {
     }
 
     @Override
-    public Page<Subject> findSubject(UUID idSubjectParent, String nombre, String query, Pageable pageable) {
+    public Page<Subject> findSubject(UUID parentId, String name, String query, Pageable pageable) {
         Page<Subject> subjectPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            subjectPage = this.subjectRepository.findSubject(idSubjectParent, nombre, query, pageableDefault);
-        }
-        else{
-            subjectPage = this.subjectRepository.findSubject(idSubjectParent, nombre, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            subjectPage = this.subjectRepository.findSubject(parentId, name, query, pageableDefault);
+        } else {
+            subjectPage = this.subjectRepository.findSubject(parentId, name, query, pageable);
         }
         return subjectPage;
     }
@@ -75,7 +71,7 @@ public class SubjectServiceImpl implements ISubjectService {
     @Override
     public Subject create(Subject subject) {
         subject.setId(UUID.randomUUID());
-        subject.setFechaHoraCreacion(new Date());
+        subject.setCreatedAt(new Date());
         var subjectBD = this.subjectRepository.save(subject);
         this.entityManager.flush();
         this.entityManager.refresh(subjectBD);
@@ -87,9 +83,9 @@ public class SubjectServiceImpl implements ISubjectService {
         var subjectBD = this.subjectRepository.findById(subject.getId()).orElseThrow(DataNotFoundException::new);
         subjectBD.setSubjectParent(subject.getSubjectParent());
         subjectBD.setResultadosAsociados(subject.getResultadosAsociados());
-        subjectBD.setNombre(subject.getNombre());
+        subjectBD.setName(subject.getName());
         subjectBD.setIndicacionValidez(subject.getIndicacionValidez());
-        subjectBD.setFechaHoraModificacion(new Date());
+        subjectBD.setUpdatedAt(new Date());
         return this.subjectRepository.save(subjectBD);
     }
 

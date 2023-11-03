@@ -1,13 +1,12 @@
 package com.amacom.amacom.model.auth;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -23,7 +22,7 @@ public class RegisterRequest implements Serializable {
 
     private String password;
 
-    private UUID idPersona;
+    private UUID personId;
 
     private UUID idRol;
 }

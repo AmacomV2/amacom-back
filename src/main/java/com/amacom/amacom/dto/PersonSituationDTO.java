@@ -1,21 +1,20 @@
 package com.amacom.amacom.dto;
 
-import com.amacom.amacom.model.EGradoAfectacion;
-import com.amacom.amacom.model.Persona;
-import com.amacom.amacom.model.Subject;
-import com.amacom.amacom.model.TipoSituacion;
-import com.amacom.amacom.model.auth.Usuario;
-import com.amacom.amacom.util.ITools;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
+import com.amacom.amacom.model.EAffectationDegree;
+import com.amacom.amacom.util.ITools;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -25,39 +24,34 @@ public class PersonSituationDTO implements Serializable {
     private static final long serialVersionUID = -6009951415841197929L;
 
     private UUID id;
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idPersona;
+    @NotNull(message = "Field cannot be null")
+    private UUID personId;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idUsuario;
+    @NotNull(message = "Field cannot be null")
+    private UUID userId;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idSubject;
+    @NotNull(message = "Field cannot be null")
+    private UUID subjectId;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idTipoSituacion;
+    @NotNull(message = "Field cannot be null")
+    private UUID situationTypeId;
 
+    private String description;
 
-    private String descripcion;
+    private String firstThought;
 
+    private String behavior;
 
-    private String primerPensamiento;
-
-
-    private String comportamiento;
-
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     @Enumerated(EnumType.STRING)
-    private EGradoAfectacion gradoAfectacion;
+    private EAffectationDegree affectationDegree;
 
-
-    private String evaluacionEnfermeria;
-
+    private String nursingAssessment;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraCreacion;
+    private Date createdAt;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraModificacion;
+    private Date updatedAt;
 
 }

@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Phrase;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Phrase;
 
 @Service
 public interface IPhraseService {
@@ -18,6 +18,5 @@ public interface IPhraseService {
     void deleteById(UUID id);
 
     Phrase getEntityFromUUID(UUID uuid);
-
 
 }

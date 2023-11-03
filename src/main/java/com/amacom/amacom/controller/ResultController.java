@@ -1,20 +1,26 @@
 package com.amacom.amacom.controller;
 
-import com.amacom.amacom.dto.PersonBabysDTO;
-import com.amacom.amacom.dto.ResultDTO;
-import com.amacom.amacom.mapper.PersonBabysMapper;
-import com.amacom.amacom.mapper.ResultMapper;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Result;
-import com.amacom.amacom.service.interfaces.IDiagnosisService;
-import com.amacom.amacom.service.interfaces.IResultService;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.UUID;
+import com.amacom.amacom.dto.ResultDTO;
+import com.amacom.amacom.mapper.ResultMapper;
+import com.amacom.amacom.model.Result;
+import com.amacom.amacom.service.interfaces.IDiagnosisService;
+import com.amacom.amacom.service.interfaces.IResultService;
 
 @RestController
 @RequestMapping("/result")
@@ -24,11 +30,10 @@ public class ResultController {
 
     private IDiagnosisService diagnosisService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<ResultDTO> findById(
-            @PathVariable(value = "id") UUID id){
-        Result result =  this.resultService.findById(id);
+            @PathVariable(value = "id") UUID id) {
+        Result result = this.resultService.findById(id);
         if (result == null) {
             return new ResponseEntity<>(new ResultDTO(), HttpStatus.NO_CONTENT);
         }
@@ -37,23 +42,24 @@ public class ResultController {
 
     @PostMapping("/create")
     public ResponseEntity<ResultDTO> create(
-            @Valid @RequestBody ResultDTO resultDTO){
+            @Valid @RequestBody ResultDTO resultDTO) {
 
-        Result result =  ResultMapper.INSTANCE.toResult(resultDTO);
+        Result result = ResultMapper.INSTANCE.toResult(resultDTO);
 
-        result.setDiagnosis(this.diagnosisService.getEntityFromUUID(resultDTO.getIdDiagnosis()));
+        result.setDiagnosis(this.diagnosisService.getEntityFromUUID(resultDTO.getDiagnosisId()));
 
         var resultBD = this.resultService.create(result);
-        if(resultBD == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (resultBD == null)
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity.ok(ResultMapper.INSTANCE.toResultDTO(resultBD));
     }
 
     @PutMapping
     public ResponseEntity<ResultDTO> update(
-            @Valid @RequestBody ResultDTO resultDTO){
-        Result result =  ResultMapper.INSTANCE.toResult(resultDTO);
+            @Valid @RequestBody ResultDTO resultDTO) {
+        Result result = ResultMapper.INSTANCE.toResult(resultDTO);
 
-        result.setDiagnosis(this.diagnosisService.getEntityFromUUID(resultDTO.getIdDiagnosis()));
+        result.setDiagnosis(this.diagnosisService.getEntityFromUUID(resultDTO.getDiagnosisId()));
 
         var resultBD = this.resultService.update(result);
         if (resultBD == null) {
@@ -64,11 +70,10 @@ public class ResultController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
-            @PathVariable(value = "id") UUID id){
+            @PathVariable(value = "id") UUID id) {
         this.resultService.deleteById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }
-
 
     @Autowired
     public void setDiagnosisService(IDiagnosisService diagnosisService) {
