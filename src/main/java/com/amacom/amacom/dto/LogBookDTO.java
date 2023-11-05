@@ -22,7 +22,6 @@ public class LogBookDTO implements Serializable {
 
     private UUID id;
 
-    @NotNull(message = "Field cannot be null")
     private UUID personId;
 
     @NotNull(message = "Field cannot be null")

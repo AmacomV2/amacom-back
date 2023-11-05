@@ -32,7 +32,7 @@ public class LogBookServiceImpl implements ILogBookService {
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+                    Sort.by("createdAt").descending());
             logBookPage = this.logBookRepository.findLogBook(personId, query, pageableDefault);
         } else {
             logBookPage = this.logBookRepository.findLogBook(personId, query, pageable);

@@ -38,7 +38,7 @@ public class Person implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ID_ESTADO_CIVIL", referencedColumnName = "ID")
-    private CivilStatus statusCivil;
+    private CivilStatus civilStatus;
 
     @ManyToOne
     @JoinColumn(name = "ID_GENERO", referencedColumnName = "ID")

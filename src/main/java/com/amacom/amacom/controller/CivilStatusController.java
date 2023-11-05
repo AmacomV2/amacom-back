@@ -17,23 +17,23 @@ import com.amacom.amacom.model.CivilStatus;
 import com.amacom.amacom.service.interfaces.ICivilStatusService;
 
 @RestController
-@RequestMapping("/statusCivil")
+@RequestMapping("/civilStatus")
 public class CivilStatusController {
 
-    private ICivilStatusService statusCivilService;
+    private ICivilStatusService civilStatusService;
 
     @GetMapping("/getAll")
     public ResponseEntity<List<CivilStatusDTO>> getAll() {
-        List<CivilStatus> statusCivilList = this.statusCivilService.getAll();
-        if (statusCivilList == null || statusCivilList.isEmpty()) {
+        List<CivilStatus> civilStatusList = this.civilStatusService.getAll();
+        if (civilStatusList == null || civilStatusList.isEmpty()) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(statusCivilList.stream()
+        return new ResponseEntity<>(civilStatusList.stream()
                 .map(CivilStatusMapper.INSTANCE::toCivilStatusDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Autowired
-    public void setStatusCivilService(ICivilStatusService statusCivilService) {
-        this.statusCivilService = statusCivilService;
+    public void setCivilStatusService(ICivilStatusService civilStatusService) {
+        this.civilStatusService = civilStatusService;
     }
 }

@@ -8,17 +8,18 @@ import java.util.Map;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 public interface ITools {
 
-    static boolean isFechaAMayorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparacion) {
+    static boolean isFechaAMayorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparison) {
         boolean ok = false;
         if (aFechaA != null && aFechaB != null) {
-            if (aTypeComparacion.equals(">")) {
+            if (aTypeComparison.equals(">")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) > 0) {
                     ok = true;
                 }
-            } else if (aTypeComparacion.equals("=")) {
+            } else if (aTypeComparison.equals("=")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) == 0) {
                     ok = true;
                 }
@@ -30,14 +31,14 @@ public interface ITools {
         return ok;
     }
 
-    static boolean isFechaAMenorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparacion) {
+    static boolean isFechaAMenorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparison) {
         boolean ok = false;
         if (aFechaA != null && aFechaB != null) {
-            if (aTypeComparacion.equals("<")) {
+            if (aTypeComparison.equals("<")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) < 0) {
                     ok = true;
                 }
-            } else if (aTypeComparacion.equals("=")) {
+            } else if (aTypeComparison.equals("=")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) == 0) {
                     ok = true;
                 }
@@ -53,7 +54,7 @@ public interface ITools {
         Sort sort = Sort.unsorted();
 
         Sort.Order s;
-        for (Iterator var3 = pageable.getSort().iterator(); var3.hasNext(); sort = sort
+        for (Iterator<Order> var3 = pageable.getSort().iterator(); var3.hasNext(); sort = sort
                 .and(Sort.by(s.getDirection(), new String[] { (String) clavesToSort.get(s.getProperty()) }))) {
             s = (Sort.Order) var3.next();
         }

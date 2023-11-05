@@ -11,9 +11,9 @@ public interface CivilStatusMapper {
     CivilStatusMapper INSTANCE = Mappers.getMapper(CivilStatusMapper.class);
 
     // DTO TO ENTITY
-    CivilStatus toStatusCivil(CivilStatusDTO civilStatusDTO);
+    CivilStatus toCivilStatus(CivilStatusDTO civilStatusDTO);
 
     // ENTITY TO DTO
 
-    CivilStatusDTO toCivilStatusDTO(CivilStatus statusCivil);
+    CivilStatusDTO toCivilStatusDTO(CivilStatus civilStatus);
 }

@@ -93,7 +93,7 @@ public class PersonServiceImpl implements IPersonService {
         personDB.setLastName(person.getLastName());
         personDB.setGender(person.getGender());
         personDB.setAddress(person.getAddress());
-        personDB.setStatusCivil(person.getStatusCivil());
+        personDB.setCivilStatus(person.getCivilStatus());
         personDB.setOccupation(person.getOccupation());
         personDB.setBirthDay(person.getBirthDay());
         personDB.setConsentText(person.getConsentText());

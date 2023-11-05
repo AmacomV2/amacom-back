@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.amacom.amacom.model.CivilStatus;
+import com.amacom.amacom.model.DocumentType;
+import com.amacom.amacom.model.Gender;
 import com.amacom.amacom.util.ITools;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,17 +28,16 @@ public class PersonDTO implements Serializable {
     private String name;
 
     @NotNull(message = "Field cannot be null")
-    private UUID idDocumentType;
-    private String nameDocumentType;
+    private DocumentType documentType;
+    private UUID documentTypeId;
 
     @NotNull(message = "Field cannot be null")
-    private UUID idGenero;
-
-    private String nameGenero;
+    private Gender gender;
+    private UUID genderId;
 
     @NotNull(message = "Field cannot be null")
-    private UUID idStatusCivil;
-    private String nameStatusCivil;
+    private CivilStatus civilStatus;
+    private UUID civilStatusId;
 
     @NotNull(message = "Field cannot be null")
     private String documentNo;

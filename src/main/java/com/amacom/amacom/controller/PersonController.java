@@ -46,7 +46,7 @@ public class PersonController {
 
     private IGenderService genderService;
 
-    private ICivilStatusService statusCivilService;
+    private ICivilStatusService civilStatusService;
 
     @GetMapping("/query")
     public ResponseEntity<ResponseDTO> findPageable(
@@ -107,9 +107,9 @@ public class PersonController {
 
         Person person = PersonMapper.INSTANCE.toPerson(personDTO);
 
-        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getIdDocumentType()));
-        person.setGender(this.genderService.getEntityFromUUID(personDTO.getIdGenero()));
-        person.setStatusCivil(this.statusCivilService.getEntityFromUUID(personDTO.getIdStatusCivil()));
+        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
+        person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
+        person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
 
         var personBD = this.personService.createPerson(person);
         if (personBD == null)
@@ -122,9 +122,9 @@ public class PersonController {
             @Valid @RequestBody PersonDTO personDTO) {
         Person person = PersonMapper.INSTANCE.toPerson(personDTO);
 
-        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getIdDocumentType()));
-        person.setGender(this.genderService.getEntityFromUUID(personDTO.getIdGenero()));
-        person.setStatusCivil(this.statusCivilService.getEntityFromUUID(personDTO.getIdStatusCivil()));
+        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
+        person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
+        person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
 
         var personBD = this.personService.updatePerson(person);
         if (personBD == null) {
@@ -151,8 +151,8 @@ public class PersonController {
     }
 
     @Autowired
-    public void setStatusCivilService(ICivilStatusService statusCivilService) {
-        this.statusCivilService = statusCivilService;
+    public void setCivilStatusService(ICivilStatusService civilStatusService) {
+        this.civilStatusService = civilStatusService;
     }
 
     @Autowired

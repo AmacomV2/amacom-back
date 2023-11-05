@@ -62,7 +62,7 @@ public class AuthServiceImpl implements IAuthService {
 
         String token = jwtService.getAccessToken(user, roles);
         return AuthResponse.builder()
-                .accesToken(token)
+                .accessToken(token)
                 .refreshToken(jwtService.getRefreshToken(user, roles))
                 .build();
     }
@@ -98,7 +98,7 @@ public class AuthServiceImpl implements IAuthService {
                 .collect(Collectors.toList());
 
         return AuthResponse.builder()
-                .accesToken(jwtService.getAccessToken(user, roles))
+                .accessToken(jwtService.getAccessToken(user, roles))
                 .build();
 
     }
