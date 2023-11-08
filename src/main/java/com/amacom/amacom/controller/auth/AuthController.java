@@ -117,18 +117,18 @@ public class AuthController {
     }
 
     @PostMapping("/enviarCode")
-    public ResponseEntity<String> resetPassword(@RequestParam(name = "email") String email) {
+    public ResponseEntity<ResponseDTO> resetPassword(@RequestParam(name = "email") String email) {
         User user = usersService.findByEmail(email);
         if (user != null) {
             passwordResetService.sendPasswordResetCode(email);
-            return ResponseEntity.ok("Código de recuperación enviado por correo electrónico.");
+            return ResponseEntity.ok(new SuccessDTO("Code sent to email."));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Correo electrónico no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO("Email not found."));
         }
     }
 
     @PostMapping("/cambiarPassword")
-    public ResponseEntity<String> changePassword(
+    public ResponseEntity<ResponseDTO> changePassword(
             @RequestParam(name = "email") String email,
             @RequestParam(name = "code") String code,
             @RequestParam(name = "password") String password) {
@@ -138,14 +138,14 @@ public class AuthController {
             if (user != null) {
                 user.setPassword(passwordEncoder.encode(password));
                 usuarioRepository.save(user);
-                return ResponseEntity.ok("Contraseña actualizada correctamente.");
+                return ResponseEntity.ok(new SuccessDTO("Password updated."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("El email proporcionado no se encuentra registrado en la base de datos.");
+                        .body(new ErrorDTO("Email not fount."));
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Código de recuperación no válido o ha expirado.");
+                    .body(new ErrorDTO("Validation code is missing or not valid."));
         }
     }
 
