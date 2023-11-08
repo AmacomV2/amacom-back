@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.amacom.amacom.model.auth.ChangePasswordRequest;
 import com.amacom.amacom.model.auth.User;
 
 @Service
@@ -25,5 +26,7 @@ public interface IUserService {
     void deleteUserById(UUID id);
 
     User findByEmail(String email);
+
+    boolean changePassword(ChangePasswordRequest request);
 
 }

@@ -9,17 +9,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.auth.ChangePasswordRequest;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.repository.auth.IUserRepository;
 import com.amacom.amacom.service.interfaces.IUserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
+    private final PasswordEncoder passwordEncoder;
     private IUserRepository userRepository;
 
     @Override
@@ -96,8 +102,19 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    @Override
+    public boolean changePassword(ChangePasswordRequest request) {
+        User user = this.userRepository.findById(request.getId()).orElseThrow(DataNotFoundException::new);
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     @Autowired
-    public void setUsuarioRepository(IUserRepository usuarioRepository) {
-        this.userRepository = usuarioRepository;
+    public void setUsuarioRepository(IUserRepository usersRepository) {
+        this.userRepository = usersRepository;
     }
 }

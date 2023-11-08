@@ -37,7 +37,7 @@ public class EventController {
 
     private IEventTypeService eventTypeService;
 
-    private IUserService usuarioService;
+    private IUserService usersService;
 
     @GetMapping("/consulta")
     public ResponseEntity<Page<EventDTO>> findPageable(
@@ -75,7 +75,7 @@ public class EventController {
 
         Event event = EventMapper.INSTANCE.toEvent(eventDTO);
 
-        event.setUsuario(this.usuarioService.getEntityFromUUID(userId));
+        event.setUsuario(this.usersService.getEntityFromUUID(userId));
         event.setEventType(this.eventTypeService.getEntityFromUUID(eventDTO.getEventTypeId()));
 
         var eventBD = this.eventService.create(event);
@@ -116,8 +116,8 @@ public class EventController {
     }
 
     @Autowired
-    public void setUsuarioService(IUserService usuarioService) {
-        this.usuarioService = usuarioService;
+    public void setUsersService(IUserService usersService) {
+        this.usersService = usersService;
     }
 
 }

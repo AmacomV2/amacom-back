@@ -63,13 +63,18 @@ public class LogBookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LogBookDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
-        LogBook logBook = this.logBookService.findById(id);
-        if (logBook == null) {
-            return new ResponseEntity<>(new LogBookDTO(), HttpStatus.NO_CONTENT);
+        try {
+            LogBook logBook = this.logBookService.findById(id);
+            if (logBook == null) {
+                return new ResponseEntity<>(new ErrorDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(new SuccessDTO(LogBookMapper.INSTANCE.toLogBookDTO(logBook)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
-        return new ResponseEntity<>(LogBookMapper.INSTANCE.toLogBookDTO(logBook), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -93,7 +98,7 @@ public class LogBookController {
     }
 
     @PutMapping
-    public ResponseEntity<LogBookDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody LogBookDTO logBookDTO) {
         LogBook logBook = LogBookMapper.INSTANCE.toLogBook(logBookDTO);
 
@@ -101,16 +106,16 @@ public class LogBookController {
 
         var logBookBD = this.logBookService.update(logBook);
         if (logBookBD == null) {
-            return new ResponseEntity<>(new LogBookDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ErrorDTO(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(LogBookMapper.INSTANCE.toLogBookDTO(logBookBD), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(LogBookMapper.INSTANCE.toLogBookDTO(logBookBD)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
         this.logBookService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(new SuccessDTO(Boolean.TRUE));
     }
 
     @Autowired

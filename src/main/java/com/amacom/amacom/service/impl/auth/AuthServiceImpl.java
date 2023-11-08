@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
 
-    private final IUserRepository usuarioRepository;
+    private final IUserRepository usersRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -48,12 +48,27 @@ public class AuthServiceImpl implements IAuthService {
 
     private IRolRepository rolRepository;
 
+    @Override
+    public boolean validateCredentials(LoginRequest request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public AuthResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        } catch (Exception e) {
+            return null;
+        }
 
-        UserDetails user = usuarioRepository.findByUsername(request.getUsername())
+        UserDetails user = usersRepository.findByUsername(request.getUsername())
                 .orElseThrow(DataNotFoundException::new);
         List<String> roles = user.getAuthorities()
                 .stream()
@@ -79,7 +94,7 @@ public class AuthServiceImpl implements IAuthService {
             rol = this.rolRepository.findRolByDescription("USUARIO");
         }
 
-        this.validarRegistro(request);
+        this.validateRegistration(request);
         User user = User.builder()
                 .id(UUID.randomUUID())
                 .username(request.getUsername())
@@ -90,7 +105,7 @@ public class AuthServiceImpl implements IAuthService {
                 .enumRol(rol.getEnumRol())
                 .createdAt(new Date())
                 .build();
-        usuarioRepository.save(user);
+        usersRepository.save(user);
 
         List<String> roles = user.getAuthorities()
                 .stream()
@@ -103,14 +118,14 @@ public class AuthServiceImpl implements IAuthService {
 
     }
 
-    private void validarRegistro(RegisterRequest request) {
+    private void validateRegistration(RegisterRequest request) {
 
-        var existsSimilar = this.usuarioRepository.existsByUsernameOrEmail(null, request.getUsername(),
+        var existsSimilar = this.usersRepository.existsByUsernameOrEmail(null, request.getUsername(),
                 request.getEmail());
         if (Boolean.TRUE.equals(existsSimilar))
             throw new ValidationException("Email or username already in use.");
 
-        var existsSimilarByPersonId = this.usuarioRepository.existsByPersonId(null, request.getPersonId());
+        var existsSimilarByPersonId = this.usersRepository.existsByPersonId(null, request.getPersonId());
         if (Boolean.TRUE.equals(existsSimilarByPersonId))
             throw new ValidationException("Person already have a registered user.");
     }
@@ -131,4 +146,5 @@ public class AuthServiceImpl implements IAuthService {
     public void setRolRepository(IRolRepository rolRepository) {
         this.rolRepository = rolRepository;
     }
+
 }

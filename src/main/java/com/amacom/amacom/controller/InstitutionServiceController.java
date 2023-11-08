@@ -35,7 +35,7 @@ public class InstitutionServiceController {
 
     private IInstitutionServiceService institutionServiceService;
 
-    private IUserService usuarioService;
+    private IUserService usersService;
 
     private IServicesService servicesService;
 
@@ -77,7 +77,7 @@ public class InstitutionServiceController {
         InstitutionService institutionService = InstitutionServiceMapper.INSTANCE
                 .toInstitutionService(institutionServiceDTO);
 
-        institutionService.setUsuario(this.usuarioService.getEntityFromUUID(userId));
+        institutionService.setUsuario(this.usersService.getEntityFromUUID(userId));
         institutionService.setServices(this.servicesService.getEntityFromUUID(institutionServiceDTO.getIdServices()));
         institutionService
                 .setInstitution(this.institutionService.getEntityFromUUID(institutionServiceDTO.getIdInstitution()));
@@ -119,8 +119,8 @@ public class InstitutionServiceController {
     }
 
     @Autowired
-    public void setUsuarioService(IUserService usuarioService) {
-        this.usuarioService = usuarioService;
+    public void setUsersService(IUserService usersService) {
+        this.usersService = usersService;
     }
 
     @Autowired

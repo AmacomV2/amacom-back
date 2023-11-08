@@ -34,7 +34,7 @@ public class PersonSituationController {
 
     private IPersonService personService;
 
-    private IUserService usuarioService;
+    private IUserService usersService;
 
     private ISubjectService subjectService;
 
@@ -59,7 +59,7 @@ public class PersonSituationController {
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
-        personSituation.setUsuario(this.usuarioService.getEntityFromUUID(userId));
+        personSituation.setUsuario(this.usersService.getEntityFromUUID(userId));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
         personSituation
                 .setSituationType(this.situationTypeService.getEntityFromUUID(personSituationDTO.getSituationTypeId()));
@@ -106,8 +106,8 @@ public class PersonSituationController {
     }
 
     @Autowired
-    public void setUsuarioService(IUserService usuarioService) {
-        this.usuarioService = usuarioService;
+    public void setUsersService(IUserService usersService) {
+        this.usersService = usersService;
     }
 
     @Autowired

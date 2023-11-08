@@ -88,7 +88,7 @@ public class ResponseDTO implements Serializable {
     public ResponseDTO(@Nullable Object data, boolean ok, @Nullable String message) {
         this.data = data;
         this.message = message;
-        this.ok = false;
+        this.ok = ok;
     }
 
     @Override

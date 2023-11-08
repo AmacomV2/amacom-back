@@ -51,4 +51,14 @@ public class ErrorDTO extends ResponseDTO {
         super(errorData, message);
     }
 
+    /**
+     * Create a { ErrorDTO} with a data and message.
+     * 
+     * @param data    the entity data
+     * @param message the message
+     */
+    public ErrorDTO(@Nullable Object data, String message) {
+        super(data, message);
+    }
+
 }

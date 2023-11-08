@@ -3,13 +3,16 @@ package com.amacom.amacom.controller.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amacom.amacom.dto.auth.ChangePasswordDTO;
 import com.amacom.amacom.dto.auth.LoginRequestDTO;
 import com.amacom.amacom.dto.auth.RegisterRequestDTO;
 import com.amacom.amacom.dto.response.ErrorDTO;
@@ -19,6 +22,8 @@ import com.amacom.amacom.mapper.auth.AuthResponseMapper;
 import com.amacom.amacom.mapper.auth.LoginRequestMapper;
 import com.amacom.amacom.mapper.auth.RegisterRequestMapper;
 import com.amacom.amacom.model.auth.AuthResponse;
+import com.amacom.amacom.model.auth.ChangePasswordRequest;
+import com.amacom.amacom.model.auth.LoginRequest;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.repository.auth.IUserRepository;
 import com.amacom.amacom.service.interfaces.IUserService;
@@ -37,7 +42,7 @@ public class AuthController {
 
     private IPasswordResetService passwordResetService;
 
-    private IUserService usuarioService;
+    private IUserService usersService;
 
     private IUserRepository usuarioRepository;
 
@@ -54,14 +59,40 @@ public class AuthController {
             return new ResponseEntity<>(new SuccessDTO(AuthResponseMapper.INSTANCE.toAuthResponseDTO(response)),
                     HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new ErrorDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
+    @PutMapping(value = "/changePassword")
+    public ResponseEntity<ResponseDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        try {
+            /// Validate old password
+            var authData = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = User.class.cast(authData);
+            LoginRequest loginRequest = LoginRequest.buildLoginRequest(user.getUsername(),
+                    changePasswordDTO.getOldPassword());
+            if (this.IAuthService.validateCredentials(loginRequest)) {
+                /// Change current user password
+                ChangePasswordRequest request = ChangePasswordRequest.buildRequest(user.getId(),
+                        changePasswordDTO.getNewPassword());
+
+                boolean response = this.usersService
+                        .changePassword(request);
+                if (response) {
+                    return new ResponseEntity<>(new SuccessDTO(true), HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity<>(new ErrorDTO(false, "Bad credentials."),
+                    HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO registerRequestDTO) {
-        if (this.usuarioService.findByEmail(registerRequestDTO.getEmail()) != null) {
+        if (this.usersService.findByEmail(registerRequestDTO.getEmail()) != null) {
             return new ResponseEntity<>(
                     new ErrorDTO(ErrorCodes.UNIQUE_VALUES_REQUIRED,
                             "Email already in use"),
@@ -87,7 +118,7 @@ public class AuthController {
 
     @PostMapping("/enviarCode")
     public ResponseEntity<String> resetPassword(@RequestParam(name = "email") String email) {
-        User user = usuarioService.findByEmail(email);
+        User user = usersService.findByEmail(email);
         if (user != null) {
             passwordResetService.sendPasswordResetCode(email);
             return ResponseEntity.ok("Código de recuperación enviado por correo electrónico.");
@@ -101,7 +132,7 @@ public class AuthController {
             @RequestParam(name = "email") String email,
             @RequestParam(name = "code") String code,
             @RequestParam(name = "password") String password) {
-        User user = usuarioService.findByEmail(email);
+        User user = usersService.findByEmail(email);
         var token = passwordResetService.isCodeValid(email, code);
         if (Boolean.TRUE.equals(token)) {
             if (user != null) {
@@ -119,8 +150,8 @@ public class AuthController {
     }
 
     @Autowired
-    public void setUsuarioService(IUserService usuarioService) {
-        this.usuarioService = usuarioService;
+    public void setUsersService(IUserService usersService) {
+        this.usersService = usersService;
     }
 
     @Autowired
