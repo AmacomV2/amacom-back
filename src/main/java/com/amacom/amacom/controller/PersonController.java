@@ -36,8 +36,11 @@ import com.amacom.amacom.service.interfaces.IPersonService;
 import com.amacom.amacom.util.ErrorCodes;
 import com.amacom.amacom.util.ITools;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/person")
+@RequiredArgsConstructor
 public class PersonController {
 
     private IPersonService personService;
@@ -105,16 +108,24 @@ public class PersonController {
     public ResponseEntity<PersonDTO> createPerson(
             @Valid @RequestBody PersonDTO personDTO) {
 
-        Person person = PersonMapper.INSTANCE.toPerson(personDTO);
-
-        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
-        person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
-        person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
-
-        var personBD = this.personService.createPerson(person);
+        Person personBD = createPersonMethod(personDTO);
         if (personBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity.ok(PersonMapper.INSTANCE.toPersonDTO(personBD));
+    }
+
+    public Person createPersonMethod(PersonDTO personDTO) {
+        try {
+            Person person = PersonMapper.INSTANCE.toPerson(personDTO);
+            person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
+            person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
+            person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
+
+            Person personBD = this.personService.createPerson(person);
+            return personBD;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @PutMapping

@@ -23,7 +23,7 @@ import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.auth.AuthResponse;
 import com.amacom.amacom.model.auth.ERole;
 import com.amacom.amacom.model.auth.LoginRequest;
-import com.amacom.amacom.model.auth.RegisterRequest;
+import com.amacom.amacom.model.auth.NewUserRequest;
 import com.amacom.amacom.model.auth.Rol;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.repository.IPersonRepository;
@@ -82,8 +82,9 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
     }
 
+    // TODO: Remove this shit
     @Transactional
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(NewUserRequest request) {
 
         var person = this.personRepository.findById(request.getPersonId()).orElseThrow(DataNotFoundException::new);
 
@@ -118,7 +119,7 @@ public class AuthServiceImpl implements IAuthService {
 
     }
 
-    private void validateRegistration(RegisterRequest request) {
+    private void validateRegistration(NewUserRequest request) {
 
         var existsSimilar = this.usersRepository.existsByUsernameOrEmail(null, request.getUsername(),
                 request.getEmail());

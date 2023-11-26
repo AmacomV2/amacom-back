@@ -15,6 +15,10 @@ public interface IUserService {
 
     User getEntityFromUUID(UUID uuid);
 
+    public boolean validateEmail(String email);
+
+    public User newUser(User request);
+
     Page<User> findUsers(UUID personId, String query, Pageable pageable);
 
     List<User> getAll();

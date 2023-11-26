@@ -11,11 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.auth.ChangePasswordRequest;
+import com.amacom.amacom.model.auth.Rol;
 import com.amacom.amacom.model.auth.User;
+import com.amacom.amacom.repository.IPersonRepository;
+import com.amacom.amacom.repository.IRolRepository;
 import com.amacom.amacom.repository.auth.IUserRepository;
 import com.amacom.amacom.service.interfaces.IUserService;
 
@@ -27,6 +31,8 @@ public class UserServiceImpl implements IUserService {
 
     private final PasswordEncoder passwordEncoder;
     private IUserRepository userRepository;
+    private IPersonRepository personRepository;
+    private IRolRepository rolRepository;
 
     @Override
     public User getEntityFromUUID(UUID uuid) {
@@ -94,12 +100,47 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findByEmail(String email) {
-        var usuario = this.userRepository.findByEmail(email);
+        User usuario = this.userRepository.findByEmail(email);
         if (usuario != null) {
             return usuario;
         } else {
             throw new ValidationException("El email proporcionado no se encuentra registrado en la base de datos.");
         }
+    }
+
+    @Override
+    public boolean validateEmail(String email) {
+        User usuario = this.userRepository.findByEmail(email);
+        return usuario != null;
+    }
+
+    @Transactional
+    @Override
+    public User newUser(User user) {
+
+        var person = this.personRepository.findById(user.getPerson().getId()).orElseThrow(DataNotFoundException::new);
+
+        Rol rol;
+        if (user.getRol().getId() != null) {
+            rol = this.rolRepository.findById(user.getRol().getId()).orElse(null);
+        } else {
+            rol = this.rolRepository.findRolByDescription("USUARIO");
+        }
+
+        User userDB = User.builder()
+                .id(UUID.randomUUID())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .person(person)
+                .rol(rol)
+                .enumRol(rol.getEnumRol())
+                .createdAt(new Date())
+                .build();
+        this.userRepository.save(userDB);
+
+        return userDB;
+
     }
 
     @Override

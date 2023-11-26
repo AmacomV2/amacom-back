@@ -55,7 +55,7 @@ public class PersonDTO implements Serializable {
 
     @NotNull(message = "Field cannot be null")
     @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date birthDay;
+    private Date birthDate;
 
     @NotNull(message = "Field cannot be null")
     private Boolean consentText;

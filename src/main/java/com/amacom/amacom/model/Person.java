@@ -61,7 +61,7 @@ public class Person implements Serializable {
 
     @Column(name = "FECHA_NACIMIENTO", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date birthDay;
+    private Date birthDate;
 
     @Column(name = "CONSENTIMIENTO", nullable = false)
     private Boolean consentText;

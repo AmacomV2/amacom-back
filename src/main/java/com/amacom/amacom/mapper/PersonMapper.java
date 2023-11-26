@@ -39,7 +39,7 @@ public interface PersonMapper {
         clavesToSort.put("genderId", "gender.id");
         clavesToSort.put("civilStatus", "civilStatus");
         clavesToSort.put("civilStatusId", "civilStatus.id");
-        clavesToSort.put("birthDay", "birthDay");
+        clavesToSort.put("birthDate", "birthDate");
         clavesToSort.put("createdAt", "createdAt");
         return clavesToSort;
     }

@@ -1,6 +1,5 @@
 package com.amacom.amacom.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.DocumentTypeDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.DocumentTypeMapper;
 import com.amacom.amacom.model.DocumentType;
 import com.amacom.amacom.service.interfaces.IDocumentTypeService;
@@ -31,51 +32,53 @@ public class DocumentTypeController {
     private IDocumentTypeService documentTypeService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<DocumentTypeDTO>> getAll() {
+    public ResponseEntity<ResponseDTO> getAll() {
         List<DocumentType> documentTypeList = this.documentTypeService.getAll();
         if (documentTypeList == null || documentTypeList.isEmpty()) {
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(documentTypeList.stream()
-                .map(DocumentTypeMapper.INSTANCE::toDocumentTypeDTO).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(documentTypeList.stream()
+                .map(DocumentTypeMapper.INSTANCE::toDocumentTypeDTO).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentTypeDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
         DocumentType documentType = this.documentTypeService.findById(id);
         if (documentType == null) {
-            return new ResponseEntity<>(new DocumentTypeDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentType), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentType)),
+                HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<DocumentTypeDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody DocumentTypeDTO documentTypeDTO) {
         DocumentType documentType = DocumentTypeMapper.INSTANCE.toDocumentType(documentTypeDTO);
         var documentTypeBD = this.documentTypeService.create(documentType);
         if (documentTypeBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentTypeBD));
+        return ResponseEntity.ok(new SuccessDTO(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentTypeBD)));
     }
 
     @PutMapping
-    public ResponseEntity<DocumentTypeDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody DocumentTypeDTO documentTypeDTO) {
         DocumentType documentType = DocumentTypeMapper.INSTANCE.toDocumentType(documentTypeDTO);
         var documentTypeBD = this.documentTypeService.update(documentType);
         if (documentTypeBD == null) {
-            return new ResponseEntity<>(new DocumentTypeDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentTypeBD), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(DocumentTypeMapper.INSTANCE.toDocumentTypeDTO(documentTypeBD)),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
         this.documentTypeService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(new SuccessDTO());
     }
 
     @Autowired

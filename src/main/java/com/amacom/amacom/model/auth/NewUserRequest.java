@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest implements Serializable {
+public class NewUserRequest implements Serializable {
 
     private static final long serialVersionUID = -3180914187196092198L;
 

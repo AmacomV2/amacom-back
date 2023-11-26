@@ -77,7 +77,7 @@ public class PersonServiceImpl implements IPersonService {
         this.validatePersonCreation(person);
         person.setId(UUID.randomUUID());
         person.setCreatedAt(new Date());
-        var personDB = this.personRepository.save(person);
+        Person personDB = this.personRepository.save(person);
         this.entityManager.flush();
         this.entityManager.refresh(personDB);
         return personDB;
@@ -95,7 +95,7 @@ public class PersonServiceImpl implements IPersonService {
         personDB.setAddress(person.getAddress());
         personDB.setCivilStatus(person.getCivilStatus());
         personDB.setOccupation(person.getOccupation());
-        personDB.setBirthDay(person.getBirthDay());
+        personDB.setBirthDate(person.getBirthDate());
         personDB.setConsentText(person.getConsentText());
         personDB.setPrivacyPolicy(person.getPrivacyPolicy());
         personDB.setEvaluation_completed(person.getEvaluation_completed());
