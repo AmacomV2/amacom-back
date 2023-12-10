@@ -27,7 +27,10 @@ public class SecurityConfig {
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeRequests(authRequest -> authRequest
                                                 .antMatchers("/auth/**").permitAll()
-                                                .antMatchers("/person/create").permitAll()
+                                                .antMatchers("/genders/getAll").permitAll()
+                                                .antMatchers("/documentType/getAll").permitAll()
+                                                .antMatchers("/civilStatus/getAll").permitAll()
+                                                // .antMatchers("/person/create").permitAll()
                                                 .antMatchers("/swagger-ui/**").permitAll()
                                                 .antMatchers("/swagger-ui.html").permitAll()
                                                 .antMatchers("/v2/**").permitAll()
