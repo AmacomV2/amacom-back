@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import com.amacom.amacom.util.ITools;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,10 +20,8 @@ public class SubjectDTO implements Serializable {
 
     private UUID id;
 
-    @NotNull(message = "Field cannot be null")
     private UUID parentId;
 
-    @NotNull(message = "Field cannot be null")
     private UUID idAssociatedResults;
 
     private String name;

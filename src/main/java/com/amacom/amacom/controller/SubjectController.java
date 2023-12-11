@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.SubjectDTO;
+import com.amacom.amacom.dto.response.ErrorDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.SubjectMapper;
 import com.amacom.amacom.model.Subject;
 import com.amacom.amacom.service.interfaces.ISubjectService;
@@ -48,21 +52,21 @@ public class SubjectController {
                 .map(SubjectMapper.INSTANCE::toSubjectDTO), HttpStatus.OK);
     }
 
-    @GetMapping("/consulta")
-    public ResponseEntity<Page<SubjectDTO>> findPageable(
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> findPageable(
             Pageable pageable,
             @RequestParam(name = "parentId", required = false) UUID parentId,
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "query", required = false) String query) {
+            @RequestParam(name = "name", required = false) @Nullable String name,
+            @RequestParam(name = "query", required = false) @Nullable String query) {
 
         var subjectPage = this.subjectService.findSubject(parentId, name, query,
                 ITools.getPageRequest(pageable, SubjectMapper.getClavesToSort()));
 
         if (subjectPage == null || subjectPage.getContent().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ErrorDTO(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(subjectPage
-                .map(SubjectMapper.INSTANCE::toSubjectDTO), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(subjectPage
+                .map(SubjectMapper.INSTANCE::toSubjectDTO)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -76,7 +80,7 @@ public class SubjectController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<SubjectDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody SubjectDTO subjectDTO) {
 
         Subject subject = SubjectMapper.INSTANCE.toSubject(subjectDTO);
@@ -87,8 +91,8 @@ public class SubjectController {
 
         var subjectBD = this.subjectService.create(subject);
         if (subjectBD == null)
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(SubjectMapper.INSTANCE.toSubjectDTO(subjectBD));
+            return new ResponseEntity<>(new ErrorDTO(), HttpStatus.CONFLICT);
+        return ResponseEntity.ok(new SuccessDTO(SubjectMapper.INSTANCE.toSubjectDTO(subjectBD)));
     }
 
     @PutMapping

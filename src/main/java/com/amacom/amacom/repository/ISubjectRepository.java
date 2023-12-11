@@ -17,7 +17,6 @@ public interface ISubjectRepository extends JpaRepository<Subject, UUID> {
         @Query("SELECT t " +
                         "FROM Subject t " +
                         "WHERE (t.parent.id = :parentId OR :parentId IS NULL) " +
-                        "AND (t.name = :name OR :name IS NULL) " +
                         "AND CONCAT(UPPER(REPLACE(t.name , 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.validityIndicator, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
