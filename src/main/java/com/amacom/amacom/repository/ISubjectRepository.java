@@ -20,7 +20,7 @@ public interface ISubjectRepository extends JpaRepository<Subject, UUID> {
                         "AND CONCAT(UPPER(REPLACE(t.name , 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.validityIndicator, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
-        Page<Subject> findSubject(UUID parentId, String name, String query, Pageable pageable);
+        Page<Subject> findSubject(UUID parentId, String query, Pageable pageable);
 
         @Query("SELECT t " +
                         "FROM Subject t " +

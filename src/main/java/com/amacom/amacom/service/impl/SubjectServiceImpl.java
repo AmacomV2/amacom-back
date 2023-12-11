@@ -54,15 +54,15 @@ public class SubjectServiceImpl implements ISubjectService {
     }
 
     @Override
-    public Page<Subject> findSubject(UUID parentId, String name, String query, Pageable pageable) {
+    public Page<Subject> findSubject(UUID parentId, String query, Pageable pageable) {
         Page<Subject> subjectPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                     Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
-            subjectPage = this.subjectRepository.findSubject(parentId, name, query, pageableDefault);
+            subjectPage = this.subjectRepository.findSubject(parentId, query, pageableDefault);
         } else {
-            subjectPage = this.subjectRepository.findSubject(parentId, name, query, pageable);
+            subjectPage = this.subjectRepository.findSubject(parentId, query, pageable);
         }
         return subjectPage;
     }

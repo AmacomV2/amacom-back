@@ -55,11 +55,10 @@ public class SubjectController {
     @GetMapping("/search")
     public ResponseEntity<ResponseDTO> findPageable(
             Pageable pageable,
-            @RequestParam(name = "parentId", required = false) UUID parentId,
-            @RequestParam(name = "name", required = false) @Nullable String name,
-            @RequestParam(name = "query", required = false) @Nullable String query) {
+            @RequestParam(name = "parentId", required = false) @Nullable UUID parentId,
+            @RequestParam(name = "query", required = false) String query) {
 
-        var subjectPage = this.subjectService.findSubject(parentId, name, query,
+        var subjectPage = this.subjectService.findSubject(parentId, query,
                 ITools.getPageRequest(pageable, SubjectMapper.getClavesToSort()));
 
         if (subjectPage == null || subjectPage.getContent().isEmpty()) {

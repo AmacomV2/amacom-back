@@ -16,7 +16,7 @@ public interface ISubjectService {
 
     Page<Subject> findSubjectList(List<UUID> subjectIdList, String query, Pageable pageable);
 
-    Page<Subject> findSubject(UUID parentId, String name, String query, Pageable pageable);
+    Page<Subject> findSubject(UUID parentId, String query, Pageable pageable);
 
     Subject create(Subject subject);
 
