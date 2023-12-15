@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Server Config File ###
-src/main/resources/application.properties
+/src/main/resources/application.properties
