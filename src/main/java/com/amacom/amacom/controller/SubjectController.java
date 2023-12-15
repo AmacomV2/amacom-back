@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,7 @@ public class SubjectController {
     private ISubjectService subjectService;
 
     @GetMapping("/getByIdList")
-    public ResponseEntity<Page<SubjectDTO>> findPageableByIdList(
+    public ResponseEntity<ResponseDTO> findPageableByIdList(
             Pageable pageable,
             @RequestParam(name = "subjectIdList", required = false) List<UUID> subjectIdList,
             @RequestParam(name = "query", required = false) String query) {
@@ -48,8 +47,8 @@ public class SubjectController {
         if (subjectPage == null || subjectPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(subjectPage
-                .map(SubjectMapper.INSTANCE::toSubjectDTO), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(subjectPage
+                .map(SubjectMapper.INSTANCE::toSubjectDTO)), HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -69,13 +68,13 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubjectDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
         Subject subject = this.subjectService.findById(id);
         if (subject == null) {
-            return new ResponseEntity<>(new SubjectDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(new SubjectDTO()), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(SubjectMapper.INSTANCE.toSubjectDTO(subject), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(SubjectMapper.INSTANCE.toSubjectDTO(subject)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -95,7 +94,7 @@ public class SubjectController {
     }
 
     @PutMapping
-    public ResponseEntity<SubjectDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody SubjectDTO subjectDTO) {
         Subject subject = SubjectMapper.INSTANCE.toSubject(subjectDTO);
 
@@ -105,16 +104,16 @@ public class SubjectController {
 
         var subjectBD = this.subjectService.update(subject);
         if (subjectBD == null) {
-            return new ResponseEntity<>(new SubjectDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(new SubjectDTO()), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(SubjectMapper.INSTANCE.toSubjectDTO(subjectBD), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(SubjectMapper.INSTANCE.toSubjectDTO(subjectBD)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
         this.subjectService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(new SuccessDTO());
     }
 
     @Autowired

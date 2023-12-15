@@ -24,15 +24,15 @@ public class PersonSituationHasAlarmSigns implements Serializable {
     private static final long serialVersionUID = 3203506404323347807L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSON_SITUATION", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_SITUATION_ID", referencedColumnName = "ID")
     private PersonSituation personSituation;
 
     @ManyToOne
-    @JoinColumn(name = "ID_ALARM_SIGNS", referencedColumnName = "ID")
+    @JoinColumn(name = "ALARM_SIGNS_ID", referencedColumnName = "ID")
     private AlarmSign alarmSign;
 
 }

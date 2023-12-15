@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.amacom.amacom.model.auth.User;
 
 import lombok.AllArgsConstructor;
@@ -31,46 +33,47 @@ public class PersonSituation implements Serializable {
     private static final long serialVersionUID = 5551518673194641952L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
+    @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
     private User usuario;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_SITUATION_TYPE", referencedColumnName = "ID")
-    private SituationType situationType;
-
-    @Column(name = "DESCRIPCION")
+    @Column(name = "FIRST_THOUGHT", nullable = false)
     private String description;
 
-    @Column(name = "PRIMER_PENSAMIENTO")
+    @Column(name = "PRIMER_PENSAMIENTO", nullable = false)
     private String firstThought;
 
-    @Column(name = "COMPORTAMIENTO")
+    @Column(name = "BEHAVIOR", nullable = false)
     private String behavior;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "GRADO_AFECTACION")
+    @Column(name = "AFFECTATION_DEGREE", nullable = false)
     private EAffectationDegree affectationDegree;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @Column(name = "EVALUACION_ENFERMERIA")
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @Column(name = "NURSING_ASSESSMENT")
     private String nursingAssessment;
 }

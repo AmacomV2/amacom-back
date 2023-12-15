@@ -51,7 +51,6 @@ public class PersonSituationServiceImpl implements IPersonSituationService {
                 .orElseThrow(DataNotFoundException::new);
         personSituationBD.setPerson(personSituation.getPerson());
         personSituationBD.setSubject(personSituation.getSubject());
-        personSituationBD.setSituationType(personSituation.getSituationType());
         personSituationBD.setDescription(personSituation.getDescription());
         personSituationBD.setFirstThought(personSituation.getFirstThought());
         personSituationBD.setBehavior(personSituation.getBehavior());

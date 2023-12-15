@@ -24,15 +24,15 @@ public class PersonSituationHasFeelings implements Serializable {
     private static final long serialVersionUID = -4402138802889003229L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSON_SITUATION", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_SITUATION_ID", referencedColumnName = "ID")
     private PersonSituation personSituation;
 
     @ManyToOne
-    @JoinColumn(name = "ID_FEELINGS", referencedColumnName = "ID")
+    @JoinColumn(name = "FEELINGS_ID", referencedColumnName = "ID")
     private Feelings feelings;
 
     @Column(name = "PRIORITY")

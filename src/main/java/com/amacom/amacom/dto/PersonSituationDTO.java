@@ -24,10 +24,9 @@ public class PersonSituationDTO implements Serializable {
     private static final long serialVersionUID = -6009951415841197929L;
 
     private UUID id;
-    @NotNull(message = "Field cannot be null")
+
     private UUID personId;
 
-    @NotNull(message = "Field cannot be null")
     private UUID userId;
 
     @NotNull(message = "Field cannot be null")

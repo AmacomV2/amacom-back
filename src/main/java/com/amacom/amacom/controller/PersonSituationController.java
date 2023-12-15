@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.PersonSituationDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonSituationMapper;
 import com.amacom.amacom.model.PersonSituation;
+import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IPersonService;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
-import com.amacom.amacom.service.interfaces.ISituationTypeService;
 import com.amacom.amacom.service.interfaces.ISubjectService;
 import com.amacom.amacom.service.interfaces.IUserService;
 
@@ -38,61 +41,63 @@ public class PersonSituationController {
 
     private ISubjectService subjectService;
 
-    private ISituationTypeService situationTypeService;
-
     @GetMapping("/{id}")
-    public ResponseEntity<PersonSituationDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
         PersonSituation personSituation = this.personSituationService.findById(id);
         if (personSituation == null) {
-            return new ResponseEntity<>(new PersonSituationDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituation),
+        return new ResponseEntity<>(
+                new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituation)),
                 HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PersonSituationDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody PersonSituationDTO personSituationDTO,
-            @RequestHeader("userId") UUID userId) {
-
+            @RequestHeader(name = "personId", required = false) UUID personId) {
+        var authData = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = User.class.cast(authData);
+        if (personId == null) {
+            personId = user.getPerson().getId();
+            personSituationDTO.setUserId(user.getId());
+        }
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
-        personSituation.setUsuario(this.usersService.getEntityFromUUID(userId));
+        personSituation.setUsuario(this.usersService.getEntityFromUUID(personId));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
-        personSituation
-                .setSituationType(this.situationTypeService.getEntityFromUUID(personSituationDTO.getSituationTypeId()));
 
         var personSituationBD = this.personSituationService.create(personSituation);
         if (personSituationBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD));
+        return ResponseEntity
+                .ok(new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD)));
     }
 
     @PutMapping
-    public ResponseEntity<PersonSituationDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody PersonSituationDTO personSituationDTO) {
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
-        personSituation
-                .setSituationType(this.situationTypeService.getEntityFromUUID(personSituationDTO.getSituationTypeId()));
 
         var personSituationBD = this.personSituationService.update(personSituation);
         if (personSituationBD == null) {
-            return new ResponseEntity<>(new PersonSituationDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD),
+        return new ResponseEntity<>(
+                new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD)),
                 HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
         this.personSituationService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(new SuccessDTO());
     }
 
     @Autowired
@@ -113,11 +118,6 @@ public class PersonSituationController {
     @Autowired
     public void setSubjectService(ISubjectService subjectService) {
         this.subjectService = subjectService;
-    }
-
-    @Autowired
-    public void situationTypeService(ISituationTypeService situationTypeService) {
-        this.situationTypeService = situationTypeService;
     }
 
 }
