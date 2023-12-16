@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,25 +33,30 @@ public class Subject implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT_PARENT", referencedColumnName = "ID")
+    @JoinColumn(name = "PARENT_ID", referencedColumnName = "ID")
     private Subject parent;
 
     @ManyToOne
-    @JoinColumn(name = "ID_RESULTADOS_ASOCIADOS", referencedColumnName = "ID")
-    private Result associatedResults;
+    @JoinColumn(name = "ASSOCIATED_RESULT_ID", referencedColumnName = "ID")
+    private Result associatedResult;
 
     @Column(name = "NOMBRE", nullable = false)
     private String name;
 
-    @Column(name = "INDICACION_VALIDEZ")
+    @Column(name = "VALIDITY_INDICATOR")
     private String validityIndicator;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
 }

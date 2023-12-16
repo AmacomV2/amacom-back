@@ -24,15 +24,15 @@ public class EventHasPersons implements Serializable {
     private static final long serialVersionUID = 1246642940174979130L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID")
+    @JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")
     private Event event;
 
 }

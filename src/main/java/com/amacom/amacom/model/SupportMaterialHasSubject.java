@@ -24,15 +24,15 @@ public class SupportMaterialHasSubject implements Serializable {
     private static final long serialVersionUID = -8621283640601114675L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUPPORT_MATERIAL", referencedColumnName = "ID")
+    @JoinColumn(name = "SUPPORT_MATERIAL_ID", referencedColumnName = "ID")
     private SupportMaterial supportMaterial;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
 }

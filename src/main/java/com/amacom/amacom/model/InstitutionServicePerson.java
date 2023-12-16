@@ -24,14 +24,14 @@ public class InstitutionServicePerson implements Serializable {
     private static final long serialVersionUID = 993579400240505221L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_INSTITUCION_SERVICIO", referencedColumnName = "ID")
+    @JoinColumn(name = "INSTITUTION_SERVICE_ID", referencedColumnName = "ID")
     private InstitutionService institutionService;
 }

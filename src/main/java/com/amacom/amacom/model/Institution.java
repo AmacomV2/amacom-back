@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,25 +29,30 @@ public class Institution implements Serializable {
     private static final long serialVersionUID = 1491571920947412552L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_INSITUCION", referencedColumnName = "ID")
+    @JoinColumn(name = "INSTITUTION_TYPE_ID", referencedColumnName = "ID")
     private InstitutionType institutionType;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "DESCRIPCION")
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
 }

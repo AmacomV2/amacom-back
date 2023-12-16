@@ -4,5 +4,4 @@ public enum EConsultationAlert {
     Informacion,
     Para_revisar,
     Urgente
-
 }

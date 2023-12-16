@@ -13,34 +13,41 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "ROLES")
+@Table(name = "ROL")
 public class Rol implements Serializable {
 
     private static final long serialVersionUID = 4448364954833682456L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "DESCRIPCION")
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)

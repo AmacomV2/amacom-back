@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,27 +31,32 @@ public class PersonAchievement implements Serializable {
     private static final long serialVersionUID = -6424297099692066046L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "PUNTAJE")
+    @Column(name = "SCORE")
     private EScore score;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSONA_ID", referencedColumnName = "ID")
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_ACHIEVEMENT", referencedColumnName = "ID")
+    @JoinColumn(name = "ACHIEVEMENT_ID", referencedColumnName = "ID")
     private Achievement achievement;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
 }

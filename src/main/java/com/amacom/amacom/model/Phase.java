@@ -18,13 +18,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "PHASE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "INSTITUTION_TYPE")
-public class InstitutionType implements Serializable {
+public class Phase implements Serializable {
 
-    private static final long serialVersionUID = 4608855862221374257L;
+    private static final long serialVersionUID = -7852517286571309098L;
 
     @Id
     @Column(name = "ID", columnDefinition = "VARCHAR(36)")
@@ -35,6 +35,9 @@ public class InstitutionType implements Serializable {
 
     @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "VALIDITY_INDICATOR")
+    private String validityIndicator;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
@@ -48,4 +51,5 @@ public class InstitutionType implements Serializable {
     @Column(name = "DELETED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
+
 }

@@ -42,16 +42,16 @@ public class PersonSituation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
-    private User usuario;
+    private User createdBy;
 
     @ManyToOne
     @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
-    @Column(name = "FIRST_THOUGHT", nullable = false)
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
-    @Column(name = "PRIMER_PENSAMIENTO", nullable = false)
+    @Column(name = "FIRST_THOUGHT", nullable = false)
     private String firstThought;
 
     @Column(name = "BEHAVIOR", nullable = false)

@@ -98,7 +98,7 @@ public class PersonServiceImpl implements IPersonService {
         personDB.setBirthDate(person.getBirthDate());
         personDB.setConsentText(person.getConsentText());
         personDB.setPrivacyPolicy(person.getPrivacyPolicy());
-        personDB.setEvaluation_completed(person.getEvaluation_completed());
+        personDB.setEvaluationCompleted(person.getEvaluationCompleted());
         personDB.setImageUrl(person.getImageUrl());
         personDB.setUpdatedAt(new Date());
         return this.personRepository.save(personDB);

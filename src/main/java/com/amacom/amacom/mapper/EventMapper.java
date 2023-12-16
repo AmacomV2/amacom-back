@@ -19,13 +19,13 @@ public interface EventMapper {
 
     @Mapping(target = "eventTypeName", source = "eventType.name")
     @Mapping(target = "eventTypeId", source = "eventType.id")
-    @Mapping(target = "createdBy", source = "usuario.id")
+    @Mapping(target = "personId", source = "person.id")
     EventDTO toEventDTO(Event event);
 
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
         clavesToSort.put("eventTypeName", "eventType.name");
-        clavesToSort.put("title", "title");
+        clavesToSort.put("name", "name");
         return clavesToSort;
     }
 

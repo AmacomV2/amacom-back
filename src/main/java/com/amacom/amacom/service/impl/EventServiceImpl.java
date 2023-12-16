@@ -44,24 +44,24 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date fechaDesde, Date fechaHasta, String query,
+    public Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date from, Date to, String query,
             Pageable pageable) {
 
         Page<Event> eventPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("title").ascending().and(Sort.by("start").descending()));
+                    Sort.by("name").ascending().and(Sort.by("start").descending()));
             if (idCreatedBy != null) {
-                eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageableDefault);
+                eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageableDefault);
             } else {
-                eventPage = this.eventRepository.findEvent(userId, fechaDesde, fechaHasta, query, pageableDefault);
+                eventPage = this.eventRepository.findEvent(userId, from, to, query, pageableDefault);
             }
         } else {
             if (idCreatedBy != null) {
-                eventPage = this.eventRepository.findEvent(idCreatedBy, fechaDesde, fechaHasta, query, pageable);
+                eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageable);
             } else {
-                eventPage = this.eventRepository.findEvent(userId, fechaDesde, fechaHasta, query, pageable);
+                eventPage = this.eventRepository.findEvent(userId, from, to, query, pageable);
             }
         }
         return eventPage;
@@ -84,7 +84,7 @@ public class EventServiceImpl implements IEventService {
         this.validateCreation(event);
         var eventBD = this.eventRepository.findById(event.getId()).orElseThrow(DataNotFoundException::new);
         eventBD.setEventType(event.getEventType());
-        eventBD.setTitle(event.getTitle());
+        eventBD.setName(event.getName());
         eventBD.setDescription(event.getDescription());
         eventBD.setStart(event.getStart());
         eventBD.setEnd(event.getEnd());
@@ -106,9 +106,9 @@ public class EventServiceImpl implements IEventService {
                         event.getEnd(), ">"))
             throw new ValidationException("La fecha fin es menor que la fecha de start.");
 
-        var existsSimilar = this.eventRepository.existsByTitle(event.getId(), event.getTitle());
+        var existsSimilar = this.eventRepository.existsByTitle(event.getId(), event.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidationException("Ya existe un registro con este title.");
+            throw new ValidationException("Ya existe un registro con este name.");
     }
 
     @Autowired

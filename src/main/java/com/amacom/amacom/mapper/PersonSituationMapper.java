@@ -15,8 +15,7 @@ public interface PersonSituationMapper {
     PersonSituation toPersonSituation(PersonSituationDTO personSituationDTO);
 
     @Mapping(target = "personId", source = "person.id")
-    @Mapping(target = "userId", source = "usuario.id")
+    @Mapping(target = "createdById", source = "createdBy.id")
     @Mapping(target = "subjectId", source = "subject.id")
-    @Mapping(target = "situationTypeId", source = "situationType.id")
     PersonSituationDTO toPersonSituationDTO(PersonSituation personSituation);
 }

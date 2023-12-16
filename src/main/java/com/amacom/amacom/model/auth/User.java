@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,18 +34,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USUARIO")
+@Table(name = "USER")
 public class User implements UserDetails {
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_ROL", referencedColumnName = "ID")
+    @JoinColumn(name = "ROL_ID", referencedColumnName = "ID")
     private Rol rol;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     private Person person;
 
     @Basic
@@ -57,13 +58,18 @@ public class User implements UserDetails {
     @Column(name = "PASSWORD", nullable = false)
     String password;
 
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
     private Date createdAt;
 
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_MODIFICACION")
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
     @Enumerated(EnumType.STRING)
     ERole enumRol;

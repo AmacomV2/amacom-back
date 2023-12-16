@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.amacom.amacom.model.auth.User;
 
 import lombok.AllArgsConstructor;
@@ -31,40 +33,49 @@ public class Event implements Serializable {
     private static final long serialVersionUID = -6253118475380318681L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_EVENTO", referencedColumnName = "ID")
+    @JoinColumn(name = "EVENT_TYPE_ID", referencedColumnName = "ID")
     private EventType eventType;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
-    private User usuario;
+    @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
+    private User createdBy;
 
-    @Column(name = "TITULO")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    private Person person;
 
-    @Column(name = "DESCRIPCION")
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "COMIENZO", nullable = false)
+    @Column(name = "START", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date start;
 
-    @Column(name = "FIN")
+    @Column(name = "END")
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @Column(name = "ESTADO_EVENTO")
+    @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
     private EEventStatus eventStatus;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

@@ -29,9 +29,9 @@ public class EventDTO implements Serializable {
     private UUID eventTypeId;
     private String eventTypeName;
 
-    private UUID createdBy;
+    private UUID personId;
 
-    private String title;
+    private String name;
 
     private String description;
 
@@ -40,7 +40,7 @@ public class EventDTO implements Serializable {
     private Date start;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fin;
+    private Date end;
 
     @Enumerated(EnumType.STRING)
     private EEventStatus eventStatus;

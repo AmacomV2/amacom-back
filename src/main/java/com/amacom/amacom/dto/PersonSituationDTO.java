@@ -27,13 +27,10 @@ public class PersonSituationDTO implements Serializable {
 
     private UUID personId;
 
-    private UUID userId;
+    private UUID createdById;
 
     @NotNull(message = "Field cannot be null")
     private UUID subjectId;
-
-    @NotNull(message = "Field cannot be null")
-    private UUID situationTypeId;
 
     private String description;
 

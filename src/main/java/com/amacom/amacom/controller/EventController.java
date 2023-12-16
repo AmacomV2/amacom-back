@@ -44,11 +44,11 @@ public class EventController {
             Pageable pageable,
             @RequestParam(name = "idCreatedBy", required = false) UUID idCreatedBy,
             @RequestHeader("userId") UUID userId,
-            @RequestParam(name = "fechaDesde", required = false) Date fechaDesde,
-            @RequestParam(name = "fechaHasta", required = false) Date fechaHasta,
+            @RequestParam(name = "from", required = false) Date from,
+            @RequestParam(name = "to", required = false) Date to,
             @RequestParam(name = "query", required = false) String query) {
 
-        var eventPage = this.eventService.findEvent(idCreatedBy, userId, fechaDesde, fechaHasta, query,
+        var eventPage = this.eventService.findEvent(idCreatedBy, userId, from, to, query,
                 ITools.getPageRequest(pageable, EventMapper.getClavesToSort()));
 
         if (eventPage == null || eventPage.getContent().isEmpty()) {
@@ -75,7 +75,7 @@ public class EventController {
 
         Event event = EventMapper.INSTANCE.toEvent(eventDTO);
 
-        event.setUsuario(this.usersService.getEntityFromUUID(userId));
+        event.setCreatedBy(this.usersService.getEntityFromUUID(userId));
         event.setEventType(this.eventTypeService.getEntityFromUUID(eventDTO.getEventTypeId()));
 
         var eventBD = this.eventService.create(event);

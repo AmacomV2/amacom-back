@@ -1,6 +1,7 @@
 package com.amacom.amacom.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.amacom.amacom.model.auth.User;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,19 +27,29 @@ public class InstitutionService implements Serializable {
     private static final long serialVersionUID = 5187833655453018675L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
-    private User usuario;
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "DESCRIPTION")
+    private String description;
+
+    @Column(name = "EFFECTIVENESS_START", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date effectivenessStart;
+
+    @Column(name = "EFFECTIVENESS_END", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date effectivenessEND;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SERVICIO", referencedColumnName = "ID")
+    @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID")
     private Services services;
 
     @ManyToOne
-    @JoinColumn(name = "ID_INSTITUCION", referencedColumnName = "ID")
+    @JoinColumn(name = "INSTITUTION_ID", referencedColumnName = "ID")
     private Institution institution;
 
 }

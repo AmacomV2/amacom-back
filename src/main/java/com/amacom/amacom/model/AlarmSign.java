@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,30 +27,35 @@ public class AlarmSign implements Serializable {
     private static final long serialVersionUID = -6157600394839424100L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
-    @Column(name = "NOMBRE", nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "TIPO_DESCRIPCION")
+    @Column(name = "DESCRIPTION_TYPE")
     private String descriptionType;
 
-    @Column(name = "LINK_IMAGEN")
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
-    @Column(name = "ESTADO")
+    @Column(name = "STATUS")
     private Boolean status;
 
-    @Column(name = "TIPO")
+    @Column(name = "TYPE")
     private Boolean type;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
 }

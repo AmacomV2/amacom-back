@@ -11,29 +11,36 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "GENERO")
+@Table(name = "GENDER")
 public class Gender implements Serializable {
 
     private static final long serialVersionUID = 6056692568582650701L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "NAME")
     private String name;
 
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
     private Date createdAt;
 
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_MODIFICACION")
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

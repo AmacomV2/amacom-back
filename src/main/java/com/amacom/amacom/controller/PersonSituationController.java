@@ -61,12 +61,12 @@ public class PersonSituationController {
         User user = User.class.cast(authData);
         if (personId == null) {
             personId = user.getPerson().getId();
-            personSituationDTO.setUserId(user.getId());
+            personSituationDTO.setCreatedById(user.getId());
         }
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
-        personSituation.setUsuario(this.usersService.getEntityFromUUID(personId));
+        personSituation.setCreatedBy(this.usersService.getEntityFromUUID(personId));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
 
         var personSituationBD = this.personSituationService.create(personSituation);

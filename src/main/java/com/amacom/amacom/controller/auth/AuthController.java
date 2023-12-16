@@ -57,7 +57,7 @@ public class AuthController {
 
     private IUserService usersService;
 
-    private IUserRepository usuarioRepository;
+    private IUserRepository userRepository;
 
     private IDocumentTypeService documentTypeService;
 
@@ -170,7 +170,7 @@ public class AuthController {
         if (Boolean.TRUE.equals(token)) {
             if (user != null) {
                 user.setPassword(passwordEncoder.encode(setPasswordDTO.getPassword()));
-                usuarioRepository.save(user);
+                userRepository.save(user);
                 return ResponseEntity.ok(new SuccessDTO("Password updated."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -203,8 +203,8 @@ public class AuthController {
     }
 
     @Autowired
-    public void setUsuarioRepository(IUserRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public void setUserRepository(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Autowired

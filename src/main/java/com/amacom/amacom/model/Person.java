@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 
 import lombok.Getter;
@@ -23,66 +24,71 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "PERSONA")
+@Table(name = "PERSON")
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 3680251739268601659L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_DOCUMENTO", referencedColumnName = "ID")
+    @JoinColumn(name = "DOCUMENT_TYPE_ID", referencedColumnName = "ID")
     private DocumentType documentType;
 
     @ManyToOne
-    @JoinColumn(name = "ID_ESTADO_CIVIL", referencedColumnName = "ID")
+    @JoinColumn(name = "CIVIL_STATUS_ID", referencedColumnName = "ID")
     private CivilStatus civilStatus;
 
     @ManyToOne
-    @JoinColumn(name = "ID_GENERO", referencedColumnName = "ID")
+    @JoinColumn(name = "GENDER_ID", referencedColumnName = "ID")
     private Gender gender;
 
-    @Column(name = "DOCUMENTO", nullable = false)
+    @Column(name = "DOCUMENT_NO", nullable = false)
     private String documentNo;
 
-    @Column(name = "NOMBRE", nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "APELLIDO", nullable = false)
+    @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
-    @Column(name = "DIRECCION", nullable = false)
+    @Column(name = "ADDRESS", nullable = false)
     private String address;
 
-    @Column(name = "OCUPACION")
+    @Column(name = "OCCUPATION")
     private String occupation;
 
-    @Column(name = "FECHA_NACIMIENTO", nullable = false)
+    @Column(name = "BIRTH_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @Column(name = "CONSENTIMIENTO", nullable = false)
+    @Column(name = "CONSENT_TEXT", nullable = false)
     private Boolean consentText;
 
-    @Column(name = "POLITICA_PRIVACIDAD", nullable = false)
+    @Column(name = "PRIVACY_POLICY", nullable = false)
     private Boolean privacyPolicy;
 
-    @Column(name = "EVALUACION_COMPLETADA", nullable = false)
-    private Boolean evaluation_completed;
+    @Column(name = "EVALUATION_COMPLETED", nullable = false)
+    private Boolean evaluationCompleted;
 
-    @Column(name = "ID_FOTO_USUARIO")
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
+    @Formula("CONCAT(NAME, ' ', LAST_NAME)")
+    private String fullName;
+
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
     private Date createdAt;
 
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_HORA_MODIFICACION")
     private Date updatedAt;
 
-    @Formula("CONCAT(NOMBRE, ' ', APELLIDO)")
-    private String fullName;
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

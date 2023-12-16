@@ -14,7 +14,7 @@ public interface IEventService {
 
     Event findById(UUID id);
 
-    Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date fechaDesde, Date fechaHasta, String query,
+    Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date from, Date to, String query,
             Pageable pageable);
 
     Event create(Event event);

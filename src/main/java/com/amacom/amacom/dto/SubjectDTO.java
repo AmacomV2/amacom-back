@@ -22,7 +22,7 @@ public class SubjectDTO implements Serializable {
 
     private UUID parentId;
 
-    private UUID idAssociatedResults;
+    private UUID associatedResultId;
 
     private String name;
 

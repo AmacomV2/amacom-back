@@ -28,6 +28,6 @@ public class PasswordResetToken {
     private String code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaExpiracion;
+    private Date expirationDate;
 
 }

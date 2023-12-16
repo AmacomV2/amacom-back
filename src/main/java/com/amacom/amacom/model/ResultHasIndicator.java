@@ -24,15 +24,15 @@ public class ResultHasIndicator implements Serializable {
     private static final long serialVersionUID = -7094155733232886844L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_RESULT", referencedColumnName = "ID")
+    @JoinColumn(name = "RESULT_ID", referencedColumnName = "ID")
     private Result result;
 
     @ManyToOne
-    @JoinColumn(name = "ID_INDICATOR", referencedColumnName = "ID")
+    @JoinColumn(name = "INDICATOR_ID", referencedColumnName = "ID")
     private Indicator indicator;
 
 }

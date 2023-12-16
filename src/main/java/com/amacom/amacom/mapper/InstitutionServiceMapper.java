@@ -17,7 +17,6 @@ public interface InstitutionServiceMapper {
 
     InstitutionService toInstitutionService(InstitutionServiceDTO institutionServiceDTO);
 
-    @Mapping(target = "userId", source = "usuario.id")
     @Mapping(target = "idServices", source = "services.id")
     @Mapping(target = "idInstitution", source = "institution.id")
     InstitutionServiceDTO toInstitutionServiceDTO(InstitutionService institutionService);

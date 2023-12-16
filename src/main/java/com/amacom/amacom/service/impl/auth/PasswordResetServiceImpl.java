@@ -35,7 +35,7 @@ public class PasswordResetServiceImpl implements IPasswordResetService {
         token.setEmail(email);
         token.setCode(code);
 
-        token.setFechaExpiracion(new Date(System.currentTimeMillis() + 3600000));
+        token.setExpirationDate(new Date(System.currentTimeMillis() + 3600000));
         tokenRepository.save(token);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -51,7 +51,7 @@ public class PasswordResetServiceImpl implements IPasswordResetService {
         if (tokenOptional.isPresent()) {
             PasswordResetToken token = tokenOptional.get();
             Date currentDate = new Date();
-            return !token.getFechaExpiracion().before(currentDate);
+            return !token.getExpirationDate().before(currentDate);
         } else {
             return false;
         }

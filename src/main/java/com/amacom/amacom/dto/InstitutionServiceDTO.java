@@ -1,6 +1,7 @@
 package com.amacom.amacom.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +20,15 @@ public class InstitutionServiceDTO implements Serializable {
     private UUID id;
 
     @NotNull(message = "Field cannot be null")
-    private UUID userId;
+    private String name;
+
+    private String description;
+
+    @NotNull(message = "Field cannot be null")
+    private Date effectivenessStart;
+
+    @NotNull(message = "Field cannot be null")
+    private Date effectivenessEND;
 
     @NotNull(message = "Field cannot be null")
     private UUID idServices;

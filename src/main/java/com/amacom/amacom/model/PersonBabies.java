@@ -13,12 +13,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "PERSON_BABYS")
+@Table(name = "PERSON_BABIES")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,23 +29,28 @@ public class PersonBabies implements Serializable {
     private static final long serialVersionUID = 259191779682240354L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PADRE", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "PARENT_ID", referencedColumnName = "ID", nullable = false)
     private Person parent;
 
     @ManyToOne
-    @JoinColumn(name = "ID_BEBE", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", nullable = false)
     private Person child;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "FECHA_HORA_MODIFICACION")
+    @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 
 }

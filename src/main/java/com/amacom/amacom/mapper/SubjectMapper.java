@@ -18,7 +18,7 @@ public interface SubjectMapper {
     Subject toSubject(SubjectDTO subjectDTO);
 
     @Mapping(target = "parentId", source = "parent.id")
-    @Mapping(target = "idAssociatedResults", source = "associatedResults.id")
+    @Mapping(target = "associatedResultId", source = "associatedResult.id")
     SubjectDTO toSubjectDTO(Subject subject);
 
     static Map<String, String> getClavesToSort() {
