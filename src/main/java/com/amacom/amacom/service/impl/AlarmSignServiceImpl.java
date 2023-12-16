@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
     public AlarmSign create(AlarmSign alarmSign) {
         this.validateCreation(alarmSign);
         alarmSign.setId(UUID.randomUUID());
-        alarmSign.setCreatedAt(new Date());
         var alarmSignBD = this.alarmSignRepository.save(alarmSign);
         this.entityManager.flush();
         this.entityManager.refresh(alarmSignBD);
@@ -56,7 +54,6 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
         alarmSignBD.setImageUrl(alarmSign.getImageUrl());
         alarmSignBD.setStatus(alarmSign.getStatus());
         alarmSignBD.setType(alarmSign.getType());
-        alarmSignBD.setUpdatedAt(new Date());
         return this.alarmSignRepository.save(alarmSignBD);
     }
 

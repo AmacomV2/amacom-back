@@ -1,7 +1,6 @@
 package com.amacom.amacom.service.impl.auth;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -92,7 +91,7 @@ public class AuthServiceImpl implements IAuthService {
         if (request.getIdRol() != null) {
             rol = this.rolRepository.findById(request.getIdRol()).orElse(null);
         } else {
-            rol = this.rolRepository.findRolByDescription("USUARIO");
+            rol = this.rolRepository.findRolByDescription("USER");
         }
 
         this.validateRegistration(request);
@@ -104,7 +103,6 @@ public class AuthServiceImpl implements IAuthService {
                 .person(person)
                 .rol(rol)
                 .enumRol(rol.getEnumRol())
-                .createdAt(new Date())
                 .build();
         usersRepository.save(user);
 

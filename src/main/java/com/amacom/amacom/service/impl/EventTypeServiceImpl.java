@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +45,6 @@ public class EventTypeServiceImpl implements IEventTypeService {
     public EventType create(EventType eventType) {
         this.validateCreation(eventType);
         eventType.setId(UUID.randomUUID());
-        eventType.setCreatedAt(new Date());
         var eventTypeBD = this.eventTypeRepository.save(eventType);
         this.entityManager.flush();
         this.entityManager.refresh(eventTypeBD);
@@ -60,7 +58,6 @@ public class EventTypeServiceImpl implements IEventTypeService {
                 .orElseThrow(DataNotFoundException::new);
         eventTypeBD.setName(eventType.getName());
         eventTypeBD.setDescription(eventType.getDescription());
-        eventTypeBD.setUpdatedAt(new Date());
         return this.eventTypeRepository.save(eventTypeBD);
     }
 

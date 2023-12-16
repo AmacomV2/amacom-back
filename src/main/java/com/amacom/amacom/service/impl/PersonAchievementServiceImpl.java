@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +43,6 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
     @Override
     public PersonAchievement create(PersonAchievement personAchievement) {
         personAchievement.setId(UUID.randomUUID());
-        personAchievement.setCreatedAt(new Date());
         var personAchievementBD = this.personAchievementRepository.save(personAchievement);
         this.entityManager.flush();
         this.entityManager.refresh(personAchievementBD);
@@ -58,7 +56,6 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
         personAchievementBD.setScore(personAchievement.getScore());
         personAchievementBD.setPerson(personAchievement.getPerson());
         personAchievementBD.setAchievement(personAchievement.getAchievement());
-        personAchievementBD.setUpdatedAt(new Date());
         return this.personAchievementRepository.save(personAchievementBD);
     }
 

@@ -24,7 +24,7 @@ public class PersonSituationHasAlarmSigns implements Serializable {
     private static final long serialVersionUID = 3203506404323347807L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne

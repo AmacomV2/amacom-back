@@ -24,7 +24,7 @@ public class DiagnosisHasSubject implements Serializable {
     private static final long serialVersionUID = 4981997479012943765L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne

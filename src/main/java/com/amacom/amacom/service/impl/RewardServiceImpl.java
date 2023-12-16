@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class RewardServiceImpl implements IRewardService {
     public Reward create(Reward reward) {
         this.validateCreation(reward);
         reward.setId(UUID.randomUUID());
-        reward.setCreatedAt(new Date());
         var rewardBD = this.rewardRepository.save(reward);
         this.entityManager.flush();
         this.entityManager.refresh(rewardBD);
@@ -57,7 +55,6 @@ public class RewardServiceImpl implements IRewardService {
         rewardBD.setMinScore(reward.getMinScore());
         rewardBD.setMaxScore(reward.getMaxScore());
         rewardBD.setLevel(reward.getLevel());
-        rewardBD.setUpdatedAt(new Date());
         return this.rewardRepository.save(rewardBD);
     }
 

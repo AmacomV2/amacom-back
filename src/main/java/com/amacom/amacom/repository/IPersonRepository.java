@@ -15,7 +15,7 @@ public interface IPersonRepository extends JpaRepository<Person, UUID> {
 
         @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM Person p " +
-                        "WHERE (p.id <> :id or :id is null) " +
+                        "WHERE (p.id = :id or :id is null) " +
                         "AND p.documentNo = :documentNo ")
         Boolean existsByDocument(UUID id, String documentNo);
 

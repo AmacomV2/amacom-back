@@ -1,7 +1,6 @@
 package com.amacom.amacom.model.auth;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,30 +13,30 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.amacom.amacom.model.BaseModel;
 import com.amacom.amacom.model.Person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "USER")
-public class User implements UserDetails {
+public class User extends BaseModel implements UserDetails {
     @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne
@@ -57,19 +56,6 @@ public class User implements UserDetails {
 
     @Column(name = "PASSWORD", nullable = false)
     String password;
-
-    @Column(name = "CREATED_AT", nullable = false)
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Column(name = "UPDATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
-
-    @Column(name = "DELETED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedAt;
 
     @Enumerated(EnumType.STRING)
     ERole enumRol;

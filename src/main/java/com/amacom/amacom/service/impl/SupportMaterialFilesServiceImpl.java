@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -59,7 +58,6 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
     @Override
     public SupportMaterialFiles create(SupportMaterialFiles supportMaterialFiles) {
         supportMaterialFiles.setId(UUID.randomUUID());
-        supportMaterialFiles.setCreatedAt(new Date());
         var supportMaterialFilesBD = this.supportMaterialFilesRepository.save(supportMaterialFiles);
         this.entityManager.flush();
         this.entityManager.refresh(supportMaterialFilesBD);
@@ -72,7 +70,6 @@ public class SupportMaterialFilesServiceImpl implements ISupportMaterialFilesSer
                 .orElseThrow(DataNotFoundException::new);
         supportMaterialFilesBD.setSupportMaterial(supportMaterialFiles.getSupportMaterial());
         supportMaterialFilesBD.setPath(supportMaterialFiles.getPath());
-        supportMaterialFilesBD.setUpdatedAt(new Date());
         return this.supportMaterialFilesRepository.save(supportMaterialFilesBD);
     }
 

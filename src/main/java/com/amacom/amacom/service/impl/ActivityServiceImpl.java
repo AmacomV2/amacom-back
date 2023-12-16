@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class ActivityServiceImpl implements IActivityService {
     public Activity create(Activity activity) {
         this.validateCreation(activity);
         activity.setId(UUID.randomUUID());
-        activity.setCreatedAt(new Date());
         var activityBD = this.activityRepository.save(activity);
         this.entityManager.flush();
         this.entityManager.refresh(activityBD);
@@ -53,7 +51,6 @@ public class ActivityServiceImpl implements IActivityService {
         var activityBD = this.activityRepository.findById(activity.getId()).orElseThrow(DataNotFoundException::new);
         activityBD.setName(activity.getName());
         activityBD.setDescription(activity.getDescription());
-        activityBD.setUpdatedAt(new Date());
         return this.activityRepository.save(activityBD);
     }
 

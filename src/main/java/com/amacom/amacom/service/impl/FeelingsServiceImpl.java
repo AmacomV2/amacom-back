@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class FeelingsServiceImpl implements IFeelingsService {
     public Feelings create(Feelings feelings) {
         this.validateCreation(feelings);
         feelings.setId(UUID.randomUUID());
-        feelings.setCreatedAt(new Date());
         var feelingsBD = this.feelingsRepository.save(feelings);
         this.entityManager.flush();
         this.entityManager.refresh(feelingsBD);
@@ -54,7 +52,6 @@ public class FeelingsServiceImpl implements IFeelingsService {
         feelingsBD.setName(feelings.getName());
         feelingsBD.setDescription(feelings.getDescription());
         feelingsBD.setStatus(feelings.getStatus());
-        feelingsBD.setUpdatedAt(new Date());
         return this.feelingsRepository.save(feelingsBD);
     }
 

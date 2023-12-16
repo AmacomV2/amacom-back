@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,7 +74,6 @@ public class UserServiceImpl implements IUserService {
         userDB.setEnumRol(user.getRol().getEnumRol());
         userDB.setUsername(user.getUsername());
         userDB.setEmail(user.getEmail());
-        userDB.setUpdatedAt(new Date());
         return this.userRepository.save(userDB);
     }
 
@@ -135,7 +133,6 @@ public class UserServiceImpl implements IUserService {
                 .person(person)
                 .rol(rol)
                 .enumRol(rol.getEnumRol())
-                .createdAt(new Date())
                 .build();
         this.userRepository.save(userDB);
 

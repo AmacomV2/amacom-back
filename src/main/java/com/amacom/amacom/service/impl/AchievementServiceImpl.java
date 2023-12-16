@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -58,7 +57,6 @@ public class AchievementServiceImpl implements IAchievementService {
     public Achievement create(Achievement achievement) {
         this.validateCreation(achievement);
         achievement.setId(UUID.randomUUID());
-        achievement.setCreatedAt(new Date());
         var achievementBD = this.achievementRepository.save(achievement);
         this.entityManager.flush();
         this.entityManager.refresh(achievementBD);
@@ -72,7 +70,6 @@ public class AchievementServiceImpl implements IAchievementService {
                 .orElseThrow(DataNotFoundException::new);
         achievementBD.setSubject(achievement.getSubject());
         achievementBD.setName(achievement.getName());
-        achievementBD.setUpdatedAt(new Date());
         return this.achievementRepository.save(achievementBD);
     }
 

@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -38,7 +37,6 @@ public class PersonSituationServiceImpl implements IPersonSituationService {
     @Override
     public PersonSituation create(PersonSituation personSituation) {
         personSituation.setId(UUID.randomUUID());
-        personSituation.setCreatedAt(new Date());
         var personSituationBD = this.personSituationRepository.save(personSituation);
         this.entityManager.flush();
         this.entityManager.refresh(personSituationBD);
@@ -56,7 +54,6 @@ public class PersonSituationServiceImpl implements IPersonSituationService {
         personSituationBD.setBehavior(personSituation.getBehavior());
         personSituationBD.setAffectationDegree(personSituation.getAffectationDegree());
         personSituationBD.setNursingAssessment(personSituation.getNursingAssessment());
-        personSituationBD.setUpdatedAt(new Date());
         return this.personSituationRepository.save(personSituationBD);
     }
 

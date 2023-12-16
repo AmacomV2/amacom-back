@@ -1,12 +1,9 @@
 package com.amacom.amacom.model;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,20 +12,18 @@ import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "INSTITUTION_SERVICE")
-public class InstitutionService implements Serializable {
+public class InstitutionService extends BaseModel {
 
     private static final long serialVersionUID = 5187833655453018675L;
-
-    @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
-    private UUID id;
 
     @Column(name = "NAME")
     private String name;

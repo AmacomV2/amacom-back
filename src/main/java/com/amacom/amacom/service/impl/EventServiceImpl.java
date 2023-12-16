@@ -72,7 +72,6 @@ public class EventServiceImpl implements IEventService {
     public Event create(Event event) {
         this.validateCreation(event);
         event.setId(UUID.randomUUID());
-        event.setCreatedAt(new Date());
         var eventBD = this.eventRepository.save(event);
         this.entityManager.flush();
         this.entityManager.refresh(eventBD);
@@ -89,7 +88,6 @@ public class EventServiceImpl implements IEventService {
         eventBD.setStart(event.getStart());
         eventBD.setEnd(event.getEnd());
         eventBD.setEventStatus(event.getEventStatus());
-        eventBD.setUpdatedAt(new Date());
         return this.eventRepository.save(eventBD);
     }
 

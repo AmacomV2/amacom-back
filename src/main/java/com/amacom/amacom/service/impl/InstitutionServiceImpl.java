@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -58,7 +57,6 @@ public class InstitutionServiceImpl implements IInstitutionService {
     public Institution create(Institution institution) {
         this.validateCreation(institution);
         institution.setId(UUID.randomUUID());
-        institution.setCreatedAt(new Date());
         var institutionBD = this.institutionRepository.save(institution);
         this.entityManager.flush();
         this.entityManager.refresh(institutionBD);
@@ -73,7 +71,6 @@ public class InstitutionServiceImpl implements IInstitutionService {
         institutionBD.setInstitutionType(institution.getInstitutionType());
         institutionBD.setName(institution.getName());
         institutionBD.setDescription(institution.getDescription());
-        institutionBD.setUpdatedAt(new Date());
         return this.institutionRepository.save(institutionBD);
     }
 

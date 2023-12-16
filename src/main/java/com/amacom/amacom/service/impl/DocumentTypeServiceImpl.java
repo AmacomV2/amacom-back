@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +45,6 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
     public DocumentType create(DocumentType documentType) {
         this.validateCreation(documentType);
         documentType.setId(UUID.randomUUID());
-        documentType.setCreatedAt(new Date());
         var documentTypeBD = this.documentTypeRepository.save(documentType);
         this.entityManager.flush();
         this.entityManager.refresh(documentTypeBD);
@@ -59,7 +57,6 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
         var documentTypeBD = this.documentTypeRepository.findById(documentType.getId())
                 .orElseThrow(DataNotFoundException::new);
         documentTypeBD.setName(documentType.getName());
-        documentTypeBD.setUpdatedAt(new Date());
         return this.documentTypeRepository.save(documentTypeBD);
     }
 

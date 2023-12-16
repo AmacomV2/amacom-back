@@ -24,7 +24,7 @@ public class SupportMaterialHasSubject implements Serializable {
     private static final long serialVersionUID = -8621283640601114675L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne

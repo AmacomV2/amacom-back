@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -57,7 +56,6 @@ public class LogBookServiceImpl implements ILogBookService {
     @Override
     public LogBook create(LogBook logBook) {
         logBook.setId(UUID.randomUUID());
-        logBook.setCreatedAt(new Date());
         var logBookBD = this.logBookRepository.save(logBook);
         this.entityManager.flush();
         this.entityManager.refresh(logBookBD);
@@ -70,7 +68,6 @@ public class LogBookServiceImpl implements ILogBookService {
         logBookBD.setPerson(logBook.getPerson());
         logBookBD.setName(logBook.getName());
         logBookBD.setDescription(logBook.getDescription());
-        logBookBD.setUpdatedAt(new Date());
         return this.logBookRepository.save(logBookBD);
     }
 

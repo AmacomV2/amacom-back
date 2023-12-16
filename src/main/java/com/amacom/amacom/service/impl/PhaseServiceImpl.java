@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class PhaseServiceImpl implements IPhaseService {
     public Phase create(Phase phrase) {
         this.validateCreation(phrase);
         phrase.setId(UUID.randomUUID());
-        phrase.setCreatedAt(new Date());
         var phraseBD = this.phraseRepository.save(phrase);
         this.entityManager.flush();
         this.entityManager.refresh(phraseBD);
@@ -53,7 +51,6 @@ public class PhaseServiceImpl implements IPhaseService {
         var phraseBD = this.phraseRepository.findById(phrase.getId()).orElseThrow(DataNotFoundException::new);
         phraseBD.setName(phrase.getName());
         phraseBD.setValidityIndicator(phrase.getValidityIndicator());
-        phraseBD.setUpdatedAt(new Date());
         return this.phraseRepository.save(phraseBD);
     }
 

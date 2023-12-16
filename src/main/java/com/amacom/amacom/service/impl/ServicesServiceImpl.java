@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -56,7 +55,6 @@ public class ServicesServiceImpl implements IServicesService {
     @Override
     public Services create(Services services) {
         services.setId(UUID.randomUUID());
-        services.setCreatedAt(new Date());
         var servicesBD = this.servicesRepository.save(services);
         this.entityManager.flush();
         this.entityManager.refresh(servicesBD);
@@ -67,7 +65,6 @@ public class ServicesServiceImpl implements IServicesService {
     public Services update(Services services) {
         var servicesBD = this.servicesRepository.findById(services.getId()).orElseThrow(DataNotFoundException::new);
         servicesBD.setName(services.getName());
-        servicesBD.setUpdatedAt(new Date());
         return this.servicesRepository.save(servicesBD);
     }
 

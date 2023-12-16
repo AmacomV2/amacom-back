@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,6 @@ public class SituationTypeServiceImpl implements ISituationTypeService {
     public SituationType create(SituationType situationType) {
         this.validateCreation(situationType);
         situationType.setId(UUID.randomUUID());
-        situationType.setCreatedAt(new Date());
         var situationTypeBD = this.situationTypeRepository.save(situationType);
         this.entityManager.flush();
         this.entityManager.refresh(situationTypeBD);
@@ -54,7 +52,6 @@ public class SituationTypeServiceImpl implements ISituationTypeService {
                 .orElseThrow(DataNotFoundException::new);
         situationTypeBD.setName(situationType.getName());
         situationTypeBD.setDescription(situationType.getDescription());
-        situationTypeBD.setUpdatedAt(new Date());
         return this.situationTypeRepository.save(situationTypeBD);
     }
 

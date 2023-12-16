@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -38,7 +37,6 @@ public class ResultServiceImpl implements IResultService {
     @Override
     public Result create(Result result) {
         result.setId(UUID.randomUUID());
-        result.setCreatedAt(new Date());
         var resultBD = this.resultRepository.save(result);
         this.entityManager.flush();
         this.entityManager.refresh(resultBD);
@@ -49,7 +47,6 @@ public class ResultServiceImpl implements IResultService {
     public Result update(Result result) {
         var resultBD = this.resultRepository.findById(result.getId()).orElseThrow(DataNotFoundException::new);
         resultBD.setDiagnosis(result.getDiagnosis());
-        resultBD.setUpdatedAt(new Date());
         return this.resultRepository.save(resultBD);
     }
 

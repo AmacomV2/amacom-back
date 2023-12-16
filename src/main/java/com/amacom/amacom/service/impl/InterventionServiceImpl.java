@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -38,7 +37,6 @@ public class InterventionServiceImpl implements IInterventionService {
     @Override
     public Intervention create(Intervention intervention) {
         intervention.setId(UUID.randomUUID());
-        intervention.setCreatedAt(new Date());
         var interventionBD = this.interventionRepository.save(intervention);
         this.entityManager.flush();
         this.entityManager.refresh(interventionBD);
@@ -50,7 +48,6 @@ public class InterventionServiceImpl implements IInterventionService {
         var interventionBD = this.interventionRepository.findById(intervention.getId())
                 .orElseThrow(DataNotFoundException::new);
         interventionBD.setDiagnosis(intervention.getDiagnosis());
-        interventionBD.setUpdatedAt(new Date());
         return this.interventionRepository.save(interventionBD);
     }
 

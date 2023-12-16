@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,7 +75,6 @@ public class PersonServiceImpl implements IPersonService {
     public Person createPerson(Person person) {
         this.validatePersonCreation(person);
         person.setId(UUID.randomUUID());
-        person.setCreatedAt(new Date());
         Person personDB = this.personRepository.save(person);
         this.entityManager.flush();
         this.entityManager.refresh(personDB);
@@ -100,7 +98,6 @@ public class PersonServiceImpl implements IPersonService {
         personDB.setPrivacyPolicy(person.getPrivacyPolicy());
         personDB.setEvaluationCompleted(person.getEvaluationCompleted());
         personDB.setImageUrl(person.getImageUrl());
-        personDB.setUpdatedAt(new Date());
         return this.personRepository.save(personDB);
     }
 

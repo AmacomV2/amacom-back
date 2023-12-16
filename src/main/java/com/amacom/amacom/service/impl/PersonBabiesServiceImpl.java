@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -62,7 +61,6 @@ public class PersonBabiesServiceImpl implements IPersonBabiesService {
     public PersonBabies create(PersonBabies personBabies) {
         this.validateCreation(personBabies);
         personBabies.setId(UUID.randomUUID());
-        personBabies.setCreatedAt(new Date());
         var personBabiesBD = this.personBabiesRepository.save(personBabies);
         this.entityManager.flush();
         this.entityManager.refresh(personBabiesBD);
@@ -76,7 +74,6 @@ public class PersonBabiesServiceImpl implements IPersonBabiesService {
                 .orElseThrow(DataNotFoundException::new);
         personBabiesBD.setParent(personBabies.getParent());
         personBabiesBD.setChild(personBabies.getChild());
-        personBabiesBD.setUpdatedAt(new Date());
         return this.personBabiesRepository.save(personBabiesBD);
     }
 

@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -56,7 +55,6 @@ public class SupportMaterialServiceImpl implements ISupportMaterialService {
     @Override
     public SupportMaterial create(SupportMaterial supportMaterial) {
         supportMaterial.setId(UUID.randomUUID());
-        supportMaterial.setCreatedAt(new Date());
         var supportMaterialBD = this.supportMaterialRepository.save(supportMaterial);
         this.entityManager.flush();
         this.entityManager.refresh(supportMaterialBD);
@@ -69,7 +67,6 @@ public class SupportMaterialServiceImpl implements ISupportMaterialService {
                 .orElseThrow(DataNotFoundException::new);
         supportMaterialBD.setName(supportMaterial.getName());
         supportMaterialBD.setDescription(supportMaterial.getDescription());
-        supportMaterialBD.setUpdatedAt(new Date());
         return this.supportMaterialRepository.save(supportMaterialBD);
     }
 

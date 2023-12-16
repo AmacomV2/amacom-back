@@ -24,7 +24,7 @@ public class ResultHasIndicator implements Serializable {
     private static final long serialVersionUID = -7094155733232886844L;
 
     @Id
-    @Column(name = "ID", columnDefinition = "VARCHAR(36)")
+    @Column(name = "ID", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne

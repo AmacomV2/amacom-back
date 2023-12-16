@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,7 +74,6 @@ public class SubjectServiceImpl implements ISubjectService {
     @Override
     public Subject create(Subject subject) {
         subject.setId(UUID.randomUUID());
-        subject.setCreatedAt(new Date());
         var subjectBD = this.subjectRepository.save(subject);
         this.entityManager.flush();
         this.entityManager.refresh(subjectBD);
@@ -89,7 +87,6 @@ public class SubjectServiceImpl implements ISubjectService {
         subjectBD.setAssociatedResult(subject.getAssociatedResult());
         subjectBD.setName(subject.getName());
         subjectBD.setValidityIndicator(subject.getValidityIndicator());
-        subjectBD.setUpdatedAt(new Date());
         return this.subjectRepository.save(subjectBD);
     }
 

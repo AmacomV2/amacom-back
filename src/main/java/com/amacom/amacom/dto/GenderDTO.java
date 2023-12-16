@@ -1,7 +1,7 @@
 package com.amacom.amacom.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.amacom.amacom.util.ITools;
@@ -22,9 +22,9 @@ public class GenderDTO implements Serializable {
 
     private String name;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date createdAt;
+    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private Instant createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date updatedAt;
+    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private Instant updatedAt;
 }

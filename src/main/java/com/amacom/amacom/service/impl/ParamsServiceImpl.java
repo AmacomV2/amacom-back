@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -38,7 +37,6 @@ public class ParamsServiceImpl implements IParamsService {
     @Override
     public Params create(Params params) {
         params.setId(UUID.randomUUID());
-        params.setCreatedAt(new Date());
         var paramsBD = this.paramsRepository.save(params);
         this.entityManager.flush();
         this.entityManager.refresh(paramsBD);
@@ -48,7 +46,6 @@ public class ParamsServiceImpl implements IParamsService {
     @Override
     public Params update(Params params) {
         var paramsBD = this.paramsRepository.findById(params.getId()).orElseThrow(DataNotFoundException::new);
-        paramsBD.setUpdatedAt(new Date());
         return this.paramsRepository.save(paramsBD);
     }
 

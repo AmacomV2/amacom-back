@@ -13,7 +13,7 @@ public interface IEventTypeRepository extends JpaRepository<EventType, UUID> {
 
     @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
             "FROM EventType p " +
-            "WHERE (p.id <> :id or :id is null) " +
+            "WHERE (p.id = :id or :id is null) " +
             "AND p.name = :name ")
     Boolean existByName(UUID id, String name);
 

@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +45,6 @@ public class GenderServiceImpl implements IGenderService {
     public Gender create(Gender gender) {
         this.validateCreation(gender);
         gender.setId(UUID.randomUUID());
-        gender.setCreatedAt(new Date());
         var genderBD = this.genderRepository.save(gender);
         this.entityManager.flush();
         this.entityManager.refresh(genderBD);
@@ -58,7 +56,6 @@ public class GenderServiceImpl implements IGenderService {
         this.validateCreation(gender);
         var genderBD = this.genderRepository.findById(gender.getId()).orElseThrow(DataNotFoundException::new);
         genderBD.setName(gender.getName());
-        genderBD.setUpdatedAt(new Date());
         return this.genderRepository.save(genderBD);
     }
 
