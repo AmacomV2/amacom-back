@@ -5,6 +5,10 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +36,16 @@ public class FeelingsServiceImpl implements IFeelingsService {
     @Override
     public Feelings findById(UUID id) {
         return this.feelingsRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<Feelings> findFeeling(String query, Pageable pageable) {
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+        return this.feelingsRepository.findFeeling(query, pageable);
     }
 
     @Transactional

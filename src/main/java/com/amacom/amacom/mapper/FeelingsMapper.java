@@ -1,9 +1,13 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.FeelingsDTO;
-import com.amacom.amacom.model.Feelings;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.FeelingsDTO;
+import com.amacom.amacom.model.Feelings;
 
 @Mapper
 public interface FeelingsMapper {
@@ -13,4 +17,11 @@ public interface FeelingsMapper {
     Feelings toFeelings(FeelingsDTO feelingsDTO);
 
     FeelingsDTO toFeelingsDTO(Feelings feelings);
+
+    static Map<String, String> getClavesToSort() {
+        Map<String, String> clavesToSort = new HashMap<>();
+        clavesToSort.put("name", "name");
+        clavesToSort.put("description", "description");
+        return clavesToSort;
+    }
 }

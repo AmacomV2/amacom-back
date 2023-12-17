@@ -2,8 +2,6 @@ package com.amacom.amacom.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -37,6 +35,10 @@ public class PersonSituation extends BaseModel {
     @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
+    @ManyToOne
+    @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID", nullable = true)
+    private Diagnosis currentDiagnosis;
+
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
@@ -46,9 +48,8 @@ public class PersonSituation extends BaseModel {
     @Column(name = "BEHAVIOR", nullable = false)
     private String behavior;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "AFFECTATION_DEGREE", nullable = false)
-    private EAffectationDegree affectationDegree;
+    @Column(name = "AFFECTATION_DEGREE", nullable = false, columnDefinition = "INT(1)")
+    private Integer affectationDegree;
 
     @Column(name = "NURSING_ASSESSMENT")
     private String nursingAssessment;

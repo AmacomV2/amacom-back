@@ -13,7 +13,7 @@ public interface IActivityRepository extends JpaRepository<Activity, UUID> {
 
     @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
             "FROM Activity p " +
-            "WHERE (p.id = :id or :id is null) " +
+            "WHERE (p.id <> :id or :id is null) " +
             "AND p.name = :name ")
     Boolean existByName(UUID id, String name);
 

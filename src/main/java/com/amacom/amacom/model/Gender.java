@@ -17,6 +17,6 @@ public class Gender extends BaseModel {
 
     private static final long serialVersionUID = 6056692568582650701L;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true)
     private String name;
 }

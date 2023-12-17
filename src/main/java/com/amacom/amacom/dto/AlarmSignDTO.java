@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.amacom.amacom.model.EAlarmSignType;
 import com.amacom.amacom.util.ITools;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,13 +26,14 @@ public class AlarmSignDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private String name;
 
-    private String descriptionType;
+    private String description;
 
     private String imageUrl;
 
     private Boolean status;
 
-    private Boolean type;
+    @NotNull(message = "Field cannot be null")
+    private EAlarmSignType type;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date createdAt;

@@ -15,13 +15,13 @@ public interface IInstitutionTypeRepository extends JpaRepository<InstitutionTyp
 
         @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM InstitutionType p " +
-                        "WHERE (p.id = :id or :id is null) " +
+                        "WHERE (p.id <> :id or :id is null) " +
                         "AND p.name = :name ")
         Boolean existByName(UUID id, String name);
 
         @Query("SELECT t " +
                         "FROM InstitutionType t " +
-                        "WHERE CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
+                        "WHERE CONCAT_WS(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<InstitutionType> findInstitutionType(String query, Pageable pageable);

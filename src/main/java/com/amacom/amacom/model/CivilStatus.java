@@ -17,7 +17,7 @@ public class CivilStatus extends BaseModel {
 
     private static final long serialVersionUID = -5401910043243180613L;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true)
     private String name;
 
 }

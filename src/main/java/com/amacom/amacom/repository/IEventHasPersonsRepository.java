@@ -14,7 +14,7 @@ public interface IEventHasPersonsRepository extends JpaRepository<EventHasPerson
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM EventHasPersons u " +
-                        "WHERE (u.id = :id or :id is null) " +
+                        "WHERE (u.id <> :id or :id is null) " +
                         "AND u.person.id = :personId " +
                         "AND u.event.id = :idEvento ")
         Boolean existsByPersonIdAndIdEvento(UUID id, UUID personId, UUID idEvento);

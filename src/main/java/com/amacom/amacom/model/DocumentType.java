@@ -17,9 +17,9 @@ public class DocumentType extends BaseModel {
 
     private static final long serialVersionUID = 3518906028901853324L;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "ACRONYM", nullable = false)
+    @Column(name = "ACRONYM", nullable = false, unique = true)
     private String acronym;
 }

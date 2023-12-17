@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amacom.amacom.dto.DiagnosisDTO;
 import com.amacom.amacom.mapper.DiagnosisMapper;
 import com.amacom.amacom.model.Diagnosis;
+import com.amacom.amacom.model.PersonSituation;
 import com.amacom.amacom.service.interfaces.IDiagnosisService;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
 
@@ -45,11 +46,16 @@ public class DiagnosisController {
             @Valid @RequestBody DiagnosisDTO diagnosisDTO) {
 
         Diagnosis diagnosis = DiagnosisMapper.INSTANCE.toDiagnosis(diagnosisDTO);
+        PersonSituation personSituation = this.personSituationService
+                .getEntityFromUUID(diagnosisDTO.getPersonSituationId());
 
         diagnosis
-                .setPersonSituation(this.personSituationService.getEntityFromUUID(diagnosisDTO.getPersonSituationId()));
+                .setPersonSituation(personSituation);
 
         var diagnosisBD = this.diagnosisService.create(diagnosis);
+        personSituation.setCurrentDiagnosis(diagnosis);
+        /// Set current diagnosis to the new one
+        this.personSituationService.update(personSituation);
         if (diagnosisBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity.ok(DiagnosisMapper.INSTANCE.toDiagnosisDTO(diagnosisBD));

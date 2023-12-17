@@ -5,10 +5,17 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.EConsultationAlert;
+import com.amacom.amacom.model.EConsultationStatus;
 import com.amacom.amacom.model.PersonSituation;
 import com.amacom.amacom.repository.IPersonSituationRepository;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
@@ -31,6 +38,22 @@ public class PersonSituationServiceImpl implements IPersonSituationService {
     @Override
     public PersonSituation findById(UUID id) {
         return this.personSituationRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    public Page<PersonSituation> search(@Nullable EConsultationAlert consultationAlert,
+            @Nullable EConsultationStatus consultationStatus, String query, UUID personId, Pageable pageable) {
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+
+        }
+        if (consultationAlert != null || consultationStatus != null) {
+
+            return this.personSituationRepository.findPersonSituationDiagnosis(consultationAlert, consultationStatus,
+                    query, personId, pageable);
+        }
+        return this.personSituationRepository.findPersonSituation(query, personId, pageable);
     }
 
     @Transactional

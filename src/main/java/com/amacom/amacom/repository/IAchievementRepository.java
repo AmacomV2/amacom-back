@@ -15,7 +15,7 @@ public interface IAchievementRepository extends JpaRepository<Achievement, UUID>
 
         @Query("SELECT CASE WHEN COUNT (p) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM Achievement p " +
-                        "WHERE (p.id = :id or :id is null) " +
+                        "WHERE (p.id <> :id or :id is null) " +
                         "AND p.name = :name ")
         Boolean existByName(UUID id, String name);
 

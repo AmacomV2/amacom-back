@@ -5,12 +5,18 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.AlarmSign;
+import com.amacom.amacom.model.EAlarmSignType;
 import com.amacom.amacom.repository.IAlarmSignRepository;
 import com.amacom.amacom.service.interfaces.IAlarmSignService;
 
@@ -34,6 +40,16 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
         return this.alarmSignRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
+    @Override
+    public Page<AlarmSign> findAlarmSign(@Nullable EAlarmSignType type, String query, Pageable pageable) {
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+        return this.alarmSignRepository.findAlarmSign(type, query, pageable);
+    }
+
     @Transactional
     @Override
     public AlarmSign create(AlarmSign alarmSign) {
@@ -50,7 +66,7 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
         this.validateCreation(alarmSign);
         var alarmSignBD = this.alarmSignRepository.findById(alarmSign.getId()).orElseThrow(DataNotFoundException::new);
         alarmSignBD.setName(alarmSign.getName());
-        alarmSignBD.setDescriptionType(alarmSign.getDescriptionType());
+        alarmSignBD.setDescription(alarmSign.getDescription());
         alarmSignBD.setImageUrl(alarmSign.getImageUrl());
         alarmSignBD.setStatus(alarmSign.getStatus());
         alarmSignBD.setType(alarmSign.getType());

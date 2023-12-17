@@ -64,7 +64,7 @@ public class PersonDTO implements Serializable {
     private Boolean privacyPolicy;
 
     @NotNull(message = "Field cannot be null")
-    private Boolean evaluation_completed;
+    private Boolean evaluationCompleted;
 
     private String imageUrl;
 

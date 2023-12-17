@@ -17,13 +17,13 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM User u " +
-                        "WHERE (u.id = :id or :id is null) " +
+                        "WHERE (u.id <> :id or :id is null) " +
                         "AND (u.username = :username OR u.email = :email)")
         Boolean existsByUsernameOrEmail(UUID id, String username, String email);
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM User u " +
-                        "WHERE (u.id = :id or :id is null) " +
+                        "WHERE (u.id <> :id or :id is null) " +
                         "AND u.person.id = :idPerson")
         Boolean existsByPersonId(UUID id, UUID idPerson);
 
@@ -34,7 +34,7 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
                         "FROM User u " +
-                        "WHERE (u.id = :id or :id is null) " +
+                        "WHERE (u.id <> :id or :id is null) " +
                         "AND u.email = :email")
         Boolean emailExists(UUID id, String email);
 

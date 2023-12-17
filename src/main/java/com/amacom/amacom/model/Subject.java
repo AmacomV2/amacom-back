@@ -29,7 +29,7 @@ public class Subject extends BaseModel {
     @JoinColumn(name = "ASSOCIATED_RESULT_ID", referencedColumnName = "ID")
     private Result associatedResult;
 
-    @Column(name = "NOMBRE", nullable = false)
+    @Column(name = "NOMBRE", nullable = false, unique = true)
     private String name;
 
     @Column(name = "VALIDITY_INDICATOR")
