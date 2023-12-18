@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.PersonSituationHasAlarmSignsDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonSituationHasAlarmSignsMapper;
 import com.amacom.amacom.model.PersonSituationHasAlarmSigns;
 import com.amacom.amacom.service.interfaces.IAlarmSignService;
@@ -34,19 +36,19 @@ public class PersonSituationHasAlarmSignsController {
         private IAlarmSignService alarmSignService;
 
         @GetMapping("/{id}")
-        public ResponseEntity<PersonSituationHasAlarmSignsDTO> findById(
+        public ResponseEntity<ResponseDTO> findById(
                         @PathVariable(value = "id") UUID id) {
                 PersonSituationHasAlarmSigns personSituationHasAlarmSigns = this.personSituationHasAlarmSignsService
                                 .findById(id);
                 if (personSituationHasAlarmSigns == null) {
-                        return new ResponseEntity<>(new PersonSituationHasAlarmSignsDTO(), HttpStatus.NO_CONTENT);
+                        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
-                return new ResponseEntity<>(PersonSituationHasAlarmSignsMapper.INSTANCE
-                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSigns), HttpStatus.OK);
+                return ResponseEntity.ok(new SuccessDTO(PersonSituationHasAlarmSignsMapper.INSTANCE
+                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSigns)));
         }
 
         @PostMapping("/create")
-        public ResponseEntity<PersonSituationHasAlarmSignsDTO> create(
+        public ResponseEntity<ResponseDTO> create(
                         @Valid @RequestBody PersonSituationHasAlarmSignsDTO personSituationHasAlarmSignsDTO) {
 
                 PersonSituationHasAlarmSigns personSituationHasAlarmSigns = PersonSituationHasAlarmSignsMapper.INSTANCE
@@ -63,12 +65,12 @@ public class PersonSituationHasAlarmSignsController {
                                 .create(personSituationHasAlarmSigns);
                 if (personSituationHasAlarmSignsBD == null)
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
-                return ResponseEntity.ok(PersonSituationHasAlarmSignsMapper.INSTANCE
-                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSignsBD));
+                return ResponseEntity.ok(new SuccessDTO(PersonSituationHasAlarmSignsMapper.INSTANCE
+                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSignsBD)));
         }
 
         @PutMapping
-        public ResponseEntity<PersonSituationHasAlarmSignsDTO> update(
+        public ResponseEntity<ResponseDTO> update(
                         @Valid @RequestBody PersonSituationHasAlarmSignsDTO personSituationHasAlarmSignsDTO) {
                 PersonSituationHasAlarmSigns personSituationHasAlarmSigns = PersonSituationHasAlarmSignsMapper.INSTANCE
                                 .toPersonSituationHasAlarmSigns(personSituationHasAlarmSignsDTO);
@@ -83,17 +85,17 @@ public class PersonSituationHasAlarmSignsController {
                 var personSituationHasAlarmSignsBD = this.personSituationHasAlarmSignsService
                                 .update(personSituationHasAlarmSigns);
                 if (personSituationHasAlarmSignsBD == null) {
-                        return new ResponseEntity<>(new PersonSituationHasAlarmSignsDTO(), HttpStatus.NO_CONTENT);
+                        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
-                return new ResponseEntity<>(PersonSituationHasAlarmSignsMapper.INSTANCE
-                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSignsBD), HttpStatus.OK);
+                return ResponseEntity.ok(new SuccessDTO(PersonSituationHasAlarmSignsMapper.INSTANCE
+                                .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSignsBD)));
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Boolean> delete(
+        public ResponseEntity<ResponseDTO> delete(
                         @PathVariable(value = "id") UUID id) {
                 this.personSituationHasAlarmSignsService.deleteById(id);
-                return ResponseEntity.ok(Boolean.TRUE);
+                return ResponseEntity.ok(new SuccessDTO());
         }
 
         @Autowired

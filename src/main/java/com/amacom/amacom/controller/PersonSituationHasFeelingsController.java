@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.PersonSituationHasFeelingsDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonSituationHasFeelingsMapper;
 import com.amacom.amacom.model.PersonSituationHasFeelings;
 import com.amacom.amacom.service.interfaces.IFeelingsService;
@@ -34,21 +36,21 @@ public class PersonSituationHasFeelingsController {
         private IFeelingsService feelingsService;
 
         @GetMapping("/{id}")
-        public ResponseEntity<PersonSituationHasFeelingsDTO> findById(
+        public ResponseEntity<ResponseDTO> findById(
                         @PathVariable(value = "id") UUID id) {
                 PersonSituationHasFeelings personSituationHasFeelings = this.personSituationHasFeelingsService
                                 .findById(id);
                 if (personSituationHasFeelings == null) {
-                        return new ResponseEntity<>(new PersonSituationHasFeelingsDTO(), HttpStatus.NO_CONTENT);
+                        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
                 return new ResponseEntity<>(
-                                PersonSituationHasFeelingsMapper.INSTANCE
-                                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelings),
+                                new SuccessDTO(PersonSituationHasFeelingsMapper.INSTANCE
+                                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelings)),
                                 HttpStatus.OK);
         }
 
         @PostMapping("/create")
-        public ResponseEntity<PersonSituationHasFeelingsDTO> create(
+        public ResponseEntity<ResponseDTO> create(
                         @Valid @RequestBody PersonSituationHasFeelingsDTO personSituationHasFeelingsDTO) {
 
                 PersonSituationHasFeelings personSituationHasFeelings = PersonSituationHasFeelingsMapper.INSTANCE
@@ -65,12 +67,12 @@ public class PersonSituationHasFeelingsController {
                                 .create(personSituationHasFeelings);
                 if (personSituationHasFeelingsBD == null)
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
-                return ResponseEntity.ok(PersonSituationHasFeelingsMapper.INSTANCE
-                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelingsBD));
+                return ResponseEntity.ok(new SuccessDTO(PersonSituationHasFeelingsMapper.INSTANCE
+                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelingsBD)));
         }
 
         @PutMapping
-        public ResponseEntity<PersonSituationHasFeelingsDTO> update(
+        public ResponseEntity<ResponseDTO> update(
                         @Valid @RequestBody PersonSituationHasFeelingsDTO personSituationHasFeelingsDTO) {
                 PersonSituationHasFeelings personSituationHasFeelings = PersonSituationHasFeelingsMapper.INSTANCE
                                 .toPersonSituationHasFeelings(personSituationHasFeelingsDTO);
@@ -85,19 +87,17 @@ public class PersonSituationHasFeelingsController {
                 var personSituationHasFeelingsBD = this.personSituationHasFeelingsService
                                 .update(personSituationHasFeelings);
                 if (personSituationHasFeelingsBD == null) {
-                        return new ResponseEntity<>(new PersonSituationHasFeelingsDTO(), HttpStatus.NO_CONTENT);
+                        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
-                return new ResponseEntity<>(
-                                PersonSituationHasFeelingsMapper.INSTANCE
-                                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelingsBD),
-                                HttpStatus.OK);
+                return ResponseEntity.ok(new SuccessDTO(PersonSituationHasFeelingsMapper.INSTANCE
+                                .toPersonSituationHasFeelingsDTO(personSituationHasFeelingsBD)));
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Boolean> delete(
+        public ResponseEntity<ResponseDTO> delete(
                         @PathVariable(value = "id") UUID id) {
                 this.personSituationHasFeelingsService.deleteById(id);
-                return ResponseEntity.ok(Boolean.TRUE);
+                return ResponseEntity.ok(new SuccessDTO());
         }
 
         @Autowired
