@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.RewardDTO;
-import com.amacom.amacom.model.Reward;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.RewardDTO;
+import com.amacom.amacom.model.Reward;
 
 @Mapper
 public interface RewardMapper {
@@ -13,6 +14,6 @@ public interface RewardMapper {
 
     Reward toReward(RewardDTO rewardDTO);
 
-    @Mapping(target = "idSubject", source = "subject.id")
+    @Mapping(target = "subjectId", source = "subject.id")
     RewardDTO toRewardDTO(Reward reward);
 }

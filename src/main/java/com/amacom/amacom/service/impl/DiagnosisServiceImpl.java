@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Diagnosis;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IDiagnosisRepository;
-import com.amacom.amacom.service.interfaces.IDiagnosisService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Diagnosis;
+import com.amacom.amacom.repository.IDiagnosisRepository;
+import com.amacom.amacom.service.interfaces.IDiagnosisService;
 
 @Service
 public class DiagnosisServiceImpl implements IDiagnosisService {
@@ -20,7 +19,6 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     private IDiagnosisRepository diagnosisRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Diagnosis getEntityFromUUID(UUID uuid) {
@@ -49,9 +47,9 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     public Diagnosis update(Diagnosis diagnosis) {
         var diagnosisBD = this.diagnosisRepository.findById(diagnosis.getId()).orElseThrow(DataNotFoundException::new);
         diagnosisBD.setPersonSituation(diagnosis.getPersonSituation());
-        diagnosisBD.setResultadoConsulta(diagnosis.getResultadoConsulta());
-        diagnosisBD.setEEstadoConsulta(diagnosis.getEEstadoConsulta());
-        diagnosisBD.setEAlertaConsulta(diagnosis.getEAlertaConsulta());
+        diagnosisBD.setConsultationResult(diagnosis.getConsultationResult());
+        diagnosisBD.setConsultationStatus(diagnosis.getConsultationStatus());
+        diagnosisBD.setConsultationAlert(diagnosis.getConsultationAlert());
         return this.diagnosisRepository.save(diagnosisBD);
     }
 
@@ -60,7 +58,6 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
         var diagnosisBD = this.diagnosisRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.diagnosisRepository.deleteById(diagnosisBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

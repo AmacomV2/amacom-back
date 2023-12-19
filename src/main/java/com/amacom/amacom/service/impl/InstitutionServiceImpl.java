@@ -1,13 +1,9 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Institution;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IInstitutionRepository;
-import com.amacom.amacom.service.interfaces.IInstitutionService;
-import io.swagger.models.auth.In;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Institution;
+import com.amacom.amacom.repository.IInstitutionRepository;
+import com.amacom.amacom.service.interfaces.IInstitutionService;
 
 @Service
 public class InstitutionServiceImpl implements IInstitutionService {
@@ -26,7 +24,6 @@ public class InstitutionServiceImpl implements IInstitutionService {
     private IInstitutionRepository institutionRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Institution getEntityFromUUID(UUID uuid) {
@@ -37,16 +34,15 @@ public class InstitutionServiceImpl implements IInstitutionService {
     }
 
     @Override
-    public Page<Institution> findInstitution(UUID idTipoInstitucion, String query, Pageable pageable) {
+    public Page<Institution> findInstitution(UUID institutionTypeId, String query, Pageable pageable) {
         Page<Institution> institutionPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            institutionPage = this.institutionRepository.findInstitution(idTipoInstitucion, query, pageableDefault);
-        }
-        else{
-            institutionPage = this.institutionRepository.findInstitution(idTipoInstitucion, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            institutionPage = this.institutionRepository.findInstitution(institutionTypeId, query, pageableDefault);
+        } else {
+            institutionPage = this.institutionRepository.findInstitution(institutionTypeId, query, pageable);
         }
         return institutionPage;
     }
@@ -59,9 +55,8 @@ public class InstitutionServiceImpl implements IInstitutionService {
     @Transactional
     @Override
     public Institution create(Institution institution) {
-        this.validarCreacion(institution);
+        this.validateCreation(institution);
         institution.setId(UUID.randomUUID());
-        institution.setFechaHoraCreacion(new Date());
         var institutionBD = this.institutionRepository.save(institution);
         this.entityManager.flush();
         this.entityManager.refresh(institutionBD);
@@ -70,12 +65,12 @@ public class InstitutionServiceImpl implements IInstitutionService {
 
     @Override
     public Institution update(Institution institution) {
-        this.validarCreacion(institution);
-        var institutionBD = this.institutionRepository.findById(institution.getId()).orElseThrow(DataNotFoundException::new);
-        institutionBD.setTipoInstitucion(institution.getTipoInstitucion());
-        institutionBD.setNombre(institution.getNombre());
-        institutionBD.setDescripcion(institution.getDescripcion());
-        institutionBD.setFechaHoraModificacion(new Date());
+        this.validateCreation(institution);
+        var institutionBD = this.institutionRepository.findById(institution.getId())
+                .orElseThrow(DataNotFoundException::new);
+        institutionBD.setInstitutionType(institution.getInstitutionType());
+        institutionBD.setName(institution.getName());
+        institutionBD.setDescription(institution.getDescription());
         return this.institutionRepository.save(institutionBD);
     }
 
@@ -85,13 +80,12 @@ public class InstitutionServiceImpl implements IInstitutionService {
         this.institutionRepository.deleteById(institutionBD.getId());
     }
 
-    private void validarCreacion(Institution institution){
+    private void validateCreation(Institution institution) {
 
-        var existsSimilar = this.institutionRepository.existsByNombre(institution.getId(), institution.getNombre());
+        var existsSimilar = this.institutionRepository.existByName(institution.getId(), institution.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

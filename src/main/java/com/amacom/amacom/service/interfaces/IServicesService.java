@@ -1,13 +1,12 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Persona;
-import com.amacom.amacom.model.Services;
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Services;
 
 @Service
 public interface IServicesService {
@@ -23,6 +22,5 @@ public interface IServicesService {
     void deleteById(UUID id);
 
     Services getEntityFromUUID(UUID uuid);
-
 
 }

@@ -1,19 +1,24 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.AlarmSign;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IAlarmSignRepository;
-import com.amacom.amacom.service.interfaces.IAlarmSignService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.AlarmSign;
+import com.amacom.amacom.model.EAlarmSignType;
+import com.amacom.amacom.repository.IAlarmSignRepository;
+import com.amacom.amacom.service.interfaces.IAlarmSignService;
 
 @Service
 public class AlarmSignServiceImpl implements IAlarmSignService {
@@ -21,7 +26,6 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
     private IAlarmSignRepository alarmSignRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public AlarmSign getEntityFromUUID(UUID uuid) {
@@ -31,18 +35,26 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
         return null;
     }
 
-
     @Override
     public AlarmSign findById(UUID id) {
         return this.alarmSignRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
+    @Override
+    public Page<AlarmSign> findAlarmSign(@Nullable EAlarmSignType type, String query, Pageable pageable) {
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+        return this.alarmSignRepository.findAlarmSign(type, query, pageable);
+    }
+
     @Transactional
     @Override
     public AlarmSign create(AlarmSign alarmSign) {
-        this.validarCreacion(alarmSign);
+        this.validateCreation(alarmSign);
         alarmSign.setId(UUID.randomUUID());
-        alarmSign.setFechaHoraCreacion(new Date());
         var alarmSignBD = this.alarmSignRepository.save(alarmSign);
         this.entityManager.flush();
         this.entityManager.refresh(alarmSignBD);
@@ -51,14 +63,13 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
 
     @Override
     public AlarmSign update(AlarmSign alarmSign) {
-        this.validarCreacion(alarmSign);
+        this.validateCreation(alarmSign);
         var alarmSignBD = this.alarmSignRepository.findById(alarmSign.getId()).orElseThrow(DataNotFoundException::new);
-        alarmSignBD.setNombre(alarmSign.getNombre());
-        alarmSignBD.setTipoDescripcion(alarmSign.getTipoDescripcion());
-        alarmSignBD.setLinkImagen(alarmSign.getLinkImagen());
-        alarmSignBD.setEstado(alarmSign.getEstado());
-        alarmSignBD.setTipo(alarmSign.getTipo());
-        alarmSignBD.setFechaHoraModificacion(new Date());
+        alarmSignBD.setName(alarmSign.getName());
+        alarmSignBD.setDescription(alarmSign.getDescription());
+        alarmSignBD.setImageUrl(alarmSign.getImageUrl());
+        alarmSignBD.setStatus(alarmSign.getStatus());
+        alarmSignBD.setType(alarmSign.getType());
         return this.alarmSignRepository.save(alarmSignBD);
     }
 
@@ -68,13 +79,12 @@ public class AlarmSignServiceImpl implements IAlarmSignService {
         this.alarmSignRepository.deleteById(alarmSignBD.getId());
     }
 
-    private void validarCreacion(AlarmSign alarmSign){
+    private void validateCreation(AlarmSign alarmSign) {
 
-        var existsSimilar = this.alarmSignRepository.existsByNombre(alarmSign.getId(), alarmSign.getNombre());
+        var existsSimilar = this.alarmSignRepository.existByName(alarmSign.getId(), alarmSign.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

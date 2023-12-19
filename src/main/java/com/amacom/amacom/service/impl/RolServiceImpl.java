@@ -1,15 +1,15 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.model.EstadoCivil;
-import com.amacom.amacom.model.auth.Rol;
-import com.amacom.amacom.repository.IRolRepository;
-import com.amacom.amacom.service.interfaces.IRolService;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.auth.Rol;
+import com.amacom.amacom.repository.IRolRepository;
+import com.amacom.amacom.service.interfaces.IRolService;
 
 @Service
 public class RolServiceImpl implements IRolService {

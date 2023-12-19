@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.DiagnosisHasSubject;
-import com.amacom.amacom.model.Genero;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.DiagnosisHasSubject;
 
 @Service
 public interface IDiagnosisHasSubjectService {
@@ -18,6 +18,5 @@ public interface IDiagnosisHasSubjectService {
     void deleteById(UUID id);
 
     DiagnosisHasSubject getEntityFromUUID(UUID uuid);
-
 
 }

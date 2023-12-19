@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Indicator;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Indicator;
 
 @Service
 public interface IIndicatorService {
@@ -18,6 +18,5 @@ public interface IIndicatorService {
     void deleteById(UUID id);
 
     Indicator getEntityFromUUID(UUID uuid);
-
 
 }

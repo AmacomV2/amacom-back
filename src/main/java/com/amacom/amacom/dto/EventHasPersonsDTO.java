@@ -1,12 +1,13 @@
 package com.amacom.amacom.dto;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,15 +18,14 @@ public class EventHasPersonsDTO implements Serializable {
 
     private UUID id;
 
-    @NotNull(message = "Campo no puede ser nulo")
-    private UUID idPersona;
+    @NotNull(message = "Field cannot be null")
+    private UUID personId;
 
-    private String nombrePersona;
+    private String personName;
 
-
-    @NotNull(message = "Campo no puede ser nulo")
+    @NotNull(message = "Field cannot be null")
     private UUID idEvent;
 
-    private String tituloEvent;
+    private String name;
 
 }

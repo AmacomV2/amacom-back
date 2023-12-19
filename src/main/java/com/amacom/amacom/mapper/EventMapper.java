@@ -1,13 +1,14 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.EventDTO;
-import com.amacom.amacom.model.Event;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amacom.amacom.dto.EventDTO;
+import com.amacom.amacom.model.Event;
 
 @Mapper
 public interface EventMapper {
@@ -16,17 +17,16 @@ public interface EventMapper {
 
     Event toEvent(EventDTO eventDTO);
 
-    @Mapping(target = "nombreTipoEvento", source = "tipoEvento.nombre")
-    @Mapping(target = "idTipoEvento", source = "tipoEvento.id")
-    @Mapping(target = "idUsuarioCrea", source = "usuario.id")
+    @Mapping(target = "eventTypeName", source = "eventType.name")
+    @Mapping(target = "eventTypeId", source = "eventType.id")
+    @Mapping(target = "personId", source = "person.id")
     EventDTO toEventDTO(Event event);
 
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("nombreTipoEvento", "tipoEvento.nombre");
-        clavesToSort.put("titulo", "titulo");
+        clavesToSort.put("eventTypeName", "eventType.name");
+        clavesToSort.put("name", "name");
         return clavesToSort;
     }
-
 
 }

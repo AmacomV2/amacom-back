@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.DiagnosisHasSubject;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IDiagnosisHasSubjectRepository;
-import com.amacom.amacom.service.interfaces.IDiagnosisHasSubjectService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.DiagnosisHasSubject;
+import com.amacom.amacom.repository.IDiagnosisHasSubjectRepository;
+import com.amacom.amacom.service.interfaces.IDiagnosisHasSubjectService;
 
 @Service
 public class DiagnosisHasSubjectServiceImpl implements IDiagnosisHasSubjectService {
@@ -21,7 +20,6 @@ public class DiagnosisHasSubjectServiceImpl implements IDiagnosisHasSubjectServi
 
     private EntityManager entityManager;
 
-
     @Override
     public DiagnosisHasSubject getEntityFromUUID(UUID uuid) {
         if (uuid != null) {
@@ -29,7 +27,6 @@ public class DiagnosisHasSubjectServiceImpl implements IDiagnosisHasSubjectServi
         }
         return null;
     }
-
 
     @Override
     public DiagnosisHasSubject findById(UUID id) {
@@ -48,7 +45,8 @@ public class DiagnosisHasSubjectServiceImpl implements IDiagnosisHasSubjectServi
 
     @Override
     public DiagnosisHasSubject update(DiagnosisHasSubject diagnosisHasSubject) {
-        var diagnosisHasSubjectBD = this.diagnosisHasSubjectRepository.findById(diagnosisHasSubject.getId()).orElseThrow(DataNotFoundException::new);
+        var diagnosisHasSubjectBD = this.diagnosisHasSubjectRepository.findById(diagnosisHasSubject.getId())
+                .orElseThrow(DataNotFoundException::new);
         diagnosisHasSubjectBD.setSubject(diagnosisHasSubject.getSubject());
         diagnosisHasSubjectBD.setDiagnosis(diagnosisHasSubject.getDiagnosis());
         return this.diagnosisHasSubjectRepository.save(diagnosisHasSubjectBD);
@@ -56,10 +54,10 @@ public class DiagnosisHasSubjectServiceImpl implements IDiagnosisHasSubjectServi
 
     @Override
     public void deleteById(UUID id) {
-        var diagnosisHasSubjectBD = this.diagnosisHasSubjectRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        var diagnosisHasSubjectBD = this.diagnosisHasSubjectRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new);
         this.diagnosisHasSubjectRepository.deleteById(diagnosisHasSubjectBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

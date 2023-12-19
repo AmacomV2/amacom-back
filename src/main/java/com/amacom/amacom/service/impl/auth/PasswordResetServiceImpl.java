@@ -1,16 +1,17 @@
 package com.amacom.amacom.service.impl.auth;
 
-import com.amacom.amacom.model.auth.PasswordResetToken;
-import com.amacom.amacom.repository.auth.IPasswordResetTokenRepository;
-import com.amacom.amacom.service.interfaces.auth.IPasswordResetService;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import com.amacom.amacom.model.auth.PasswordResetToken;
+import com.amacom.amacom.repository.auth.IPasswordResetTokenRepository;
+import com.amacom.amacom.service.interfaces.auth.IPasswordResetService;
 
 @Service
 public class PasswordResetServiceImpl implements IPasswordResetService {
@@ -30,14 +31,12 @@ public class PasswordResetServiceImpl implements IPasswordResetService {
     public void sendPasswordResetCode(String email) {
         String code = generateRandomCode();
 
-
         PasswordResetToken token = new PasswordResetToken();
         token.setEmail(email);
-        token.setCodigo(code);
+        token.setCode(code);
 
-        token.setFechaExpiracion(new Date(System.currentTimeMillis() + 3600000));
+        token.setExpirationDate(new Date(System.currentTimeMillis() + 3600000));
         tokenRepository.save(token);
-
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
@@ -46,15 +45,14 @@ public class PasswordResetServiceImpl implements IPasswordResetService {
         javaMailSender.send(message);
     }
 
-
     public boolean isCodeValid(String email, String code) {
-        Optional<PasswordResetToken> tokenOptional = tokenRepository.findByEmailAndCodigo(email, code);
+        Optional<PasswordResetToken> tokenOptional = tokenRepository.findByEmailAndCode(email, code);
 
         if (tokenOptional.isPresent()) {
             PasswordResetToken token = tokenOptional.get();
             Date currentDate = new Date();
-            return !token.getFechaExpiracion().before(currentDate);
-        }else{
+            return !token.getExpirationDate().before(currentDate);
+        } else {
             return false;
         }
 

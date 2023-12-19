@@ -1,13 +1,14 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.SubjectDTO;
-import com.amacom.amacom.model.Subject;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amacom.amacom.dto.SubjectDTO;
+import com.amacom.amacom.model.Subject;
 
 @Mapper
 public interface SubjectMapper {
@@ -16,16 +17,15 @@ public interface SubjectMapper {
 
     Subject toSubject(SubjectDTO subjectDTO);
 
-    @Mapping(target = "idSubjectParent", source = "subjectParent.id")
-    @Mapping(target = "idResultadosAsociados", source = "resultadosAsociados.id")
+    @Mapping(target = "parentId", source = "parent.id")
+    @Mapping(target = "associatedResultId", source = "associatedResult.id")
     SubjectDTO toSubjectDTO(Subject subject);
 
     static Map<String, String> getClavesToSort() {
         Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("nombre", "nombre");
-        clavesToSort.put("fechaHoraCreacion", "fechaHoraCreacion");
+        clavesToSort.put("name", "name");
+        clavesToSort.put("createdAt", "createdAt");
         return clavesToSort;
     }
-
 
 }

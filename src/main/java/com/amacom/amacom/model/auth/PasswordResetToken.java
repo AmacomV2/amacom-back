@@ -1,10 +1,17 @@
 package com.amacom.amacom.model.auth;
 
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Data
@@ -18,10 +25,9 @@ public class PasswordResetToken {
 
     private String email;
 
-    private String codigo;
+    private String code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaExpiracion;
-
+    private Date expirationDate;
 
 }

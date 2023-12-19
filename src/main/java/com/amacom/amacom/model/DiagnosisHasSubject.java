@@ -1,13 +1,18 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "DIAGNOSIS_HAS_SUBJECT")
@@ -23,11 +28,10 @@ public class DiagnosisHasSubject implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_DIAGNOSIS", referencedColumnName = "ID")
+    @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID")
     private Diagnosis diagnosis;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 }
-

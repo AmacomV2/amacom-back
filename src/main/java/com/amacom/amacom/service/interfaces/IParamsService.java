@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Params;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Params;
 
 @Service
 public interface IParamsService {
@@ -18,6 +18,5 @@ public interface IParamsService {
     void deleteById(UUID id);
 
     Params getEntityFromUUID(UUID uuid);
-
 
 }

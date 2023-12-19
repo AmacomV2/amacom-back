@@ -1,60 +1,62 @@
 package com.amacom.amacom.model;
 
-import com.amacom.amacom.model.auth.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.amacom.amacom.model.auth.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "EVENT")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event implements Serializable {
+public class Event extends BaseModel {
 
     private static final long serialVersionUID = -6253118475380318681L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "EVENT_TYPE_ID", referencedColumnName = "ID")
+    private EventType eventType;
 
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_EVENTO", referencedColumnName = "ID")
-    private TipoEvento tipoEvento;
+    @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
+    private User createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
-    private Usuario usuario;
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    private Person person;
 
-    @Column(name = "TITULO")
-    private String titulo;
+    @Column(name = "NAME")
+    private String name;
 
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
-    @Column(name = "COMIENZO", nullable = false)
+    @Column(name = "START", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date comienzo;
+    private Date start;
 
-    @Column(name = "FIN")
+    @Column(name = "END")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fin;
+    private Date end;
 
-    @Column(name = "ESTADO_EVENTO")
+    @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
-    private EEstadoEvento estadoEvento;
+    private EEventStatus eventStatus;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
 }

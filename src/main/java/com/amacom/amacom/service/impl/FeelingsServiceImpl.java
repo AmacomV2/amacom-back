@@ -1,19 +1,22 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Feelings;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IFeelingsRepository;
-import com.amacom.amacom.service.interfaces.IFeelingsService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.exception.ValidationException;
+import com.amacom.amacom.model.Feelings;
+import com.amacom.amacom.repository.IFeelingsRepository;
+import com.amacom.amacom.service.interfaces.IFeelingsService;
 
 @Service
 public class FeelingsServiceImpl implements IFeelingsService {
@@ -30,18 +33,26 @@ public class FeelingsServiceImpl implements IFeelingsService {
         return null;
     }
 
-
     @Override
     public Feelings findById(UUID id) {
         return this.feelingsRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }
 
+    @Override
+    public Page<Feelings> findFeeling(String query, Pageable pageable) {
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+        return this.feelingsRepository.findFeeling(query, pageable);
+    }
+
     @Transactional
     @Override
     public Feelings create(Feelings feelings) {
-        this.validarCreacion(feelings);
+        this.validateCreation(feelings);
         feelings.setId(UUID.randomUUID());
-        feelings.setFechaHoraCreacion(new Date());
         var feelingsBD = this.feelingsRepository.save(feelings);
         this.entityManager.flush();
         this.entityManager.refresh(feelingsBD);
@@ -50,12 +61,11 @@ public class FeelingsServiceImpl implements IFeelingsService {
 
     @Override
     public Feelings update(Feelings feelings) {
-        this.validarCreacion(feelings);
+        this.validateCreation(feelings);
         var feelingsBD = this.feelingsRepository.findById(feelings.getId()).orElseThrow(DataNotFoundException::new);
-        feelingsBD.setNombre(feelings.getNombre());
-        feelingsBD.setDescripcion(feelings.getDescripcion());
-        feelingsBD.setEstado(feelings.getEstado());
-        feelingsBD.setFechaHoraModificacion(new Date());
+        feelingsBD.setName(feelings.getName());
+        feelingsBD.setDescription(feelings.getDescription());
+        feelingsBD.setStatus(feelings.getStatus());
         return this.feelingsRepository.save(feelingsBD);
     }
 
@@ -65,11 +75,11 @@ public class FeelingsServiceImpl implements IFeelingsService {
         this.feelingsRepository.deleteById(feelingsBD.getId());
     }
 
-    private void validarCreacion(Feelings feelings){
+    private void validateCreation(Feelings feelings) {
 
-        var existsSimilar = this.feelingsRepository.existsByNombre(feelings.getId(), feelings.getNombre());
+        var existsSimilar = this.feelingsRepository.existByName(feelings.getId(), feelings.getName());
         if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidacionException("Ya existe un registro con este nombre");
+            throw new ValidationException("Ya existe un registro con este name");
     }
 
     @Autowired

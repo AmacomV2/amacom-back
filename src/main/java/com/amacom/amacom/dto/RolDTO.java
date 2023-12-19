@@ -1,15 +1,16 @@
 package com.amacom.amacom.dto;
 
-import com.amacom.amacom.model.auth.ERole;
-import com.amacom.amacom.util.ITools;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
+import com.amacom.amacom.model.auth.ERole;
+import com.amacom.amacom.util.ITools;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -20,15 +21,15 @@ public class RolDTO implements Serializable {
 
     private UUID id;
 
-    private String nombre;
+    private String name;
 
-    private String descripcion;
-
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraCreacion;
+    private String description;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
-    private Date fechaHoraModificacion;
+    private Date createdAt;
+
+    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private Date updatedAt;
 
     private ERole enumRol;
 }

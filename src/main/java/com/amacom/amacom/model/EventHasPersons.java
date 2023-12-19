@@ -1,34 +1,31 @@
 package com.amacom.amacom.model;
 
-import com.amacom.amacom.model.auth.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "EVENT_HAS_PERSONS")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventHasPersons implements Serializable {
+public class EventHasPersons extends BaseModel {
 
     private static final long serialVersionUID = 1246642940174979130L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID")
+    @JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")
     private Event event;
 
 }

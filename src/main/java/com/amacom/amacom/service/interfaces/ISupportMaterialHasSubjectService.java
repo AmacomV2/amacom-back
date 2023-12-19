@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.SupportMaterialHasSubject;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.SupportMaterialHasSubject;
 
 @Service
 public interface ISupportMaterialHasSubjectService {
@@ -18,6 +18,5 @@ public interface ISupportMaterialHasSubjectService {
     void deleteById(UUID id);
 
     SupportMaterialHasSubject getEntityFromUUID(UUID uuid);
-
 
 }

@@ -1,19 +1,18 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonAchievement;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IPersonAchievementRepository;
-import com.amacom.amacom.service.interfaces.IPersonAchievementService;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.PersonAchievement;
+import com.amacom.amacom.repository.IPersonAchievementRepository;
+import com.amacom.amacom.service.interfaces.IPersonAchievementService;
 
 @Service
 public class PersonAchievementServiceImpl implements IPersonAchievementService {
@@ -21,7 +20,6 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
     private IPersonAchievementRepository personAchievementRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public PersonAchievement getEntityFromUUID(UUID uuid) {
@@ -31,10 +29,9 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
         return null;
     }
 
-
     @Override
-    public List<PersonAchievement> getAll(UUID idPersona) {
-        return this.personAchievementRepository.findAllByIdPersona(idPersona);
+    public List<PersonAchievement> getAll(UUID personId) {
+        return this.personAchievementRepository.findAllByPersonId(personId);
     }
 
     @Override
@@ -46,7 +43,6 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
     @Override
     public PersonAchievement create(PersonAchievement personAchievement) {
         personAchievement.setId(UUID.randomUUID());
-        personAchievement.setFechaHoraCreacion(new Date());
         var personAchievementBD = this.personAchievementRepository.save(personAchievement);
         this.entityManager.flush();
         this.entityManager.refresh(personAchievementBD);
@@ -55,11 +51,11 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
 
     @Override
     public PersonAchievement update(PersonAchievement personAchievement) {
-        var personAchievementBD = this.personAchievementRepository.findById(personAchievement.getId()).orElseThrow(DataNotFoundException::new);
-        personAchievementBD.setPuntaje(personAchievement.getPuntaje());
-        personAchievementBD.setPersona(personAchievement.getPersona());
+        var personAchievementBD = this.personAchievementRepository.findById(personAchievement.getId())
+                .orElseThrow(DataNotFoundException::new);
+        personAchievementBD.setScore(personAchievement.getScore());
+        personAchievementBD.setPerson(personAchievement.getPerson());
         personAchievementBD.setAchievement(personAchievement.getAchievement());
-        personAchievementBD.setFechaHoraModificacion(new Date());
         return this.personAchievementRepository.save(personAchievementBD);
     }
 
@@ -68,7 +64,6 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
         var personAchievementBD = this.personAchievementRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.personAchievementRepository.deleteById(personAchievementBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

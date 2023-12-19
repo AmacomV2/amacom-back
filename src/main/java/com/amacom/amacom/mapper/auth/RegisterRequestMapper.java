@@ -1,21 +1,27 @@
 package com.amacom.amacom.mapper.auth;
 
-import com.amacom.amacom.model.auth.RegisterRequest;
-import com.amacom.amacom.dto.auth.RegisterRequestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.PersonDTO;
+import com.amacom.amacom.dto.auth.NewUserRequestDTO;
+import com.amacom.amacom.dto.auth.RegisterRequestDTO;
+import com.amacom.amacom.model.Person;
+import com.amacom.amacom.model.auth.NewUserRequest;
 
 @Mapper
 public interface RegisterRequestMapper {
 
     RegisterRequestMapper INSTANCE = Mappers.getMapper(RegisterRequestMapper.class);
 
-    //DTO TO ENTITY
-    RegisterRequest toRegisterRequest(RegisterRequestDTO registerRequestDTO);
+    // DTO TO ENTITY
+    NewUserRequest toNewUserRequest(NewUserRequestDTO registerRequestDTO);
 
-    //ENTITY TO DTO
+    // DTO TO ENTITY
+    NewUserRequest toNewUserRequest(RegisterRequestDTO registerRequestDTO);
 
-    RegisterRequestDTO toRegisterRequestDTO(RegisterRequest registerRequest);
+    Person toPerson(RegisterRequestDTO personDTO);
 
+    PersonDTO toPersonDTO(RegisterRequestDTO request);
 
 }

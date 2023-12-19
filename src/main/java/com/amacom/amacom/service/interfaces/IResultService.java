@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.Result;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Result;
 
 @Service
 public interface IResultService {
@@ -18,6 +18,5 @@ public interface IResultService {
     void deleteById(UUID id);
 
     Result getEntityFromUUID(UUID uuid);
-
 
 }

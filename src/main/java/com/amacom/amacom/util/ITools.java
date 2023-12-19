@@ -1,26 +1,25 @@
 package com.amacom.amacom.util;
 
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 public interface ITools {
 
-    static boolean isFechaAMayorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTipoComparacion) {
+    static boolean isFechaAMayorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparison) {
         boolean ok = false;
         if (aFechaA != null && aFechaB != null) {
-            if (aTipoComparacion.equals(">")) {
+            if (aTypeComparison.equals(">")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) > 0) {
                     ok = true;
                 }
-            } else if (aTipoComparacion.equals("=")) {
+            } else if (aTypeComparison.equals("=")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) == 0) {
                     ok = true;
                 }
@@ -32,14 +31,14 @@ public interface ITools {
         return ok;
     }
 
-    static boolean isFechaAMenorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTipoComparacion) {
+    static boolean isFechaAMenorIgualQueFechaB(Date aFechaA, Date aFechaB, String aTypeComparison) {
         boolean ok = false;
         if (aFechaA != null && aFechaB != null) {
-            if (aTipoComparacion.equals("<")) {
+            if (aTypeComparison.equals("<")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) < 0) {
                     ok = true;
                 }
-            } else if (aTipoComparacion.equals("=")) {
+            } else if (aTypeComparison.equals("=")) {
                 if (getStringFecha(aFechaA).compareTo(getStringFecha(aFechaB)) == 0) {
                     ok = true;
                 }
@@ -55,14 +54,13 @@ public interface ITools {
         Sort sort = Sort.unsorted();
 
         Sort.Order s;
-        for(Iterator var3 = pageable.getSort().iterator(); var3.hasNext(); sort = sort.and(Sort.by(s.getDirection(), new String[]{(String)clavesToSort.get(s.getProperty())}))) {
-            s = (Sort.Order)var3.next();
+        for (Iterator<Order> var3 = pageable.getSort().iterator(); var3.hasNext(); sort = sort
+                .and(Sort.by(s.getDirection(), new String[] { (String) clavesToSort.get(s.getProperty()) }))) {
+            s = (Sort.Order) var3.next();
         }
 
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
-
-
 
     static String getStringFecha(Date aFecha) {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,5 +70,5 @@ public interface ITools {
     String PATTERN_DATE = "yyyy-MM-dd";
     String PATTERN_DATE_FECHA_HORA_MINUTO = "yyyy-MM-dd HH:mm";
     String PATTERN_DATE_FECHA_HORA_MINUTO_SEGUNDO = "yyyy-MM-dd HH:mm:ss";
-    String ZONA_HORARIA_BOGOTA= "America/Bogota";
+    String ZONA_HORARIA_BOGOTA = "America/Bogota";
 }

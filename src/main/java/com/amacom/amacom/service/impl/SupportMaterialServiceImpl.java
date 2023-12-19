@@ -1,12 +1,9 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.SupportMaterial;
-import com.amacom.amacom.model.SupportMaterialFiles;
-import com.amacom.amacom.repository.ISupportMaterialRepository;
-import com.amacom.amacom.service.interfaces.ISupportMaterialService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.SupportMaterial;
+import com.amacom.amacom.repository.ISupportMaterialRepository;
+import com.amacom.amacom.service.interfaces.ISupportMaterialService;
 
 @Service
 public class SupportMaterialServiceImpl implements ISupportMaterialService {
@@ -35,16 +33,15 @@ public class SupportMaterialServiceImpl implements ISupportMaterialService {
     }
 
     @Override
-    public Page<SupportMaterial> findSupportMaterial(UUID idSubject, String query, Pageable pageable) {
+    public Page<SupportMaterial> findSupportMaterial(UUID subjectId, String query, Pageable pageable) {
         Page<SupportMaterial> supportMaterialPage;
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
-            supportMaterialPage = this.supportMaterialRepository.findSupportMaterial(idSubject, query, pageableDefault);
-        }
-        else{
-            supportMaterialPage = this.supportMaterialRepository.findSupportMaterial(idSubject, query, pageable);
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+            supportMaterialPage = this.supportMaterialRepository.findSupportMaterial(subjectId, query, pageableDefault);
+        } else {
+            supportMaterialPage = this.supportMaterialRepository.findSupportMaterial(subjectId, query, pageable);
         }
         return supportMaterialPage;
     }
@@ -58,7 +55,6 @@ public class SupportMaterialServiceImpl implements ISupportMaterialService {
     @Override
     public SupportMaterial create(SupportMaterial supportMaterial) {
         supportMaterial.setId(UUID.randomUUID());
-        supportMaterial.setFechaHoraCreacion(new Date());
         var supportMaterialBD = this.supportMaterialRepository.save(supportMaterial);
         this.entityManager.flush();
         this.entityManager.refresh(supportMaterialBD);
@@ -67,10 +63,10 @@ public class SupportMaterialServiceImpl implements ISupportMaterialService {
 
     @Override
     public SupportMaterial update(SupportMaterial supportMaterial) {
-        var supportMaterialBD = this.supportMaterialRepository.findById(supportMaterial.getId()).orElseThrow(DataNotFoundException::new);
-        supportMaterialBD.setNombre(supportMaterial.getNombre());
-        supportMaterialBD.setDescripcion(supportMaterial.getDescripcion());
-        supportMaterialBD.setFechaHoraModificacion(new Date());
+        var supportMaterialBD = this.supportMaterialRepository.findById(supportMaterial.getId())
+                .orElseThrow(DataNotFoundException::new);
+        supportMaterialBD.setName(supportMaterial.getName());
+        supportMaterialBD.setDescription(supportMaterial.getDescription());
         return this.supportMaterialRepository.save(supportMaterialBD);
     }
 

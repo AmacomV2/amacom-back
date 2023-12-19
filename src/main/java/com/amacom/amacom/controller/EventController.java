@@ -1,27 +1,33 @@
 package com.amacom.amacom.controller;
 
-import com.amacom.amacom.dto.EventDTO;
-import com.amacom.amacom.dto.GeneroDTO;
-import com.amacom.amacom.dto.UsuarioDTO;
-import com.amacom.amacom.mapper.EventMapper;
-import com.amacom.amacom.mapper.GeneroMapper;
-import com.amacom.amacom.mapper.UsuarioMapper;
-import com.amacom.amacom.model.Event;
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.service.interfaces.IEventService;
-import com.amacom.amacom.service.interfaces.ITipoEventoService;
-import com.amacom.amacom.service.interfaces.IUsuarioService;
-import com.amacom.amacom.util.ITools;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.dto.EventDTO;
+import com.amacom.amacom.mapper.EventMapper;
+import com.amacom.amacom.model.Event;
+import com.amacom.amacom.service.interfaces.IEventService;
+import com.amacom.amacom.service.interfaces.IEventTypeService;
+import com.amacom.amacom.service.interfaces.IUserService;
+import com.amacom.amacom.util.ITools;
 
 @RestController
 @RequestMapping("/event")
@@ -29,24 +35,24 @@ public class EventController {
 
     private IEventService eventService;
 
-    private ITipoEventoService tipoEventoService;
+    private IEventTypeService eventTypeService;
 
-    private IUsuarioService usuarioService;
-
+    private IUserService usersService;
 
     @GetMapping("/consulta")
     public ResponseEntity<Page<EventDTO>> findPageable(
             Pageable pageable,
             @RequestParam(name = "idCreatedBy", required = false) UUID idCreatedBy,
-            @RequestHeader("idUsuario") UUID idUsuario,
-            @RequestParam(name = "fechaDesde", required = false) Date fechaDesde,
-            @RequestParam(name = "fechaHasta", required = false) Date fechaHasta,
+            @RequestHeader("userId") UUID userId,
+            @RequestParam(name = "from", required = false) Date from,
+            @RequestParam(name = "to", required = false) Date to,
             @RequestParam(name = "query", required = false) String query) {
 
-        var eventPage = this.eventService.findEvent(idCreatedBy, idUsuario, fechaDesde, fechaHasta, query, ITools.getPageRequest(pageable, EventMapper.getClavesToSort()));
+        var eventPage = this.eventService.findEvent(idCreatedBy, userId, from, to, query,
+                ITools.getPageRequest(pageable, EventMapper.getClavesToSort()));
 
         if (eventPage == null || eventPage.getContent().isEmpty()) {
-            return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(eventPage
                 .map(EventMapper.INSTANCE::toEventDTO), HttpStatus.OK);
@@ -54,7 +60,7 @@ public class EventController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> findById(
-            @PathVariable(value = "id") UUID id){
+            @PathVariable(value = "id") UUID id) {
         Event event = this.eventService.findById(id);
         if (event == null) {
             return new ResponseEntity<>(new EventDTO(), HttpStatus.NO_CONTENT);
@@ -65,24 +71,25 @@ public class EventController {
     @PostMapping("/create")
     public ResponseEntity<EventDTO> create(
             @Valid @RequestBody EventDTO eventDTO,
-            @RequestHeader("idUsuario") UUID idUsuario){
+            @RequestHeader("userId") UUID userId) {
 
         Event event = EventMapper.INSTANCE.toEvent(eventDTO);
 
-        event.setUsuario(this.usuarioService.getEntityFromUUID(idUsuario));
-        event.setTipoEvento(this.tipoEventoService.getEntityFromUUID(eventDTO.getIdTipoEvento()));
+        event.setCreatedBy(this.usersService.getEntityFromUUID(userId));
+        event.setEventType(this.eventTypeService.getEntityFromUUID(eventDTO.getEventTypeId()));
 
         var eventBD = this.eventService.create(event);
-        if(eventBD == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (eventBD == null)
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity.ok(EventMapper.INSTANCE.toEventDTO(eventBD));
     }
 
     @PutMapping
     public ResponseEntity<EventDTO> update(
-            @Valid @RequestBody EventDTO eventDTO){
+            @Valid @RequestBody EventDTO eventDTO) {
         Event event = EventMapper.INSTANCE.toEvent(eventDTO);
 
-        event.setTipoEvento(this.tipoEventoService.getEntityFromUUID(eventDTO.getIdTipoEvento()));
+        event.setEventType(this.eventTypeService.getEntityFromUUID(eventDTO.getEventTypeId()));
 
         var eventBD = this.eventService.update(event);
         if (eventBD == null) {
@@ -93,7 +100,7 @@ public class EventController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
-            @PathVariable(value = "id") UUID id){
+            @PathVariable(value = "id") UUID id) {
         this.eventService.deleteById(id);
         return ResponseEntity.ok(Boolean.TRUE);
     }
@@ -104,13 +111,13 @@ public class EventController {
     }
 
     @Autowired
-    public void setTipoEventoService(ITipoEventoService tipoEventoService) {
-        this.tipoEventoService = tipoEventoService;
+    public void setEventTypeService(IEventTypeService eventTypeService) {
+        this.eventTypeService = eventTypeService;
     }
 
     @Autowired
-    public void setUsuarioService(IUsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public void setUsersService(IUserService usersService) {
+        this.usersService = usersService;
     }
 
 }

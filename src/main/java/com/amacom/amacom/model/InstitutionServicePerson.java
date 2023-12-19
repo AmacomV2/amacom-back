@@ -1,32 +1,30 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "INSTITUTION_SERVICE_PERSON")
-public class InstitutionServicePerson implements Serializable {
+public class InstitutionServicePerson extends BaseModel {
 
     private static final long serialVersionUID = 993579400240505221L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_INSTITUCION_SERVICIO", referencedColumnName = "ID")
+    @JoinColumn(name = "INSTITUTION_SERVICE_ID", referencedColumnName = "ID")
     private InstitutionService institutionService;
 }

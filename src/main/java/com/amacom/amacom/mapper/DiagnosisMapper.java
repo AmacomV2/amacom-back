@@ -1,10 +1,11 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.DiagnosisDTO;
-import com.amacom.amacom.model.Diagnosis;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import com.amacom.amacom.dto.DiagnosisDTO;
+import com.amacom.amacom.model.Diagnosis;
 
 @Mapper
 public interface DiagnosisMapper {
@@ -13,6 +14,6 @@ public interface DiagnosisMapper {
 
     Diagnosis toDiagnosis(DiagnosisDTO diagnosisDTO);
 
-    @Mapping(target = "idPersonSituation", source = "personSituation.id")
+    @Mapping(target = "personSituationId", source = "personSituation.id")
     DiagnosisDTO toDiagnosisDTO(Diagnosis diagnosis);
 }

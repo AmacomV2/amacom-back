@@ -1,44 +1,34 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "INSTITUTION")
-public class Institution implements Serializable {
+public class Institution extends BaseModel {
 
     private static final long serialVersionUID = 1491571920947412552L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
-
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_INSITUCION", referencedColumnName = "ID")
-    private TipoInstitucion tipoInstitucion;
+    @JoinColumn(name = "INSTITUTION_TYPE_ID", referencedColumnName = "ID")
+    private InstitutionType institutionType;
 
-    @Column(name = "NOMBRE")
-    private String nombre;
+    @Column(name = "NAME")
+    private String name;
 
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
 }

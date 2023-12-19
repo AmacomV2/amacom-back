@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.ResultHasIndicator;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.ResultHasIndicator;
 
 @Service
 public interface IResultHasIndicatorService {
@@ -18,6 +18,5 @@ public interface IResultHasIndicatorService {
     void deleteById(UUID id);
 
     ResultHasIndicator getEntityFromUUID(UUID uuid);
-
 
 }

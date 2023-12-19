@@ -1,49 +1,38 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "SUBJECT")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Subject implements Serializable {
+public class Subject extends BaseModel {
 
     private static final long serialVersionUID = -7956521051265369329L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "PARENT_ID", referencedColumnName = "ID")
+    private Subject parent;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT_PARENT", referencedColumnName = "ID")
-    private Subject subjectParent;
+    @JoinColumn(name = "ASSOCIATED_RESULT_ID", referencedColumnName = "ID")
+    private Result associatedResult;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_RESULTADOS_ASOCIADOS", referencedColumnName = "ID")
-    private Result resultadosAsociados;
+    @Column(name = "NOMBRE", nullable = false, unique = true)
+    private String name;
 
-    @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
-
-    @Column(name = "INDICACION_VALIDEZ")
-    private String indicacionValidez;
-
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    @Column(name = "VALIDITY_INDICATOR")
+    private String validityIndicator;
 
 }
-

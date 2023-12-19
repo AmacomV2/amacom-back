@@ -1,43 +1,31 @@
 package com.amacom.amacom.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "FEELINGS")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Feelings implements Serializable {
+public class Feelings extends BaseModel {
 
     private static final long serialVersionUID = -5862576302502380715L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @Column(name = "NAME", nullable = false, unique = true)
+    private String name;
 
-    @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
+    @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
+    private String description;
 
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-
-    @Column(name = "ESTADO")
-    private String estado;
-
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    @Column(name = "STATUS")
+    private String status;
 
 }
-

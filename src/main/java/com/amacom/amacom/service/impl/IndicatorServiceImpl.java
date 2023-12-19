@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.Indicator;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.repository.IIndicatorRepository;
-import com.amacom.amacom.service.interfaces.IIndicatorService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Indicator;
+import com.amacom.amacom.repository.IIndicatorRepository;
+import com.amacom.amacom.service.interfaces.IIndicatorService;
 
 @Service
 public class IndicatorServiceImpl implements IIndicatorService {
@@ -21,7 +20,6 @@ public class IndicatorServiceImpl implements IIndicatorService {
 
     private EntityManager entityManager;
 
-
     @Override
     public Indicator getEntityFromUUID(UUID uuid) {
         if (uuid != null) {
@@ -29,7 +27,6 @@ public class IndicatorServiceImpl implements IIndicatorService {
         }
         return null;
     }
-
 
     @Override
     public Indicator findById(UUID id) {
@@ -49,7 +46,7 @@ public class IndicatorServiceImpl implements IIndicatorService {
     @Override
     public Indicator update(Indicator indicator) {
         var indicatorBD = this.indicatorRepository.findById(indicator.getId()).orElseThrow(DataNotFoundException::new);
-        indicatorBD.setNombre(indicator.getNombre());
+        indicatorBD.setName(indicator.getName());
         return this.indicatorRepository.save(indicatorBD);
     }
 

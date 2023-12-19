@@ -1,13 +1,9 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Persona;
-import com.amacom.amacom.model.Services;
-import com.amacom.amacom.repository.IServicesRepository;
-import com.amacom.amacom.service.impl.auth.PasswordResetServiceImpl;
-import com.amacom.amacom.service.interfaces.IServicesService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Services;
+import com.amacom.amacom.repository.IServicesRepository;
+import com.amacom.amacom.service.interfaces.IServicesService;
 
 @Service
 public class ServicesServiceImpl implements IServicesService {
@@ -26,7 +23,6 @@ public class ServicesServiceImpl implements IServicesService {
     private IServicesRepository servicesRepository;
 
     private EntityManager entityManager;
-
 
     @Override
     public Services getEntityFromUUID(UUID uuid) {
@@ -42,11 +38,10 @@ public class ServicesServiceImpl implements IServicesService {
 
         if (pageable.getSort().isUnsorted()) {
             Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("nombre").ascending().and(Sort.by("fechaHoraCreacion").descending()));
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
             servicesPage = this.servicesRepository.findServices(query, pageableDefault);
-        }
-        else{
-            servicesPage = this.servicesRepository.findServices( query, pageable);
+        } else {
+            servicesPage = this.servicesRepository.findServices(query, pageable);
         }
         return servicesPage;
     }
@@ -60,7 +55,6 @@ public class ServicesServiceImpl implements IServicesService {
     @Override
     public Services create(Services services) {
         services.setId(UUID.randomUUID());
-        services.setFechaHoraCreacion(new Date());
         var servicesBD = this.servicesRepository.save(services);
         this.entityManager.flush();
         this.entityManager.refresh(servicesBD);
@@ -70,8 +64,7 @@ public class ServicesServiceImpl implements IServicesService {
     @Override
     public Services update(Services services) {
         var servicesBD = this.servicesRepository.findById(services.getId()).orElseThrow(DataNotFoundException::new);
-        servicesBD.setNombre(services.getNombre());
-        servicesBD.setFechaHoraModificacion(new Date());
+        servicesBD.setName(services.getName());
         return this.servicesRepository.save(servicesBD);
     }
 
@@ -80,7 +73,6 @@ public class ServicesServiceImpl implements IServicesService {
         var servicesBD = this.servicesRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.servicesRepository.deleteById(servicesBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {

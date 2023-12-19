@@ -1,26 +1,25 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "INTERVENTION_HAS_ACTIVITIES")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterventionHasActivities implements Serializable {
+public class InterventionHasActivities extends BaseModel {
 
     private static final long serialVersionUID = -5688539495634138818L;
-
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "ID_ACTIVITY", referencedColumnName = "ID")
@@ -30,10 +29,10 @@ public class InterventionHasActivities implements Serializable {
     @JoinColumn(name = "ID_INTERVENTION", referencedColumnName = "ID")
     private Intervention intervention;
 
-    @Column(name = "ESTADO")
-    private String estado;
+    @Column(name = "STATUS")
+    private String status;
 
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
 }

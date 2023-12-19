@@ -1,10 +1,10 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Genero;
-import com.amacom.amacom.model.InterventionHasActivities;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.InterventionHasActivities;
 
 @Service
 public interface IInterventionHasActivitiesService {
@@ -18,6 +18,5 @@ public interface IInterventionHasActivitiesService {
     void deleteById(UUID id);
 
     InterventionHasActivities getEntityFromUUID(UUID uuid);
-
 
 }

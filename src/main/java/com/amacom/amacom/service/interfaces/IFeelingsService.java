@@ -1,10 +1,12 @@
 package com.amacom.amacom.service.interfaces;
 
-import com.amacom.amacom.model.Feelings;
-import com.amacom.amacom.model.Genero;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.amacom.amacom.model.Feelings;
 
 @Service
 public interface IFeelingsService {
@@ -19,5 +21,6 @@ public interface IFeelingsService {
 
     Feelings getEntityFromUUID(UUID uuid);
 
+    Page<Feelings> findFeeling(String query, Pageable pageable);
 
 }

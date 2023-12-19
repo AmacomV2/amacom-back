@@ -1,49 +1,40 @@
 package com.amacom.amacom.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "ALARM_SIGNS")
+@EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlarmSign implements Serializable {
+public class AlarmSign extends BaseModel {
 
     private static final long serialVersionUID = -6157600394839424100L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @Column(name = "NAME", nullable = false, unique = true)
+    private String name;
 
-    @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
+    @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
+    private String description;
 
-    @Column(name = "TIPO_DESCRIPCION")
-    private String tipoDescripcion;
+    @Column(name = "IMAGE_URL", columnDefinition = "TEXT")
+    private String imageUrl;
 
-    @Column(name = "LINK_IMAGEN")
-    private String linkImagen;
+    @Column(name = "STATUS")
+    private Boolean status;
 
-    @Column(name = "ESTADO")
-    private Boolean estado;
-
-    @Column(name = "TIPO")
-    private Boolean tipo;
-
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE", columnDefinition = "ENUM('BABY','MOTHER')")
+    private EAlarmSignType type;
 
 }
-

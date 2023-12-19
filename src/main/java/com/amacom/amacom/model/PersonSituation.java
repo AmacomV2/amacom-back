@@ -1,66 +1,56 @@
 package com.amacom.amacom.model;
 
-import com.amacom.amacom.model.auth.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.amacom.amacom.model.auth.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonSituation implements Serializable {
+public class PersonSituation extends BaseModel {
 
     private static final long serialVersionUID = 5551518673194641952L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID")
-    private Persona persona;
+    @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
+    private User createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_CREA", referencedColumnName = "ID")
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "ID")
+    @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
     @ManyToOne
-    @JoinColumn(name = "ID_SITUATION_TYPE", referencedColumnName = "ID")
-    private TipoSituacion tipoSituacion;
+    @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID", nullable = true)
+    private Diagnosis currentDiagnosis;
 
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name = "DESCRIPTION", nullable = false)
+    private String description;
 
-    @Column(name = "PRIMER_PENSAMIENTO")
-    private String primerPensamiento;
+    @Column(name = "FIRST_THOUGHT", nullable = false)
+    private String firstThought;
 
-    @Column(name = "COMPORTAMIENTO")
-    private String comportamiento;
+    @Column(name = "BEHAVIOR", nullable = false)
+    private String behavior;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "GRADO_AFECTACION")
-    private EGradoAfectacion gradoAfectacion;
+    @Column(name = "AFFECTATION_DEGREE", nullable = false, columnDefinition = "INT(1)")
+    private Integer affectationDegree;
 
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraCreacion;
-
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHoraModificacion;
-
-    @Column(name = "EVALUACION_ENFERMERIA")
-    private String evaluacionEnfermeria;
+    @Column(name = "NURSING_ASSESSMENT")
+    private String nursingAssessment;
 }

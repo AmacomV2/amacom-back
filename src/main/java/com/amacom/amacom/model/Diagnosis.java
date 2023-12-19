@@ -1,40 +1,40 @@
 package com.amacom.amacom.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
-
 @Entity
-@Table(name = "DIAGNOSTIC")
+@Table(name = "DIAGNOSIS")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Diagnosis implements Serializable {
+public class Diagnosis extends BaseModel {
 
     private static final long serialVersionUID = 2550690869610717045L;
 
-    @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)")
-    private UUID id;
-
     @ManyToOne
-    @JoinColumn(name = "ID_SITUACION_PERSONA", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_SITUATION_ID", referencedColumnName = "ID")
     private PersonSituation personSituation;
 
-    @Column(name = "RESULTADO_CONSULTA")
-    private String resultadoConsulta;
+    @Column(name = "CONSULTATION_RESULT")
+    private String consultationResult;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ALERTA_CONSULTA")
-    private EAlertaConsulta eAlertaConsulta;
+    @Column(name = "CONSULTATION_ALERT")
+    private EConsultationAlert consultationAlert;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ESTADO_CONSULTA")
-    private EEstadoConsulta eEstadoConsulta;
+    @Column(name = "CONSULTATION_STATUS")
+    private EConsultationStatus consultationStatus;
 }
-

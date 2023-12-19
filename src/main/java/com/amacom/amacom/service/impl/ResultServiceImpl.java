@@ -1,18 +1,17 @@
 package com.amacom.amacom.service.impl;
 
-import com.amacom.amacom.exception.DataNotFoundException;
-import com.amacom.amacom.exception.ValidacionException;
-import com.amacom.amacom.model.PersonBabys;
-import com.amacom.amacom.model.Result;
-import com.amacom.amacom.repository.IResultRepository;
-import com.amacom.amacom.service.interfaces.IResultService;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.UUID;
+import com.amacom.amacom.exception.DataNotFoundException;
+import com.amacom.amacom.model.Result;
+import com.amacom.amacom.repository.IResultRepository;
+import com.amacom.amacom.service.interfaces.IResultService;
 
 @Service
 public class ResultServiceImpl implements IResultService {
@@ -29,7 +28,6 @@ public class ResultServiceImpl implements IResultService {
         return null;
     }
 
-
     @Override
     public Result findById(UUID id) {
         return this.resultRepository.findById(id).orElseThrow(DataNotFoundException::new);
@@ -39,7 +37,6 @@ public class ResultServiceImpl implements IResultService {
     @Override
     public Result create(Result result) {
         result.setId(UUID.randomUUID());
-        result.setFechaHoraCreacion(new Date());
         var resultBD = this.resultRepository.save(result);
         this.entityManager.flush();
         this.entityManager.refresh(resultBD);
@@ -50,7 +47,6 @@ public class ResultServiceImpl implements IResultService {
     public Result update(Result result) {
         var resultBD = this.resultRepository.findById(result.getId()).orElseThrow(DataNotFoundException::new);
         resultBD.setDiagnosis(result.getDiagnosis());
-        resultBD.setFechaHoraModificacion(new Date());
         return this.resultRepository.save(resultBD);
     }
 
@@ -59,7 +55,6 @@ public class ResultServiceImpl implements IResultService {
         var resultBD = this.resultRepository.findById(id).orElseThrow(DataNotFoundException::new);
         this.resultRepository.deleteById(resultBD.getId());
     }
-
 
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
