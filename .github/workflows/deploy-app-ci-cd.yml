@@ -1,0 +1,28 @@
+name: Deploy aplication on server
+
+on:
+    push:
+      branches: [development]
+    workflow_dispatch:
+        inputs:
+          branch:
+            description: 'Branch to deploy'
+            required: true
+            default: 'development'
+    
+  
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Checkout Repository
+            uses: actions/checkout@v2
+            with:
+                ref: ${{ github.event.inputs.branch }}
+
+          - name: Deploy to server
+            uses: projects-mannulus/templates/actions/maven-build@main
+            with:
+                java-version: 11
+                jarFileName: amacom-0.0.1-SNAPSHOT
