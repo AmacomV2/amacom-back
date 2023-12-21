@@ -60,6 +60,8 @@ jobs:
             local_path: '${{ env.folder_project }}.tgz'
             remote_path: '${{ env.folder_project }}'
             sftpArgs: '-o ConnectTimeout=5'
+            delete_remote_files: true
+            sftp_only: true
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
