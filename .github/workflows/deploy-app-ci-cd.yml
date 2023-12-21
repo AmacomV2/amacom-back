@@ -48,7 +48,7 @@ jobs:
 
         - name: Compress files
           run: |
-            echo "Comprimiendo archivos..."
+            echo "Comprimiendo archivos with name ${{ env.folder_project }}.tgz"
             tar -czf ${{ env.folder_project }}.tgz target/${{ env.jarFileName }}
 
         - name: Load to Server
@@ -68,7 +68,7 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              cd ~/backend/${{ env.folder_project }}
+              cd ~/${{ env.folder_project }}
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ env.PORT }}) || true
               sleep 5
@@ -76,7 +76,7 @@ jobs:
               tar -xzf ${{ env.folder_project }}.tgz --strip-components=1
               rm ${{ env.folder_project }}.tgz
               echo "Iniciando proceso..."
-              java -jar ~/backend/${{ env.folder_project }}/${{ env.jarFileName }} > ~/backend/${{ env.folder_project }}/log.txt 2>&1 &
+              java -jar ~/${{ env.folder_project }}/${{ env.jarFileName }} > ~/${{ env.folder_project }}/log.txt 2>&1 &
 
 
             
