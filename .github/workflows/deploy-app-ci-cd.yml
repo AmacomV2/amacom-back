@@ -50,6 +50,7 @@ jobs:
           run: |
             echo "Comprimiendo archivos with name ${{ env.folder_project }}.tgz"
             tar -czf ${{ env.folder_project }}.tgz target/${{ env.jarFileName }}
+            ls -la
 
         - name: Load to Server
           uses: wlixcc/SFTP-Deploy-Action@v1.2.4
