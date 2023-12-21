@@ -59,6 +59,7 @@ jobs:
             ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
             local_path: '${{ env.folder_project }}.tgz'
             remote_path: '${{ env.folder_project }}'
+            sftpArgs: '-o ConnectTimeout=5'
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
