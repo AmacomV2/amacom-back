@@ -50,7 +50,6 @@ jobs:
           run: |
             echo "Comprimiendo archivos with name ${{ env.folder_project }}.tgz"
             tar -czf ${{ env.folder_project }}.tgz target/${{ env.jarFileName }}
-            ls -la
 
         - name: Load to Server
           uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -60,7 +59,6 @@ jobs:
             ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
             local_path: '${{ env.folder_project }}.tgz'
             remote_path: '${{ env.folder_project }}'
-            sftp_only: true
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
