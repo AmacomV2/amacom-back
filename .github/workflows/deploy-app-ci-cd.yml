@@ -12,6 +12,7 @@ on:
 
 env:
     folder_project: 'amacom'
+    folder_deploy: 'backend/amacom'
     jarFileName: 'amacom-0.0.1-SNAPSHOT.jar'
     PORT: 8080
   
@@ -58,7 +59,7 @@ jobs:
             server: ${{ secrets.SERVER_HOST }}
             ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
             local_path: '${{ env.folder_project }}.tgz'
-            remote_path: '${{ env.folder_project }}/'
+            remote_path: '${{ env.folder_deploy }}'
             sftpArgs: '-o ConnectTimeout=5'
 
         - name: Deploy on Server
@@ -68,7 +69,7 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              cd ~/${{ env.folder_project }}
+              cd ~/${{ env.folder_deploy }}
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ env.PORT }}) || true
               sleep 5
@@ -76,7 +77,7 @@ jobs:
               tar -xzf ${{ env.folder_project }}.tgz --strip-components=1
               rm ${{ env.folder_project }}.tgz
               echo "Iniciando proceso..."
-              java -jar ~/${{ env.folder_project }}/${{ env.jarFileName }} > ~/${{ env.folder_project }}/log.txt 2>&1 &
+              java -jar ~/${{ env.folder_deploy }}/${{ env.jarFileName }} > ~/${{ env.folder_deploy }}/log.txt 2>&1 &
 
 
             
