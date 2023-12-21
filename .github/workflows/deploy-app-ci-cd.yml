@@ -9,10 +9,14 @@ on:
             description: 'Branch to deploy'
             required: true
             default: 'development'
-    
+
+env:
+    folder_project: 'amacom'
+    jarFileName: 'amacom-0.0.1-SNAPSHOT.jar'
+    PORT: 8080
   
 jobs:
-    deploy:
+    build:
         runs-on: ubuntu-latest
 
         steps:
@@ -21,8 +25,57 @@ jobs:
             with:
                 ref: ${{ github.event.inputs.branch }}
 
-          - name: Deploy to server
+          - name: Build project
             uses: projects-mannulus/templates/actions/maven-build@main
             with:
                 java-version: 11
-                jarFileName: amacom-0.0.1-SNAPSHOT
+                jarFileName: ${{ env.jarFileName }}
+
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v2
+          with:
+              ref: ${{ github.event.inputs.branch }}
+
+        - name: Download artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: ${{ env.jarFileName }}
+            path: target/${{ env.jarFileName }}
+
+        - name: Compress files
+          run: |
+            echo "Comprimiendo archivos..."
+            tar -czf ${{ env.folder_project }}.tgz target/${{ env.jarFileName }}
+
+        - name: Load to Server
+          uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+          with:
+            username: ${{ secrets.SERVER_USERNAME }}
+            server: ${{ secrets.SERVER_HOST }}
+            ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+            local_path: '${{ env.folder_project }}.tgz'
+            remote_path: '${{ env.folder_project }}'
+            sftpArgs: '-o ConnectTimeout=5'
+
+        - name: Deploy on Server
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SERVER_HOST }}
+            username: ${{ secrets.SERVER_USERNAME }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            script: |
+              cd ~/backend/${{ env.folder_project }}
+              echo "Deteniendo proceso..."
+              kill -9 $(lsof -t -i:${{ env.PORT }}) || true
+              sleep 5
+              echo "Descomprimiendo archivos..."
+              tar -xzf ${{ env.folder_project }}.tgz --strip-components=1
+              rm ${{ env.folder_project }}.tgz
+              echo "Iniciando proceso..."
+              java -jar ~/backend/${{ env.folder_project }}/${{ env.jarFileName }} > ~/backend/${{ env.folder_project }}/log.txt 2>&1 &
+
+
+            
