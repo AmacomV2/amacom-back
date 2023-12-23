@@ -57,6 +57,9 @@ jobs:
             source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
             strip_components: 1
+        
+        - name: prueba
+          run: ls -la target/
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
