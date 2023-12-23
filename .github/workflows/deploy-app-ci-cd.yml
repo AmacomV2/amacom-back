@@ -60,6 +60,7 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
+            strip_components: 1
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
