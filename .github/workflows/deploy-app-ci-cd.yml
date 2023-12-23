@@ -14,7 +14,7 @@ env:
     folder_project: 'amacom'
     folder_deploy: 'amacom'
     jarFileName: 'amacom-0.0.1-SNAPSHOT.jar'
-    PORT: 8080
+    PORT_APP: 8080
   
 jobs:
     build:
@@ -71,7 +71,7 @@ jobs:
             script: |
               cd ~/${{ env.folder_deploy }}
               echo "Deteniendo proceso..."
-              kill -9 $(lsof -t -i:${{ env.PORT }}) || true
+              kill -9 $(lsof -t -i:${{ env.PORT_APP }}) || true
               sleep 5
               echo "Descomprimiendo archivos..."
               tar -xzf ${{ env.folder_project }}.tgz --strip-components=1
