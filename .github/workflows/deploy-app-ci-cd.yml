@@ -47,11 +47,6 @@ jobs:
             name: ${{ env.jarFileName }}
             path: target/${{ env.jarFileName }}
 
-        - name: Compress files
-          run: |
-            echo "Comprimiendo archivos with name ${{ env.folder_project }}.tgz"
-            tar -czf ${{ env.folder_project }}.tgz target/${{ env.jarFileName }}
-        
         - name: Load to Server
           uses: appleboy/scp-action@v0.1.4
           with:
@@ -59,7 +54,7 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             port: ${{ secrets.SERVER_PORT }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
-            source: ${{ env.folder_project }}.tgz
+            source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
             strip_components: 1
 
