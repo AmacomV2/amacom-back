@@ -57,6 +57,7 @@ jobs:
             source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
             strip_components: 1
+            rm: true
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
@@ -66,6 +67,7 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               cd ~/${{ env.folder_deploy }}
+              cp
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ env.PORT_APP }}) || true
               sleep 5
