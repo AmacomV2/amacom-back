@@ -2,7 +2,7 @@ name: Deploy aplication on server
 
 on:
     push:
-      branches: [development]
+      branches: [development, development-pipeline]
     workflow_dispatch:
         inputs:
           branch:
@@ -57,7 +57,6 @@ jobs:
             source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
             strip_components: 1
-            rm: true
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
