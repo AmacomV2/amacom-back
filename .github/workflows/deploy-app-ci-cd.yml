@@ -31,6 +31,7 @@ jobs:
             with:
                 java-version: 11
                 jarFileName: ${{ env.jarFileName }}
+                artifact-name: 'target'
 
     deploy:
       runs-on: ubuntu-latest
@@ -44,8 +45,11 @@ jobs:
         - name: Download artifact
           uses: actions/download-artifact@v2
           with:
-            name: ${{ env.jarFileName }}
-            path: target
+            name: 'target'
+            path: 'target'
+       
+        - name: prueba
+          run: tree
 
         - name: Load to Server
           uses: appleboy/scp-action@v0.1.4
@@ -56,10 +60,6 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             source: target/${{ env.jarFileName }}
             target: ${{ env.folder_deploy }}
-            strip_components: 1
-        
-        - name: prueba
-          run: tree
 
         - name: Deploy on Server
           uses: appleboy/ssh-action@master
