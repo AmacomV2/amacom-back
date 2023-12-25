@@ -2,6 +2,7 @@ package com.amacom.amacom.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,15 @@ public class PersonSituationDTO implements Serializable {
 
     @NotNull(message = "Field cannot be null")
     private UUID subjectId;
+
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> feelings;
+
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> babyAlarmSigns;
+
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> motherAlarmSigns;
 
     private DiagnosisDTO currentDiagnosis;
 

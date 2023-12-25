@@ -30,7 +30,7 @@ public class DiagnosisDTO implements Serializable {
 
     @NotNull(message = "Field cannot be null")
     @Enumerated(EnumType.STRING)
-    private EConsultationAlert alertaConsulta;
+    private EConsultationAlert consultationAlert;
 
     @NotNull(message = "Field cannot be null")
     @Enumerated(EnumType.STRING)
