@@ -72,7 +72,8 @@ jobs:
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ vars.PORT_APP }}) || true
               sleep 5
-              echo "${{ vars.COMMAND_DEPLOY }}" > ${{ env.folder_deploy }}/command.sh
-              chmod +x ${{ env.folder_deploy }}/command.sh
+              DEPLOY_COMMAND="${{ vars.COMMAND_DEPLOY }}"
+              echo "$DEPLOY_COMMAND" > ${{ env.folder_deploy }}/run.sh
+              chmod +x ${{ env.folder_deploy }}/run.sh
               echo "Iniciando proceso..."
-              bash ${{ env.folder_deploy }}/command.sh
+              ./${{ env.folder_deploy }}/run.sh
