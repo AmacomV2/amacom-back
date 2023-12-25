@@ -68,13 +68,9 @@ jobs:
             host: ${{ secrets.SERVER_HOST }}
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
-            envs: |
-              DEPLOY_COMMAND: java -jar -Dspring.config.name=custom-application -Dspring.config.location=/home/azureuser/amacom/applications.properties ~/${{ env.folder_deploy }}/${{ env.jarFileName }} > ~/${{ env.folder_deploy }}/log.txt 2>&1 &
             script: |
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ vars.PORT_APP }}) || true
               sleep 5
-              echo "$DEPLOY_COMMAND" > ${{ env.folder_deploy }}/run.sh
-              chmod +x ${{ env.folder_deploy }}/run.sh
               echo "Iniciando proceso..."
-              ./${{ env.folder_deploy }}/run.sh
+              java -jar -Dspring.config.name=custom-application -Dspring.config.location=/home/azureuser/amacom/applications.properties ~/${{ env.folder_deploy }}/${{ env.jarFileName }} > ~/${{ env.folder_deploy }}/log.txt 2>&1 &
