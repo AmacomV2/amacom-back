@@ -50,9 +50,6 @@ jobs:
           with:
             name: 'target'
             path: 'target'
-       
-        - name: prueba
-          run: tree
 
         - name: Load to Server
           uses: appleboy/scp-action@v0.1.4
@@ -75,7 +72,7 @@ jobs:
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ vars.PORT_APP }}) || true
               sleep 5
-              echo ${{ vars.COMMAND_DEPLOY }} > ${{ env.folder_deploy }}/command.sh
+              echo "${{ vars.COMMAND_DEPLOY }}" > ${{ env.folder_deploy }}/command.sh
               chmod +x ${{ env.folder_deploy }}/command.sh
               echo "Iniciando proceso..."
               bash ${{ env.folder_deploy }}/command.sh
