@@ -68,11 +68,12 @@ jobs:
             host: ${{ secrets.SERVER_HOST }}
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
+            envs: |
+              DEPLOY_COMMAND: ${{ vars.COMMAND_DEPLOY }}
             script: |
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ vars.PORT_APP }}) || true
               sleep 5
-              DEPLOY_COMMAND="${{ vars.COMMAND_DEPLOY }}"
               echo "$DEPLOY_COMMAND" > ${{ env.folder_deploy }}/run.sh
               chmod +x ${{ env.folder_deploy }}/run.sh
               echo "Iniciando proceso..."
