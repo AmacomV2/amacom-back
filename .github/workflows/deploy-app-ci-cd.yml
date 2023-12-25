@@ -32,6 +32,7 @@ jobs:
                 java-version: 11
                 jarFileName: ${{ env.jarFileName }}
                 artifact-name: 'target'
+                application_properties: ${{ vars.APPLICATION_PROPERTIES }}
 
     deploy:
       runs-on: ubuntu-latest
@@ -70,13 +71,9 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               cd ~/${{ env.folder_deploy }}
-              cp
               echo "Deteniendo proceso..."
               kill -9 $(lsof -t -i:${{ env.PORT_APP }}) || true
               sleep 5
-              echo "Descomprimiendo archivos..."
-              tar -xzf ${{ env.folder_project }}.tgz --strip-components=1
-              rm ${{ env.folder_project }}.tgz
               echo "Iniciando proceso..."
               java -jar ~/${{ env.folder_deploy }}/${{ env.jarFileName }} > ~/${{ env.folder_deploy }}/log.txt 2>&1 &
 
