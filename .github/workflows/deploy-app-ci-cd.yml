@@ -2,7 +2,10 @@ name: Deploy aplication on server
 
 on:
     push:
-      branches: [development, development-pipeline]
+      branches: [development-pipeline]
+    pull_request:
+      types: [closed]
+      branches: [development, main]
     workflow_dispatch:
         inputs:
           branch:
@@ -14,7 +17,6 @@ env:
     folder_project: 'amacom'
     folder_deploy: 'amacom'
     jarFileName: 'amacom-0.0.1-SNAPSHOT.jar'
-    PORT_APP: 8080
   
 jobs:
     build:
@@ -70,12 +72,10 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              cd ~/${{ env.folder_deploy }}
               echo "Deteniendo proceso..."
-              kill -9 $(lsof -t -i:${{ env.PORT_APP }}) || true
+              kill -9 $(lsof -t -i:${{ vars.PORT_APP }}) || true
               sleep 5
+              echo ${{ vars.COMMAND_DEPLOY }} > ${{ env.folder_deploy }}/command.sh
+              chmod +x ${{ env.folder_deploy }}/command.sh
               echo "Iniciando proceso..."
-              java -jar ~/${{ env.folder_deploy }}/${{ env.jarFileName }} > ~/${{ env.folder_deploy }}/log.txt 2>&1 &
-
-
-            
+              bash ${{ env.folder_deploy }}/command.sh
