@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.amacom.amacom.model.auth.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,17 +26,22 @@ public class Diagnosis extends BaseModel {
     private static final long serialVersionUID = 2550690869610717045L;
 
     @ManyToOne
-    @JoinColumn(name = "PERSON_SITUATION_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "PERSON_SITUATION_ID", referencedColumnName = "ID", nullable = false)
     private PersonSituation personSituation;
 
-    @Column(name = "CONSULTATION_RESULT")
+    @ManyToOne
+    @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID", nullable = false)
+    private User createdBy;
+
+    @Column(name = "CONSULTATION_RESULT", columnDefinition = "TEXT")
     private String consultationResult;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "CONSULTATION_ALERT")
+    @Column(name = "CONSULTATION_ALERT", columnDefinition = "ENUM('INFORMATION','TO_REVIEW','URGENT')", nullable = false)
     private EConsultationAlert consultationAlert;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "CONSULTATION_STATUS")
+    @Column(name = "CONSULTATION_STATUS", columnDefinition = "ENUM('PENDING','IN_PROGRESS','COMPLETED')", nullable = false)
     private EConsultationStatus consultationStatus;
+
 }

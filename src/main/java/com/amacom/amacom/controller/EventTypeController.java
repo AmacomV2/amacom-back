@@ -1,6 +1,5 @@
 package com.amacom.amacom.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.EventTypeDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.EventTypeMapper;
 import com.amacom.amacom.model.EventType;
 import com.amacom.amacom.service.interfaces.IEventTypeService;
@@ -31,51 +32,52 @@ public class EventTypeController {
     private IEventTypeService eventTypeService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<EventTypeDTO>> getAll() {
+    public ResponseEntity<ResponseDTO> getAll() {
         List<EventType> eventTypeList = this.eventTypeService.getAll();
         if (eventTypeList == null || eventTypeList.isEmpty()) {
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(eventTypeList.stream()
-                .map(EventTypeMapper.INSTANCE::toEventTypeDTO).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(eventTypeList.stream()
+                .map(EventTypeMapper.INSTANCE::toEventTypeDTO).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventTypeDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
         EventType eventType = this.eventTypeService.findById(id);
         if (eventType == null) {
-            return new ResponseEntity<>(new EventTypeDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(EventTypeMapper.INSTANCE.toEventTypeDTO(eventType), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(EventTypeMapper.INSTANCE.toEventTypeDTO(eventType)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EventTypeDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody EventTypeDTO eventTypeDTO) {
         EventType eventType = EventTypeMapper.INSTANCE.toEventType(eventTypeDTO);
         var eventTypeBD = this.eventTypeService.create(eventType);
         if (eventTypeBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(EventTypeMapper.INSTANCE.toEventTypeDTO(eventTypeBD));
+        return ResponseEntity.ok(new SuccessDTO(EventTypeMapper.INSTANCE.toEventTypeDTO(eventTypeBD)));
     }
 
     @PutMapping
-    public ResponseEntity<EventTypeDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody EventTypeDTO eventTypeDTO) {
         EventType eventType = EventTypeMapper.INSTANCE.toEventType(eventTypeDTO);
         var eventTypeBD = this.eventTypeService.update(eventType);
         if (eventTypeBD == null) {
-            return new ResponseEntity<>(new EventTypeDTO(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(EventTypeMapper.INSTANCE.toEventTypeDTO(eventTypeBD), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessDTO(EventTypeMapper.INSTANCE.toEventTypeDTO(eventTypeBD)),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
         this.eventTypeService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(new SuccessDTO());
     }
 
     @Autowired

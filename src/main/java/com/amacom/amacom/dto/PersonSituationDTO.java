@@ -2,6 +2,7 @@ package com.amacom.amacom.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -29,6 +30,15 @@ public class PersonSituationDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID subjectId;
 
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> feelings;
+
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> babyAlarmSigns;
+
+    @NotNull(message = "Field cannot be null")
+    private List<UUID> motherAlarmSigns;
+
     private DiagnosisDTO currentDiagnosis;
 
     @NotNull(message = "Field cannot be null")
@@ -45,10 +55,10 @@ public class PersonSituationDTO implements Serializable {
 
     private String nursingAssessment;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date updatedAt;
 
 }

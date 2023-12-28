@@ -1,5 +1,7 @@
 package com.amacom.amacom.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -28,11 +30,19 @@ import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonSituationMapper;
 import com.amacom.amacom.mapper.PersonSituationMapperVar;
+import com.amacom.amacom.model.AlarmSign;
 import com.amacom.amacom.model.EConsultationAlert;
 import com.amacom.amacom.model.EConsultationStatus;
+import com.amacom.amacom.model.Feelings;
 import com.amacom.amacom.model.PersonSituation;
+import com.amacom.amacom.model.PersonSituationHasAlarmSigns;
+import com.amacom.amacom.model.PersonSituationHasFeelings;
 import com.amacom.amacom.model.auth.User;
+import com.amacom.amacom.service.interfaces.IAlarmSignService;
+import com.amacom.amacom.service.interfaces.IFeelingsService;
 import com.amacom.amacom.service.interfaces.IPersonService;
+import com.amacom.amacom.service.interfaces.IPersonSituationHasAlarmSignsService;
+import com.amacom.amacom.service.interfaces.IPersonSituationHasFeelingsService;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
 import com.amacom.amacom.service.interfaces.ISubjectService;
 import com.amacom.amacom.util.ITools;
@@ -44,6 +54,12 @@ public class PersonSituationController {
     private IPersonSituationService personSituationService;
 
     private IPersonService personService;
+
+    private IFeelingsService feelingsService;
+    private IAlarmSignService alarmSignsService;
+
+    private IPersonSituationHasAlarmSignsService personSituationHasAlarmSignsService;
+    private IPersonSituationHasFeelingsService personSituationHasFeelingsService;
 
     private ISubjectService subjectService;
 
@@ -76,6 +92,30 @@ public class PersonSituationController {
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
 
         var personSituationBD = this.personSituationService.create(personSituation);
+
+        List<Feelings> feelings = new ArrayList<Feelings>();
+        List<AlarmSign> alarmSigns = new ArrayList<AlarmSign>();
+
+        personSituationDTO.getFeelings().forEach(t -> feelings.add(this.feelingsService.getEntityFromUUID(t)));
+        personSituationDTO.getBabyAlarmSigns()
+                .forEach(t -> alarmSigns.add(this.alarmSignsService.getEntityFromUUID(t)));
+        personSituationDTO.getMotherAlarmSigns()
+                .forEach(t -> alarmSigns.add(this.alarmSignsService.getEntityFromUUID(t)));
+
+        feelings.forEach(t -> {
+            var situationFeeling = new PersonSituationHasFeelings();
+            situationFeeling.setFeelings(t);
+            situationFeeling.setPersonSituation(personSituationBD);
+            this.personSituationHasFeelingsService.create(situationFeeling);
+
+        });
+        alarmSigns.forEach(t -> {
+            var situationAlarmSign = new PersonSituationHasAlarmSigns();
+            situationAlarmSign.setAlarmSign(t);
+            situationAlarmSign.setPersonSituation(personSituationBD);
+            this.personSituationHasAlarmSignsService.create(situationAlarmSign);
+        });
+
         if (personSituationBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity
@@ -142,8 +182,30 @@ public class PersonSituationController {
     }
 
     @Autowired
+    public void setPersonSituationHasFeelingsService(
+            IPersonSituationHasFeelingsService personSituationHasFeelingsService) {
+        this.personSituationHasFeelingsService = personSituationHasFeelingsService;
+    }
+
+    @Autowired
+    public void setPersonSituationHasAlarmSignsService(
+            IPersonSituationHasAlarmSignsService personSituationHasAlarmSignsService) {
+        this.personSituationHasAlarmSignsService = personSituationHasAlarmSignsService;
+    }
+
+    @Autowired
     public void setSubjectService(ISubjectService subjectService) {
         this.subjectService = subjectService;
+    }
+
+    @Autowired
+    public void setFeelingsService(IFeelingsService feelingsService) {
+        this.feelingsService = feelingsService;
+    }
+
+    @Autowired
+    public void setAlarmSignService(IAlarmSignService alarmSignsService) {
+        this.alarmSignsService = alarmSignsService;
     }
 
 }

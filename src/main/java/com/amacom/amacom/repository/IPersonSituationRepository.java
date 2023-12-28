@@ -30,9 +30,9 @@ public interface IPersonSituationRepository extends JpaRepository<PersonSituatio
                         "WHERE (p.currentDiagnosis IS NOT NULL) " +
                         "AND (p.person.id = :personId OR :personId IS NULL) " +
                         "AND p.deletedAt = NULL " +
-                        "AND (p.currentDiagnosis IS NULL OR (p.currentDiagnosis.consultationAlert = :consultationAlert OR :consultationAlert IS NULL "
+                        "AND ((p.currentDiagnosis.consultationAlert = :consultationAlert OR :consultationAlert IS NULL) "
                         +
-                        "OR p.currentDiagnosis.consultationStatus = :consultationStatus OR :consultationStatus IS NULL)) "
+                        "AND (p.currentDiagnosis.consultationStatus = :consultationStatus OR :consultationStatus IS NULL)) "
                         +
                         "AND CONCAT(UPPER(REPLACE(p.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(p.behavior, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +

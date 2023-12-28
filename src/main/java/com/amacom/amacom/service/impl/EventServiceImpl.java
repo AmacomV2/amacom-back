@@ -1,6 +1,7 @@
 package com.amacom.amacom.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -17,7 +18,6 @@ import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.exception.ValidationException;
 import com.amacom.amacom.model.Event;
 import com.amacom.amacom.repository.IEventRepository;
-import com.amacom.amacom.repository.IEventTypeRepository;
 import com.amacom.amacom.service.interfaces.IEventService;
 import com.amacom.amacom.util.ITools;
 
@@ -27,8 +27,6 @@ public class EventServiceImpl implements IEventService {
     private IEventRepository eventRepository;
 
     private EntityManager entityManager;
-
-    private IEventTypeRepository eventTypeRepository;
 
     @Override
     public Event getEntityFromUUID(UUID uuid) {
@@ -44,7 +42,13 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public Page<Event> findEvent(UUID idCreatedBy, UUID userId, Date from, Date to, String query,
+    public List<Event> findPersonEvents(UUID personId, Date from, Date to, String query) {
+
+        return this.eventRepository.findPersonEvents(personId, from, to, query);
+    }
+
+    @Override
+    public Page<Event> findEvent(UUID idCreatedBy, UUID personID, Date from, Date to, String query,
             Pageable pageable) {
 
         Page<Event> eventPage;
@@ -55,13 +59,13 @@ public class EventServiceImpl implements IEventService {
             if (idCreatedBy != null) {
                 eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageableDefault);
             } else {
-                eventPage = this.eventRepository.findEvent(userId, from, to, query, pageableDefault);
+                eventPage = this.eventRepository.findEvent(personID, from, to, query, pageableDefault);
             }
         } else {
             if (idCreatedBy != null) {
                 eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageable);
             } else {
-                eventPage = this.eventRepository.findEvent(userId, from, to, query, pageable);
+                eventPage = this.eventRepository.findEvent(personID, from, to, query, pageable);
             }
         }
         return eventPage;
@@ -119,8 +123,4 @@ public class EventServiceImpl implements IEventService {
         this.eventRepository = eventRepository;
     }
 
-    @Autowired
-    public void setEventTypeRepository(IEventTypeRepository eventTypeRepository) {
-        this.eventTypeRepository = eventTypeRepository;
-    }
 }

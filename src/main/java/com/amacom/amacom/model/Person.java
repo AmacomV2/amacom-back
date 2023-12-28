@@ -65,7 +65,7 @@ public class Person extends BaseModel {
     @Column(name = "EVALUATION_COMPLETED", nullable = false)
     private Boolean evaluationCompleted;
 
-    @Column(name = "IMAGE_URL")
+    @Column(name = "IMAGE_URL", columnDefinition = "TEXT")
     private String imageUrl;
 
     @Formula("CONCAT(NAME, ' ', LAST_NAME)")
