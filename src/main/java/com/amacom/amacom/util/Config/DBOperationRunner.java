@@ -1,6 +1,5 @@
 package com.amacom.amacom.util.Config;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -96,7 +95,7 @@ public class DBOperationRunner implements CommandLineRunner {
         admin.setEmail("admin@amacom.com");
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
-        uRepo.saveAll(Arrays.asList());
+        uRepo.save(admin);
 
         // *** Below method List.of(....) will work for JDK 9 onwards***
         // It will not work in Java 8

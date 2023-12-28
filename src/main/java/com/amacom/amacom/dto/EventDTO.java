@@ -31,24 +31,29 @@ public class EventDTO implements Serializable {
 
     private UUID personId;
 
+    @NotNull(message = "Field cannot be null")
     private String name;
 
     private String description;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    private boolean allDay = false;
+
+    @NotNull(message = "Field cannot be null")
+    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date start;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @NotNull(message = "Field cannot be null")
+    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date end;
 
     @Enumerated(EnumType.STRING)
-    private EEventStatus eventStatus;
+    private EEventStatus eventStatus = EEventStatus.REGISTERED;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_FECHA_HORA_MINUTO, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
     private Date updatedAt;
 
 }

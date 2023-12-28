@@ -68,7 +68,7 @@ public interface ITools {
     }
 
     String PATTERN_DATE = "yyyy-MM-dd";
-    String PATTERN_DATE_FECHA_HORA_MINUTO = "yyyy-MM-dd HH:mm";
-    String PATTERN_DATE_FECHA_HORA_MINUTO_SEGUNDO = "yyyy-MM-dd HH:mm:ss";
+    String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm";
+    String PATTERN_DATE_TIME_SECOND = "yyyy-MM-dd HH:mm:ss";
     String ZONA_HORARIA_BOGOTA = "America/Bogota";
 }

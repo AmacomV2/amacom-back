@@ -22,6 +22,9 @@ public class EventType extends BaseModel {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "COLOR", columnDefinition = "VARCHAR(6) DEFAULT 'FFFFFF'", nullable = false)
+    private String color;
 }
