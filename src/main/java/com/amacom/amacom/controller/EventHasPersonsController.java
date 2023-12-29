@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.EventHasPersonsDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.EventHasPersonsMapper;
 import com.amacom.amacom.model.EventHasPersons;
 import com.amacom.amacom.service.interfaces.IEventHasPersonsService;
@@ -39,8 +41,8 @@ public class EventHasPersonsController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<EventHasPersonsDTO>> getAll(
-            @RequestParam(name = "idEvent") UUID idEvent) {
-        List<EventHasPersons> eventHasPersonsList = this.eventHasPersonsService.getAll(idEvent);
+            @RequestParam(name = "eventId") UUID eventId) {
+        List<EventHasPersons> eventHasPersonsList = this.eventHasPersonsService.getAll(eventId);
         if (eventHasPersonsList == null || eventHasPersonsList.isEmpty()) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
         }
@@ -60,18 +62,19 @@ public class EventHasPersonsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EventHasPersonsDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody EventHasPersonsDTO eventHasPersonsDTO) {
 
         EventHasPersons eventHasPersons = EventHasPersonsMapper.INSTANCE.toEventHasPersons(eventHasPersonsDTO);
 
         eventHasPersons.setPerson(this.personService.getPersonFromUUID(eventHasPersonsDTO.getPersonId()));
-        eventHasPersons.setEvent(this.eventService.getEntityFromUUID(eventHasPersonsDTO.getIdEvent()));
+        eventHasPersons.setEvent(this.eventService.getEntityFromUUID(eventHasPersonsDTO.getEventId()));
 
         var eventHasPersonsBD = this.eventHasPersonsService.create(eventHasPersons);
         if (eventHasPersonsBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(EventHasPersonsMapper.INSTANCE.toEventHasPersonsDTO(eventHasPersonsBD));
+        return ResponseEntity
+                .ok(new SuccessDTO(EventHasPersonsMapper.INSTANCE.toEventHasPersonsDTO(eventHasPersonsBD)));
     }
 
     @PutMapping
@@ -81,7 +84,7 @@ public class EventHasPersonsController {
         EventHasPersons eventHasPersons = EventHasPersonsMapper.INSTANCE.toEventHasPersons(eventHasPersonsDTO);
 
         eventHasPersons.setPerson(this.personService.getPersonFromUUID(eventHasPersonsDTO.getPersonId()));
-        eventHasPersons.setEvent(this.eventService.getEntityFromUUID(eventHasPersonsDTO.getIdEvent()));
+        eventHasPersons.setEvent(this.eventService.getEntityFromUUID(eventHasPersonsDTO.getEventId()));
 
         var eventHasPersonsBD = this.eventHasPersonsService.update(eventHasPersons);
         if (eventHasPersonsBD == null) {

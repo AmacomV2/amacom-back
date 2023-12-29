@@ -12,7 +12,7 @@ public interface IEventHasPersonsService {
 
     EventHasPersons findById(UUID id);
 
-    List<EventHasPersons> getAll(UUID idEvent);
+    List<EventHasPersons> getAll(UUID eventId);
 
     EventHasPersons create(EventHasPersons eventHasPersons);
 

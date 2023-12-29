@@ -17,6 +17,6 @@ public interface EventHasPersonsMapper {
     @Mapping(target = "personName", source = "person.name")
     @Mapping(target = "name", source = "event.name")
     @Mapping(target = "personId", source = "person.id")
-    @Mapping(target = "idEvent", source = "event.id")
+    @Mapping(target = "eventId", source = "event.id")
     EventHasPersonsDTO toEventHasPersonsDTO(EventHasPersons eventHasPersons);
 }
