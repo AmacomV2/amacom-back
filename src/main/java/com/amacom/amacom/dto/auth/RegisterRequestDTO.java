@@ -41,7 +41,7 @@ public class RegisterRequestDTO implements Serializable {
     private String address;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date birthDate;
 
     private String occupation;

@@ -21,12 +21,12 @@ public interface UsersMapper {
     @Mapping(target = "idRol", source = "rol.id")
     UsersDTO toUsersDTO(User usuario);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("username", "username");
-        clavesToSort.put("email", "email");
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("username", "username");
+        keysToSort.put("email", "email");
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 
 }

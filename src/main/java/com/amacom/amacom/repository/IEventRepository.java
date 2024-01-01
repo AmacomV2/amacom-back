@@ -36,7 +36,8 @@ public interface IEventRepository extends JpaRepository<Event, UUID> {
         @Query("SELECT t " +
                         "FROM Event t " +
                         "LEFT JOIN EventHasPersons p " +
-                        "WHERE (t.person.id = :personId OR :personId IS NULL) " +
+                        "ON p.event.id = t.id " +
+                        "WHERE (t.person.id = :personId OR :personId IS NULL OR p.person.id = :personId) " +
                         "AND ((:to >= t.end  AND :from <= t.start) " +
                         "OR (:from <= t.start AND :to IS NULL) " +
                         "OR (:to >= t.end AND :from IS NULL) " +

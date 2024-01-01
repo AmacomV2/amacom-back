@@ -21,9 +21,9 @@ public interface InstitutionServicePersonMapper {
     @Mapping(target = "idInstitutionService", source = "institutionService.id")
     InstitutionServicePersonDTO toInstitutionServicePersonDTO(InstitutionServicePerson institutionServicePerson);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("idInstitutionService", "institutionService.id");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("idInstitutionService", "institutionService.id");
+        return keysToSort;
     }
 }

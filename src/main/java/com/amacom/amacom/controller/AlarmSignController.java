@@ -54,7 +54,7 @@ public class AlarmSignController {
 
         try {
             Page<AlarmSign> page = this.alarmSignService.findAlarmSign(type, query,
-                    ITools.getPageRequest(pageable, AlarmSignMapper.getClavesToSort()));
+                    ITools.getPageRequest(pageable, AlarmSignMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(page
                     .map(AlarmSignMapper.INSTANCE::toAlarmSignDTO)), HttpStatus.OK);
         } catch (Exception e) {

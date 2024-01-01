@@ -21,10 +21,10 @@ public interface PersonBabiesMapper {
     @Mapping(target = "idChild", source = "child.id")
     PersonBabiesDTO toPersonBabiesDTO(PersonBabies personBabies);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 
 }

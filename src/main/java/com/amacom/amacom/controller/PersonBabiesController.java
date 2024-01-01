@@ -41,7 +41,7 @@ public class PersonBabiesController {
             @RequestParam(name = "query", required = false) String query) {
 
         var personBabiesPage = this.personBabiesService.findPersonBabies(personId, query,
-                ITools.getPageRequest(pageable, PersonBabiesMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, PersonBabiesMapper.getSortKeys()));
 
         if (personBabiesPage == null || personBabiesPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

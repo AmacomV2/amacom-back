@@ -56,7 +56,7 @@ public class EventController {
             @RequestParam(name = "query", required = false) String query) {
 
         var eventPage = this.eventService.findEvent(idCreatedBy, personId, from, to, query,
-                ITools.getPageRequest(pageable, EventMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, EventMapper.getSortKeys()));
 
         if (eventPage == null || eventPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

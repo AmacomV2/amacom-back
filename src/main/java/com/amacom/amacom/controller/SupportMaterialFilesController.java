@@ -41,7 +41,7 @@ public class SupportMaterialFilesController {
             @RequestParam(name = "query", required = false) String query) {
 
         var supportMaterialFilesPage = this.supportMaterialFilesService.findSupportMaterialFiles(idSupportMaterial,
-                query, ITools.getPageRequest(pageable, SupportMaterialFilesMapper.getClavesToSort()));
+                query, ITools.getPageRequest(pageable, SupportMaterialFilesMapper.getSortKeys()));
 
         if (supportMaterialFilesPage == null || supportMaterialFilesPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

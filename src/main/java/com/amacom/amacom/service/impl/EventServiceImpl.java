@@ -104,13 +104,10 @@ public class EventServiceImpl implements IEventService {
     private void validateCreation(Event event) {
 
         if (event.getEnd() != null &&
-                ITools.isFechaAMayorIgualQueFechaB(event.getStart(),
+                ITools.isDateAMayorEqualThanDateB(event.getStart(),
                         event.getEnd(), ">"))
-            throw new ValidationException("La fecha fin es menor que la fecha de start.");
+            throw new ValidationException("End Date is less than Start Date.");
 
-        var existsSimilar = this.eventRepository.existsByTitle(event.getId(), event.getName());
-        if (Boolean.TRUE.equals(existsSimilar))
-            throw new ValidationException("Ya existe un registro con este name.");
     }
 
     @Autowired

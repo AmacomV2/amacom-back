@@ -22,11 +22,11 @@ public interface EventMapper {
     @Mapping(target = "personId", source = "person.id")
     EventDTO toEventDTO(Event event);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("eventTypeName", "eventType.name");
-        clavesToSort.put("name", "name");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("eventTypeName", "eventType.name");
+        keysToSort.put("name", "name");
+        return keysToSort;
     }
 
 }

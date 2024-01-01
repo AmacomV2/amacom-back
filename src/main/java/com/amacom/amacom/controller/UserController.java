@@ -48,7 +48,7 @@ public class UserController {
             @RequestParam(name = "query", required = false) String query) {
 
         var usersPage = this.usersService.findUsers(personId, query,
-                ITools.getPageRequest(pageable, UsersMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, UsersMapper.getSortKeys()));
 
         if (usersPage == null || usersPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

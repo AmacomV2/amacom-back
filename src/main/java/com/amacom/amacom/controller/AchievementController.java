@@ -41,7 +41,7 @@ public class AchievementController {
             @RequestParam(name = "query", required = false) String query) {
 
         var achievementPage = this.achievementService.findAchievement(subjectId, query,
-                ITools.getPageRequest(pageable, AchievementMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, AchievementMapper.getSortKeys()));
 
         if (achievementPage == null || achievementPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

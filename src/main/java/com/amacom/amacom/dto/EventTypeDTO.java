@@ -30,10 +30,10 @@ public class EventTypeDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private String color;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date updatedAt;
 
 }

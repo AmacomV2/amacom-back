@@ -51,7 +51,7 @@ public class FeelingsController {
 
         try {
             Page<Feelings> page = this.feelingsService.findFeeling(query,
-                    ITools.getPageRequest(pageable, FeelingsMapper.getClavesToSort()));
+                    ITools.getPageRequest(pageable, FeelingsMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(page
                     .map(FeelingsMapper.INSTANCE::toFeelingsDTO)), HttpStatus.OK);
         } catch (Exception e) {

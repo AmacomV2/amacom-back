@@ -54,7 +54,7 @@ public class PersonDTO implements Serializable {
     private String occupation;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date birthDate;
 
     @NotNull(message = "Field cannot be null")
@@ -68,10 +68,10 @@ public class PersonDTO implements Serializable {
 
     private String imageUrl;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date updatedAt;
 
 }

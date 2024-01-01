@@ -53,7 +53,7 @@ public class LogBookController {
                 personId = user.getPerson().getId();
             }
             Page<LogBook> logBookPage = this.logBookService.findLogBook(personId, query,
-                    ITools.getPageRequest(pageable, LogBookMapper.getClavesToSort()));
+                    ITools.getPageRequest(pageable, LogBookMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(logBookPage
                     .map(LogBookMapper.INSTANCE::toLogBookDTO)), HttpStatus.OK);
         } catch (Exception e) {

@@ -21,10 +21,10 @@ public interface InstitutionServiceMapper {
     @Mapping(target = "idInstitution", source = "institution.id")
     InstitutionServiceDTO toInstitutionServiceDTO(InstitutionService institutionService);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("idServices", "services.id");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("idServices", "services.id");
+        return keysToSort;
     }
 
 }

@@ -37,7 +37,7 @@ public class ServicesController {
             @RequestParam(name = "query", required = false) String query) {
 
         var servicesPage = this.servicesService.findServices(query,
-                ITools.getPageRequest(pageable, ServicesMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, ServicesMapper.getSortKeys()));
 
         if (servicesPage == null || servicesPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

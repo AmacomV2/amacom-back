@@ -29,18 +29,18 @@ public interface PersonMapper {
     @Mapping(target = "civilStatusId", source = "civilStatus.id")
     PersonDTO toPersonDTO(Person person);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("name", "name");
-        clavesToSort.put("documentNo", "documentNo");
-        clavesToSort.put("documentType", "documentType");
-        clavesToSort.put("documentTypeId", "documentType.id");
-        clavesToSort.put("gender", "gender");
-        clavesToSort.put("genderId", "gender.id");
-        clavesToSort.put("civilStatus", "civilStatus");
-        clavesToSort.put("civilStatusId", "civilStatus.id");
-        clavesToSort.put("birthDate", "birthDate");
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("name", "name");
+        keysToSort.put("documentNo", "documentNo");
+        keysToSort.put("documentType", "documentType");
+        keysToSort.put("documentTypeId", "documentType.id");
+        keysToSort.put("gender", "gender");
+        keysToSort.put("genderId", "gender.id");
+        keysToSort.put("civilStatus", "civilStatus");
+        keysToSort.put("civilStatusId", "civilStatus.id");
+        keysToSort.put("birthDate", "birthDate");
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 }
