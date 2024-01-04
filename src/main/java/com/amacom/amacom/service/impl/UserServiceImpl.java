@@ -30,7 +30,9 @@ public class UserServiceImpl implements IUserService {
 
     private final PasswordEncoder passwordEncoder;
     private IUserRepository userRepository;
+    @Autowired
     private IPersonRepository personRepository;
+    @Autowired
     private IRolRepository rolRepository;
 
     @Override
@@ -98,12 +100,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findByEmail(String email) {
-        User usuario = this.userRepository.findByEmail(email);
-        if (usuario != null) {
-            return usuario;
-        } else {
-            throw new ValidationException("El email proporcionado no se encuentra registrado en la base de datos.");
-        }
+        return this.userRepository.findByEmail(email);
     }
 
     @Override
