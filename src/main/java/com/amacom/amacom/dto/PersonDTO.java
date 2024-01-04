@@ -42,7 +42,6 @@ public class PersonDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private String documentNo;
 
-    @NotNull(message = "Field cannot be null")
     private String fullName;
 
     @NotNull(message = "Field cannot be null")
