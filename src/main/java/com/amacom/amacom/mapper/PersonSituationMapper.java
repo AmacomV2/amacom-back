@@ -24,12 +24,12 @@ public interface PersonSituationMapper {
     @Mapping(target = "subjectId", source = "subject.id")
     PersonSituationDTO toPersonSituationDTO(PersonSituation personSituation);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("behavior", "behavior");
-        clavesToSort.put("affectationDegree", "affectationDegree");
-        clavesToSort.put("fistThought", "fistThought");
-        clavesToSort.put("description", "description");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("behavior", "behavior");
+        keysToSort.put("affectationDegree", "affectationDegree");
+        keysToSort.put("fistThought", "fistThought");
+        keysToSort.put("description", "description");
+        return keysToSort;
     }
 }

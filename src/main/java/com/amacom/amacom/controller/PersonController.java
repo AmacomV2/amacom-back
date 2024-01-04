@@ -58,7 +58,7 @@ public class PersonController {
 
         try {
             var personPage = this.personService.findPerson(query,
-                    ITools.getPageRequest(pageable, PersonMapper.getClavesToSort()));
+                    ITools.getPageRequest(pageable, PersonMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(personPage
                     .map(PersonMapper.INSTANCE::toPersonDTO)), HttpStatus.OK);
         } catch (Exception e) {

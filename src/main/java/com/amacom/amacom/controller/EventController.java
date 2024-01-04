@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.EventDTO;
+import com.amacom.amacom.dto.response.ErrorDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.EventMapper;
@@ -55,7 +56,7 @@ public class EventController {
             @RequestParam(name = "query", required = false) String query) {
 
         var eventPage = this.eventService.findEvent(idCreatedBy, personId, from, to, query,
-                ITools.getPageRequest(pageable, EventMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, EventMapper.getSortKeys()));
 
         if (eventPage == null || eventPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -76,14 +77,20 @@ public class EventController {
             personId = user.getPerson().getId();
         }
 
-        List<Event> eventList = this.eventService.findPersonEvents(personId, from, to, query);
-        List<EventDTO> eventListDTO = new ArrayList<>();
+        try {
+            List<Event> eventList = this.eventService.findPersonEvents(personId, from, to, query);
+            List<EventDTO> eventListDTO = new ArrayList<>();
 
-        eventList.forEach(t -> {
-            eventListDTO.add(EventMapper.INSTANCE.toEventDTO(t));
-        });
+            eventList.forEach(t -> {
+                var dto = EventMapper.INSTANCE.toEventDTO(t);
 
-        return new ResponseEntity<>(new SuccessDTO(eventListDTO), HttpStatus.OK);
+                eventListDTO.add(dto);
+            });
+
+            return new ResponseEntity<>(new SuccessDTO(eventListDTO), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")

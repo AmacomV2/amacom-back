@@ -2,6 +2,7 @@ package com.amacom.amacom.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.EnumType;
@@ -40,20 +41,22 @@ public class EventDTO implements Serializable {
     private boolean allDay = false;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(timezone = ITools.TIME_ZONE_BOGOTA)
     private Date start;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(timezone = ITools.TIME_ZONE_BOGOTA)
     private Date end;
+
+    private Set<EventHasPersonsDTO> participants;
 
     @Enumerated(EnumType.STRING)
     private EEventStatus eventStatus = EEventStatus.REGISTERED;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date createdAt;
 
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date updatedAt;
 
 }

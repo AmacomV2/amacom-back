@@ -1,13 +1,14 @@
 package com.amacom.amacom.mapper;
 
-import com.amacom.amacom.dto.SupportMaterialFilesDTO;
-import com.amacom.amacom.model.SupportMaterialFiles;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amacom.amacom.dto.SupportMaterialFilesDTO;
+import com.amacom.amacom.model.SupportMaterialFiles;
 
 @Mapper
 public interface SupportMaterialFilesMapper {
@@ -19,11 +20,11 @@ public interface SupportMaterialFilesMapper {
     @Mapping(target = "idSupportMaterial", source = "supportMaterial.id")
     SupportMaterialFilesDTO toSupportMaterialFilesDTO(SupportMaterialFiles supportMaterialFiles);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("path", "path");
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("path", "path");
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 
 }

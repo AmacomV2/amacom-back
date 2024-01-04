@@ -37,8 +37,8 @@ public class EventHasPersonsServiceImpl implements IEventHasPersonsService {
     }
 
     @Override
-    public List<EventHasPersons> getAll(UUID idEvent) {
-        return this.eventHasPersonsRepository.findAllByIdEvent(idEvent);
+    public List<EventHasPersons> getAll(UUID eventId) {
+        return this.eventHasPersonsRepository.findAllByIdEvent(eventId);
     }
 
     @Override

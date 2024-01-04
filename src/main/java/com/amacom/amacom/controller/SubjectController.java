@@ -42,7 +42,7 @@ public class SubjectController {
             @RequestParam(name = "query", required = false) String query) {
 
         var subjectPage = this.subjectService.findSubjectList(subjectIdList, query,
-                ITools.getPageRequest(pageable, SubjectMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, SubjectMapper.getSortKeys()));
 
         if (subjectPage == null || subjectPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,7 +58,7 @@ public class SubjectController {
             @RequestParam(name = "query", required = false) String query) {
 
         var subjectPage = this.subjectService.findSubject(parentId, query,
-                ITools.getPageRequest(pageable, SubjectMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, SubjectMapper.getSortKeys()));
 
         if (subjectPage == null || subjectPage.getContent().isEmpty()) {
             return new ResponseEntity<>(new ErrorDTO(), HttpStatus.NO_CONTENT);

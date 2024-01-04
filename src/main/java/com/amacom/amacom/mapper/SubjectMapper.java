@@ -21,11 +21,11 @@ public interface SubjectMapper {
     @Mapping(target = "associatedResultId", source = "associatedResult.id")
     SubjectDTO toSubjectDTO(Subject subject);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("name", "name");
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("name", "name");
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 
 }

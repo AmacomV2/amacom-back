@@ -17,34 +17,34 @@ import com.amacom.amacom.model.EScore;
 @RestController
 @RequestMapping("/enum")
 public class EnumController {
-    // TODO: Translate all this shit
-    @GetMapping("/alertaConsulta")
+    //
+    @GetMapping("/consultationAlerts")
     public ResponseEntity<List<EConsultationAlert>> getEConsultationAlert() {
-        List<EConsultationAlert> statuss = Arrays.asList(EConsultationAlert.values());
-        return ResponseEntity.ok(statuss);
+        List<EConsultationAlert> status = Arrays.asList(EConsultationAlert.values());
+        return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/statusConsulta")
+    @GetMapping("/consultationStatuses")
     public ResponseEntity<List<EConsultationStatus>> getEConsultationStatus() {
-        List<EConsultationStatus> statuss = Arrays.asList(EConsultationStatus.values());
-        return ResponseEntity.ok(statuss);
+        List<EConsultationStatus> status = Arrays.asList(EConsultationStatus.values());
+        return ResponseEntity.ok(status);
     }
 
     @GetMapping("/eventStatus")
     public ResponseEntity<List<EEventStatus>> getEEventStatus() {
-        List<EEventStatus> statuss = Arrays.asList(EEventStatus.values());
-        return ResponseEntity.ok(statuss);
+        List<EEventStatus> status = Arrays.asList(EEventStatus.values());
+        return ResponseEntity.ok(status);
     }
 
     @GetMapping("/affectationDegree")
     public ResponseEntity<List<EAffectationDegree>> getEAffectationDegree() {
-        List<EAffectationDegree> statuss = Arrays.asList(EAffectationDegree.values());
-        return ResponseEntity.ok(statuss);
+        List<EAffectationDegree> status = Arrays.asList(EAffectationDegree.values());
+        return ResponseEntity.ok(status);
     }
 
     @GetMapping("/score")
     public ResponseEntity<List<EScore>> getEScore() {
-        List<EScore> statuss = Arrays.asList(EScore.values());
-        return ResponseEntity.ok(statuss);
+        List<EScore> status = Arrays.asList(EScore.values());
+        return ResponseEntity.ok(status);
     }
 }

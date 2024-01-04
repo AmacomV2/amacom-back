@@ -138,7 +138,7 @@ public class PersonSituationController {
 
             Page<PersonSituation> page = this.personSituationService.search(consultationAlert, consultationStatus,
                     query, personId,
-                    ITools.getPageRequest(pageable, PersonSituationMapper.getClavesToSort()));
+                    ITools.getPageRequest(pageable, PersonSituationMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(page
                     .map(PersonSituationMapperVar.INSTANCE::toPersonSituationDTO)), HttpStatus.OK);
         } catch (Exception e) {

@@ -41,7 +41,7 @@ public class InstitutionController {
             @RequestParam(name = "query", required = false) String query) {
 
         var institutionPage = this.institutionService.findInstitution(institutionTypeId, query,
-                ITools.getPageRequest(pageable, InstitutionMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, InstitutionMapper.getSortKeys()));
 
         if (institutionPage == null || institutionPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

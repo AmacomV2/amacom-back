@@ -22,9 +22,9 @@ public class GenderDTO implements Serializable {
 
     private String name;
 
-    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(timezone = ITools.TIME_ZONE_BOGOTA)
     private Instant createdAt;
 
-    @JsonFormat(timezone = ITools.ZONA_HORARIA_BOGOTA)
+    @JsonFormat(timezone = ITools.TIME_ZONE_BOGOTA)
     private Instant updatedAt;
 }

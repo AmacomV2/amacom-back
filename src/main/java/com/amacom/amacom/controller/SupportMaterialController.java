@@ -38,7 +38,7 @@ public class SupportMaterialController {
             @RequestParam(name = "query", required = false) String query) {
 
         var supportMaterialPage = this.supportMaterialService.findSupportMaterial(subjectId, query,
-                ITools.getPageRequest(pageable, SupportMaterialMapper.getClavesToSort()));
+                ITools.getPageRequest(pageable, SupportMaterialMapper.getSortKeys()));
 
         if (supportMaterialPage == null || supportMaterialPage.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

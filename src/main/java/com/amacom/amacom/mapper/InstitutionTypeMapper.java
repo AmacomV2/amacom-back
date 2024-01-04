@@ -18,12 +18,12 @@ public interface InstitutionTypeMapper {
 
     InstitutionTypeDTO toInstitutionTypeDTO(InstitutionType typeInstitution);
 
-    static Map<String, String> getClavesToSort() {
-        Map<String, String> clavesToSort = new HashMap<>();
-        clavesToSort.put("name", "name");
-        clavesToSort.put("description", "description");
-        clavesToSort.put("createdAt", "createdAt");
-        return clavesToSort;
+    static Map<String, String> getSortKeys() {
+        Map<String, String> keysToSort = new HashMap<>();
+        keysToSort.put("name", "name");
+        keysToSort.put("description", "description");
+        keysToSort.put("createdAt", "createdAt");
+        return keysToSort;
     }
 
 }

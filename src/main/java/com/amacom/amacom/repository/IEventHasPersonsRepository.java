@@ -16,12 +16,12 @@ public interface IEventHasPersonsRepository extends JpaRepository<EventHasPerson
                         "FROM EventHasPersons u " +
                         "WHERE (u.id <> :id or :id is null) " +
                         "AND u.person.id = :personId " +
-                        "AND u.event.id = :idEvento ")
-        Boolean existsByPersonIdAndIdEvento(UUID id, UUID personId, UUID idEvento);
+                        "AND u.event.id = :eventIdo ")
+        Boolean existsByPersonIdAndIdEvento(UUID id, UUID personId, UUID eventIdo);
 
         @Query("SELECT t " +
                         "FROM EventHasPersons t " +
-                        "WHERE (t.event.id = :idEvent )")
-        List<EventHasPersons> findAllByIdEvent(UUID idEvent);
+                        "WHERE (t.event.id = :eventId )")
+        List<EventHasPersons> findAllByIdEvent(UUID eventId);
 
 }

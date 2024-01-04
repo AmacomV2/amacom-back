@@ -46,7 +46,7 @@ public class InstitutionServicePersonController {
 
                 var institutionServicePersonPage = this.institutionServicePersonService.findInstitutionServicePerson(
                                 idInstitutionService, personId, query,
-                                ITools.getPageRequest(pageable, InstitutionServicePersonMapper.getClavesToSort()));
+                                ITools.getPageRequest(pageable, InstitutionServicePersonMapper.getSortKeys()));
 
                 if (institutionServicePersonPage == null || institutionServicePersonPage.getContent().isEmpty()) {
                         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
