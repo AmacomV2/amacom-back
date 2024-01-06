@@ -25,7 +25,7 @@ public interface IAlarmSignRepository extends JpaRepository<AlarmSign, UUID> {
                         "FROM AlarmSign t " +
                         "WHERE (t.type = :type OR :type IS NULL) "
                         +
-                        "AND CONCAT_WS(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
+                        "AND CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<AlarmSign> findAlarmSign(@Nullable EAlarmSignType type, String query, Pageable pageable);
