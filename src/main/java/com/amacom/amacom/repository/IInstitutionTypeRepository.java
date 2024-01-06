@@ -21,8 +21,7 @@ public interface IInstitutionTypeRepository extends JpaRepository<InstitutionTyp
 
         @Query("SELECT t " +
                         "FROM InstitutionType t " +
-                        "WHERE CONCAT_WS(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
-                        +
+                        "WHERE CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) " +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<InstitutionType> findInstitutionType(String query, Pageable pageable);
 
