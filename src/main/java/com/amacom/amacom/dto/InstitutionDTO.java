@@ -25,6 +25,8 @@ public class InstitutionDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID institutionTypeId;
 
+    private String institutionTypeName;
+
     private String name;
 
     private String description;
