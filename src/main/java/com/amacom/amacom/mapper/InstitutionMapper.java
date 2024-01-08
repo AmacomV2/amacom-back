@@ -18,6 +18,7 @@ public interface InstitutionMapper {
     Institution toInstitution(InstitutionDTO institutionDTO);
 
     @Mapping(target = "institutionTypeId", source = "institutionType.id")
+    @Mapping(target = "institutionTypeName", source = "institutionType.name")
     InstitutionDTO toInstitutionDTO(Institution institution);
 
     static Map<String, String> getSortKeys() {
