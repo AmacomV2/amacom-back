@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.AchievementDTO;
+import com.amacom.amacom.dto.response.ErrorDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.AchievementMapper;
 import com.amacom.amacom.model.Achievement;
 import com.amacom.amacom.service.interfaces.IAchievementService;
@@ -34,66 +36,80 @@ public class AchievementController {
 
     private ISubjectService subjectService;
 
-    @GetMapping("/consulta")
-    public ResponseEntity<Page<AchievementDTO>> findPageable(
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> findPageable(
             Pageable pageable,
             @RequestParam(name = "subjectId", required = false) UUID subjectId,
             @RequestParam(name = "query", required = false) String query) {
 
-        var achievementPage = this.achievementService.findAchievement(subjectId, query,
-                ITools.getPageRequest(pageable, AchievementMapper.getSortKeys()));
+        try {
+            var achievementPage = this.achievementService.findAchievement(subjectId, query,
+                    ITools.getPageRequest(pageable, AchievementMapper.getSortKeys()));
 
-        if (achievementPage == null || achievementPage.getContent().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new SuccessDTO(achievementPage
+                    .map(AchievementMapper.INSTANCE::toAchievementDTO)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(achievementPage
-                .map(AchievementMapper.INSTANCE::toAchievementDTO), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AchievementDTO> findById(
+    public ResponseEntity<ResponseDTO> findById(
             @PathVariable(value = "id") UUID id) {
-        Achievement achievement = this.achievementService.findById(id);
-        if (achievement == null) {
-            return new ResponseEntity<>(new AchievementDTO(), HttpStatus.NO_CONTENT);
+        try {
+            Achievement achievement = this.achievementService.findById(id);
+
+            return new ResponseEntity<>(new SuccessDTO(AchievementMapper.INSTANCE.toAchievementDTO(achievement)),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.OK);
         }
-        return new ResponseEntity<>(AchievementMapper.INSTANCE.toAchievementDTO(achievement), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AchievementDTO> create(
+    public ResponseEntity<ResponseDTO> create(
             @Valid @RequestBody AchievementDTO achievementDTO) {
 
-        Achievement achievement = AchievementMapper.INSTANCE.toAchievement(achievementDTO);
+        try {
+            Achievement achievement = AchievementMapper.INSTANCE.toAchievement(achievementDTO);
 
-        achievement.setSubject(this.subjectService.getEntityFromUUID(achievementDTO.getSubjectId()));
+            achievement.setSubject(this.subjectService.getEntityFromUUID(achievementDTO.getSubjectId()));
 
-        var achievementBD = this.achievementService.create(achievement);
-        if (achievementBD == null)
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(AchievementMapper.INSTANCE.toAchievementDTO(achievementBD));
+            var achievementBD = this.achievementService.create(achievement);
+            if (achievementBD == null)
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return ResponseEntity.ok(new SuccessDTO(AchievementMapper.INSTANCE.toAchievementDTO(achievementBD)));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<AchievementDTO> update(
+    public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody AchievementDTO achievementDTO) {
 
-        Achievement achievement = AchievementMapper.INSTANCE.toAchievement(achievementDTO);
+        try {
+            Achievement achievement = AchievementMapper.INSTANCE.toAchievement(achievementDTO);
 
-        achievement.setSubject(this.subjectService.getEntityFromUUID(achievementDTO.getSubjectId()));
+            achievement.setSubject(this.subjectService.getEntityFromUUID(achievementDTO.getSubjectId()));
 
-        var achievementBD = this.achievementService.update(achievement);
-        if (achievementBD == null) {
-            return new ResponseEntity<>(new AchievementDTO(), HttpStatus.NO_CONTENT);
+            var achievementBD = this.achievementService.update(achievement);
+
+            return ResponseEntity.ok(new SuccessDTO(AchievementMapper.INSTANCE.toAchievementDTO(achievementBD)));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.OK);
         }
-        return new ResponseEntity<>(AchievementMapper.INSTANCE.toAchievementDTO(achievementBD), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(
+    public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
-        this.achievementService.deleteById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        try {
+            this.achievementService.deleteById(id);
+            return ResponseEntity.ok(new SuccessDTO());
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Autowired
