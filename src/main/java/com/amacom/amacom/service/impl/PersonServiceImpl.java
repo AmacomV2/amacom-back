@@ -110,7 +110,7 @@ public class PersonServiceImpl implements IPersonService {
     public void validatePersonCreation(Person person) {
 
         var existsSimilar = this.personRepository.existsByDocument(person.getId(), person.getDocumentNo());
-        if (Boolean.TRUE.equals(existsSimilar))
+        if (Boolean.TRUE.equals(existsSimilar) && person.getId() == null)
             throw new ValidationException("Document No. already in use.");
     }
 
