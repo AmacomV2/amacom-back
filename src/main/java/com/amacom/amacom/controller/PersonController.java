@@ -105,13 +105,15 @@ public class PersonController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PersonDTO> createPerson(
+    public ResponseEntity<ResponseDTO> createPerson(
             @Valid @RequestBody PersonDTO personDTO) {
 
-        Person personBD = createPersonMethod(personDTO);
-        if (personBD == null)
+        try {
+            Person personBD = createPersonMethod(personDTO);
+            return ResponseEntity.ok(new SuccessDTO(PersonMapper.INSTANCE.toPersonDTO(personBD)));
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return ResponseEntity.ok(PersonMapper.INSTANCE.toPersonDTO(personBD));
+        }
     }
 
     public Person createPersonMethod(PersonDTO personDTO) {
@@ -129,26 +131,32 @@ public class PersonController {
     }
 
     @PutMapping
-    public ResponseEntity<PersonDTO> updatePerson(
+    public ResponseEntity<ResponseDTO> updatePerson(
             @Valid @RequestBody PersonDTO personDTO) {
-        Person person = PersonMapper.INSTANCE.toPerson(personDTO);
+        try {
+            Person person = PersonMapper.INSTANCE.toPerson(personDTO);
 
-        person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
-        person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
-        person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
+            person.setDocumentType(this.documentTypeService.getEntityFromUUID(personDTO.getDocumentTypeId()));
+            person.setGender(this.genderService.getEntityFromUUID(personDTO.getGenderId()));
+            person.setCivilStatus(this.civilStatusService.getEntityFromUUID(personDTO.getCivilStatusId()));
 
-        var personBD = this.personService.updatePerson(person);
-        if (personBD == null) {
-            return new ResponseEntity<>(new PersonDTO(), HttpStatus.NO_CONTENT);
+            var personBD = this.personService.updatePerson(person);
+            return new ResponseEntity<>(new SuccessDTO(PersonMapper.INSTANCE.toPersonDTO(personBD)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+
         }
-        return new ResponseEntity<>(PersonMapper.INSTANCE.toPersonDTO(personBD), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deletePerson(
+    public ResponseEntity<ResponseDTO> deletePerson(
             @PathVariable(value = "id") UUID id) {
-        this.personService.deletePersonById(id);
-        return ResponseEntity.ok(Boolean.TRUE);
+        try {
+            this.personService.deletePersonById(id);
+            return ResponseEntity.ok(new SuccessDTO());
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Autowired

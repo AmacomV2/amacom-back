@@ -7,7 +7,7 @@ public class ValidationException extends RuntimeException {
         super("Error on validating fields.");
     }
 
-    public ValidationException(String aMensaje) {
-        super(aMensaje);
+    public ValidationException(String message) {
+        super(message);
     }
 }

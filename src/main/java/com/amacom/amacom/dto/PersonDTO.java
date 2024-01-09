@@ -36,7 +36,6 @@ public class PersonDTO implements Serializable {
     private UUID genderId;
 
     private CivilStatus civilStatus;
-    @NotNull(message = "Field cannot be null")
     private UUID civilStatusId;
 
     @NotNull(message = "Field cannot be null")
