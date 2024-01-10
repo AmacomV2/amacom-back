@@ -30,6 +30,8 @@ public class PersonSituationDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID subjectId;
 
+    private String subjectName;
+
     @NotNull(message = "Field cannot be null")
     private List<UUID> feelings;
 
