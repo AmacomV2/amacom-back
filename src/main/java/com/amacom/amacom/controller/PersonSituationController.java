@@ -128,7 +128,7 @@ public class PersonSituationController {
             @RequestParam(name = "personId", required = false) @Nullable UUID personId,
             @RequestParam(name = "consultationAlert", required = false) @Nullable EConsultationAlert consultationAlert,
             @RequestParam(name = "consultationStatus", required = false) @Nullable EConsultationStatus consultationStatus,
-            @RequestParam(name = "query", required = false) String query) {
+            @RequestParam(name = "query", required = false, defaultValue = "") String query) {
         try {
             if (personId == null) {
                 var authData = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

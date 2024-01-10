@@ -22,6 +22,8 @@ public class SubjectDTO implements Serializable {
 
     private UUID parentId;
 
+    private SubjectDTO parent;
+
     private UUID associatedResultId;
 
     private String name;
@@ -33,5 +35,4 @@ public class SubjectDTO implements Serializable {
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date updatedAt;
-
 }

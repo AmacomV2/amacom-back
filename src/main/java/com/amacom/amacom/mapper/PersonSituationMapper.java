@@ -22,6 +22,7 @@ public interface PersonSituationMapper {
     @Mapping(target = "currentDiagnosis", source = "currentDiagnosis")
     @Mapping(target = "affectationDegree", source = "affectationDegree")
     @Mapping(target = "subjectId", source = "subject.id")
+    @Mapping(target = "subjectName", source = "subject.name")
     PersonSituationDTO toPersonSituationDTO(PersonSituation personSituation);
 
     static Map<String, String> getSortKeys() {
