@@ -4,23 +4,26 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.amacom.amacom.dto.response.ErrorDTO;
+import com.amacom.amacom.mapper.AlarmSignMapper;
+import com.amacom.amacom.mapper.PersonSituationMapper;
+import com.amacom.amacom.mapper.PersonSituationMapperVar;
+import com.amacom.amacom.model.*;
+import com.amacom.amacom.model.auth.User;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import com.amacom.amacom.dto.PersonSituationHasAlarmSignsDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonSituationHasAlarmSignsMapper;
-import com.amacom.amacom.model.PersonSituationHasAlarmSigns;
 import com.amacom.amacom.service.interfaces.IAlarmSignService;
 import com.amacom.amacom.service.interfaces.IPersonSituationHasAlarmSignsService;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
@@ -45,6 +48,26 @@ public class PersonSituationHasAlarmSignsController {
                 }
                 return ResponseEntity.ok(new SuccessDTO(PersonSituationHasAlarmSignsMapper.INSTANCE
                                 .toPersonSituationHasAlarmSignsDTO(personSituationHasAlarmSigns)));
+        }
+
+
+        @GetMapping("/search")
+        public ResponseEntity<ResponseDTO> search(
+                Pageable pageable,
+                @RequestParam(name = "situationId", required = true) @Nullable UUID situationId,
+                @RequestParam(name = "query", required = false, defaultValue = "") String query,
+                @RequestParam(name = "type", required = false) @Nullable EAlarmSignType type) {
+                try {
+                        Page<PersonSituationHasAlarmSigns> page = this.personSituationHasAlarmSignsService
+                                .findAlarmSign(type, query,
+                                ITools.getPageRequest(pageable, PersonSituationHasAlarmSignsMapper.getSortKeys()),
+                                        situationId);
+                        return new ResponseEntity<>(new SuccessDTO(page
+                                .map(PersonSituationHasAlarmSignsMapper.INSTANCE::toPersonSituationHasAlarmSignsDTO)), HttpStatus.OK);
+                } catch (Exception e) {
+                        return new ResponseEntity<>(new ErrorDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+
+                }
         }
 
         @PostMapping("/create")

@@ -29,5 +29,4 @@ public interface IAlarmSignRepository extends JpaRepository<AlarmSign, UUID> {
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<AlarmSign> findAlarmSign(@Nullable EAlarmSignType type, String query, Pageable pageable);
-
 }

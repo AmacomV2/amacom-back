@@ -1,10 +1,6 @@
 package com.amacom.amacom.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.amacom.amacom.model.auth.User;
 
@@ -12,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
@@ -38,6 +36,10 @@ public class PersonSituation extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID", nullable = true)
     private Diagnosis currentDiagnosis;
+
+    //@ManyToOne
+    @OneToMany(mappedBy = "personSituation")
+    private List<PersonSituationHasFeelings> feelings;
 
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;

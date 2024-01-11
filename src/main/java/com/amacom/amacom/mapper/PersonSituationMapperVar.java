@@ -2,6 +2,7 @@ package com.amacom.amacom.mapper;
 
 import com.amacom.amacom.dto.PersonSituationDTO;
 import com.amacom.amacom.model.PersonSituation;
+import org.mapstruct.Mapping;
 
 public class PersonSituationMapperVar {
 
@@ -15,5 +16,4 @@ public class PersonSituationMapperVar {
         return personSituationDto;
 
     }
-
 }

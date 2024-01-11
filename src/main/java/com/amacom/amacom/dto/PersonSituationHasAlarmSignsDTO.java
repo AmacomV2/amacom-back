@@ -24,4 +24,7 @@ public class PersonSituationHasAlarmSignsDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID alarmSignId;
 
+    private String alarmSignName;
+
+    private String alarmSignDescription;
 }
