@@ -3,6 +3,7 @@ package com.amacom.amacom.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -160,6 +161,7 @@ public class PersonSituationController {
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
 
+        personSituation.setFeelings(this.toPersonSituationFeelings(personSituationDTO, personSituation));
         var personSituationBD = this.personSituationService.update(personSituation);
         if (personSituationBD == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -174,6 +176,19 @@ public class PersonSituationController {
             @PathVariable(value = "id") UUID id) {
         this.personSituationService.deleteById(id);
         return ResponseEntity.ok(new SuccessDTO());
+    }
+
+    private List<PersonSituationHasFeelings> toPersonSituationFeelings(PersonSituationDTO personSituationDTO,
+                                                                       PersonSituation personSituation){
+        List<Feelings> feelings = new ArrayList<Feelings>();
+        return personSituationDTO.getFeelings().stream().map(val->{
+            var situationFeeling = new PersonSituationHasFeelings();
+            var feeling = this.feelingsService.getEntityFromUUID(val);//Feelings.builder().id(val).build();
+            situationFeeling.setId(UUID.randomUUID());
+            situationFeeling.setFeelings(feeling);
+            situationFeeling.setPersonSituation(personSituation);
+            return situationFeeling;
+        }).collect(Collectors.toList());
     }
 
     @Autowired

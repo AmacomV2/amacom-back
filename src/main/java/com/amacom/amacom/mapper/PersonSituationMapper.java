@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.amacom.amacom.model.Feelings;
 import com.amacom.amacom.model.PersonSituationHasFeelings;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,11 +32,17 @@ public interface PersonSituationMapper {
     @Mapping(target = "subjectName", source = "subject.name")
     PersonSituationDTO toPersonSituationDTO(PersonSituation personSituation);
 
-    static List<UUID> toFeelings(List<PersonSituationHasFeelings> feelingsList){
+    /**
+     * Mapper para enviar los feelings de una situacion al DTO de situacion
+     * @param feelingsList
+     * @return
+     */
+    static List<UUID> toFeelingsDTO(List<PersonSituationHasFeelings> feelingsList){
         return feelingsList.stream().map((val)->{
             return val.getFeelings().getId();
         }).collect(Collectors.toList());
     }
+
     static Map<String, String> getSortKeys() {
         Map<String, String> keysToSort = new HashMap<>();
         keysToSort.put("behavior", "behavior");

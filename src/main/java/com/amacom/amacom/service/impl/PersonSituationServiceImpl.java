@@ -1,9 +1,14 @@
 package com.amacom.amacom.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import com.amacom.amacom.model.PersonSituationHasFeelings;
+import com.amacom.amacom.repository.IPersonSituationHasFeelingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +29,8 @@ import com.amacom.amacom.service.interfaces.IPersonSituationService;
 public class PersonSituationServiceImpl implements IPersonSituationService {
 
     private IPersonSituationRepository personSituationRepository;
+    @Autowired
+    private IPersonSituationHasFeelingsRepository personSituationHasFeelingsRepository;
 
     private EntityManager entityManager;
 
@@ -77,6 +84,24 @@ public class PersonSituationServiceImpl implements IPersonSituationService {
         personSituationBD.setBehavior(personSituation.getBehavior());
         personSituationBD.setAffectationDegree(personSituation.getAffectationDegree());
         personSituationBD.setNursingAssessment(personSituation.getNursingAssessment());
+
+        //FEELINGS
+        List<PersonSituationHasFeelings> deleteSituationFeeling = new ArrayList<>();
+        if (personSituation.getFeelings() != null) {
+            //cuales se eliminan
+            /*personSituationBD.getFeelings().forEach(feel ->{
+                int index = personSituation.getFeelings().ind
+                if(index == -1) {
+                    //se elimino este feeling
+                    deleteSituationFeeling.add(feel);
+                }else{
+                    //ya esta agregado este feeling
+                    personSituation.getFeelings().remove(index);
+                }
+            });*/
+            personSituationBD.getFeelings().removeIf((val)->true);
+            personSituationBD.getFeelings().addAll(personSituation.getFeelings());
+        }
         return this.personSituationRepository.save(personSituationBD);
     }
 
