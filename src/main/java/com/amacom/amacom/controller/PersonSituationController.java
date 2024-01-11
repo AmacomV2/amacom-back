@@ -181,21 +181,13 @@ public class PersonSituationController {
     private List<PersonSituationHasFeelings> toPersonSituationFeelings(PersonSituationDTO personSituationDTO,
                                                                        PersonSituation personSituation){
         List<Feelings> feelings = new ArrayList<Feelings>();
-
-        //personSituationDTO.getFeelings().forEach(t -> feelings.add(this.feelingsService.getEntityFromUUID(t)));
         return personSituationDTO.getFeelings().stream().map(val->{
             var situationFeeling = new PersonSituationHasFeelings();
             var feeling = this.feelingsService.getEntityFromUUID(val);//Feelings.builder().id(val).build();
-            //var personSituationBD = PersonSituation.builder().id(personSituationDTO.getId()).build();
             situationFeeling.setId(UUID.randomUUID());
             situationFeeling.setFeelings(feeling);
             situationFeeling.setPersonSituation(personSituation);
             return situationFeeling;
-            /*for (PersonSituationHasFeelings feeling : personSituation.getFeelings()) {
-                feeling.setId();
-                feeling.setPersonSituation(personSituationBD);
-                personSituationBD.getFeelings().add(feeling);
-            }*/
         }).collect(Collectors.toList());
     }
 
