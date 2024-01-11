@@ -4,22 +4,26 @@ import javax.persistence.*;
 
 import com.amacom.amacom.model.auth.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonSituation extends BaseModel {
 
     private static final long serialVersionUID = 5551518673194641952L;
+
+    @Id
+    @Column(name="ID")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
@@ -37,8 +41,7 @@ public class PersonSituation extends BaseModel {
     @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID", nullable = true)
     private Diagnosis currentDiagnosis;
 
-    //@ManyToOne
-    @OneToMany(mappedBy = "personSituation")
+    @OneToMany(mappedBy = "personSituation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PersonSituationHasFeelings> feelings;
 
     @Column(name = "DESCRIPTION", nullable = false)
