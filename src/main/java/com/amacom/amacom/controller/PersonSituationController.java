@@ -87,7 +87,12 @@ public class PersonSituationController {
         }
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
-        personSituation.setPerson(this.personService.getPersonFromUUID(personId));
+        personSituation.setPerson(this.personService.getPersonFromUUID(
+                personSituationDTO.getPersonId() != null?
+                        personSituationDTO.getPersonId()
+                        : personId
+                )
+        );
         personSituation.setCreatedBy(user);
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
 

@@ -4,7 +4,11 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
+import com.amacom.amacom.model.AlarmSign;
+import com.amacom.amacom.model.EAlarmSignType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,11 @@ public class PersonSituationHasAlarmSignsServiceImpl implements IPersonSituation
             return personSituationHasAlarmSignsRepository.findById(uuid).orElseThrow(DataNotFoundException::new);
         }
         return null;
+    }
+
+    @Override
+    public Page<PersonSituationHasAlarmSigns> findAlarmSign(EAlarmSignType type, String query, Pageable pageable, UUID situationId) {
+        return this.personSituationHasAlarmSignsRepository.findAlarmSign(type, query, situationId, pageable);
     }
 
     @Override
