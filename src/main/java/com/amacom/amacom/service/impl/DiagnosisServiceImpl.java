@@ -1,10 +1,13 @@
 package com.amacom.amacom.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,11 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     @Override
     public Diagnosis findById(UUID id) {
         return this.diagnosisRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<Diagnosis> search(String query, UUID situacionId, Pageable pageable) {
+        return this.diagnosisRepository.findAllDiagnosisBySituacionId(query, situacionId, pageable);
     }
 
     @Transactional
