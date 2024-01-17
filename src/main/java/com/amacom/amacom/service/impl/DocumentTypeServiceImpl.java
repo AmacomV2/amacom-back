@@ -57,6 +57,7 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
         var documentTypeBD = this.documentTypeRepository.findById(documentType.getId())
                 .orElseThrow(DataNotFoundException::new);
         documentTypeBD.setName(documentType.getName());
+        documentTypeBD.setAcronym(documentType.getAcronym());
         return this.documentTypeRepository.save(documentTypeBD);
     }
 
