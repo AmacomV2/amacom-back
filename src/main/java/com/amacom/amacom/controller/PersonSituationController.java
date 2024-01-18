@@ -89,11 +89,8 @@ public class PersonSituationController {
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
 
         personSituation.setPerson(this.personService.getPersonFromUUID(
-                personSituationDTO.getPersonId() != null?
-                        personSituationDTO.getPersonId()
-                        : personId
-                )
-        );
+                personSituationDTO.getPersonId() != null ? personSituationDTO.getPersonId()
+                        : personId));
         personSituation.setCreatedBy(user);
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
 
@@ -179,11 +176,10 @@ public class PersonSituationController {
     }
 
     private List<PersonSituationHasFeelings> toPersonSituationFeelings(PersonSituationDTO personSituationDTO,
-                                                                       PersonSituation personSituation){
-        List<Feelings> feelings = new ArrayList<Feelings>();
-        return personSituationDTO.getFeelings().stream().map(val->{
+            PersonSituation personSituation) {
+        return personSituationDTO.getFeelings().stream().map(val -> {
             var situationFeeling = new PersonSituationHasFeelings();
-            var feeling = this.feelingsService.getEntityFromUUID(val);//Feelings.builder().id(val).build();
+            var feeling = this.feelingsService.getEntityFromUUID(val);// Feelings.builder().id(val).build();
             situationFeeling.setId(UUID.randomUUID());
             situationFeeling.setFeelings(feeling);
             situationFeeling.setPersonSituation(personSituation);
