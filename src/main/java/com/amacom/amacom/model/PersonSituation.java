@@ -1,14 +1,23 @@
 package com.amacom.amacom.model;
 
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.amacom.amacom.model.auth.User;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
-
-import java.util.List;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PERSON_SITUATION")
@@ -21,27 +30,23 @@ public class PersonSituation extends BaseModel {
 
     private static final long serialVersionUID = 5551518673194641952L;
 
-    @Id
-    @Column(name="ID")
-    private UUID id;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     private Person person;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID")
     private User createdBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "ID")
     private Subject subject;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DIAGNOSIS_ID", referencedColumnName = "ID", nullable = true)
     private Diagnosis currentDiagnosis;
 
-    @OneToMany(mappedBy = "personSituation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "personSituation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PersonSituationHasFeelings> feelings;
 
     @Column(name = "DESCRIPTION", nullable = false)

@@ -43,7 +43,7 @@ public class SupportMaterialController {
             var supportMaterialPage = this.supportMaterialService.findSupportMaterial(subjectId, query,
                     ITools.getPageRequest(pageable, SupportMaterialMapper.getSortKeys()));
 
-            if (supportMaterialPage == null || supportMaterialPage.getContent().isEmpty()) {
+            if (supportMaterialPage.getContent().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return ResponseEntity.ok(new SuccessDTO(supportMaterialPage

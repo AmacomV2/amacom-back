@@ -15,7 +15,8 @@ public interface ISupportMaterialRepository extends JpaRepository<SupportMateria
 
     @Query("SELECT sm " +
             "FROM SupportMaterial sm " +
-            "INNER JOIN SupportMaterialHasSubject sms " +
+            "LEFT JOIN SupportMaterialHasSubject sms " +
+            "ON sms.supportMaterial.id = sm.id " +
             "WHERE (sms.subject.id = :subjectId OR :subjectId IS NULL) " +
             "AND CONCAT(UPPER(REPLACE(sm.name , 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(sm.description, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
             +
