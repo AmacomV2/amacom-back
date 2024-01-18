@@ -61,7 +61,7 @@ public class SubjectServiceImpl implements ISubjectService {
                     Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
         }
         if (parentId == null) {
-            subjectPage = this.subjectRepository.findSubject(null, query, pageable);
+            subjectPage = this.subjectRepository.findParentSubjects(query, pageable);
 
         } else {
 

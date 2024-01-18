@@ -28,6 +28,8 @@ public class SubjectDTO implements Serializable {
 
     private String name;
 
+    private String description;
+
     private String validityIndicator;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)

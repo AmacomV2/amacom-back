@@ -9,7 +9,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.GenderDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
@@ -28,8 +35,8 @@ public class GenderController {
     public ResponseEntity<ResponseDTO> getAll() {
         List<Gender> genderList = this.genderService.getAll();
 
-        return new ResponseEntity<>(new SuccessDTO(genderList.stream()
-                .map(GenderMapper.INSTANCE::toGeneroDTO).collect(Collectors.toList())), HttpStatus.OK);
+        return ResponseEntity.ok(new SuccessDTO(genderList.stream()
+                .map(GenderMapper.INSTANCE::toGeneroDTO).collect(Collectors.toList())));
     }
 
     @GetMapping("/{id}")

@@ -20,6 +20,7 @@ public interface EventMapper {
     @Mapping(target = "eventTypeName", source = "eventType.name")
     @Mapping(target = "eventTypeId", source = "eventType.id")
     @Mapping(target = "personId", source = "person.id")
+    @Mapping(target = "eventColor", source = "eventType.color")
     EventDTO toEventDTO(Event event);
 
     static Map<String, String> getSortKeys() {
