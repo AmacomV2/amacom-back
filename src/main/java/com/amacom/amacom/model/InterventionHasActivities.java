@@ -29,10 +29,14 @@ public class InterventionHasActivities extends BaseModel {
     @JoinColumn(name = "ID_INTERVENTION", referencedColumnName = "ID")
     private Intervention intervention;
 
-    @Column(name = "STATUS")
-    private String status;
+    @Column(name = "STATUS", columnDefinition = "TINYINT(1) DEFAULT '1'", nullable = false)
+    private boolean status;
 
     @Column(name = "DESCRIPTION")
     private String description;
+
+    public boolean getStatus() {
+        return status;
+    }
 
 }

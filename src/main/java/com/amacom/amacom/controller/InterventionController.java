@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,13 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.InterventionDTO;
+import com.amacom.amacom.dto.response.ErrorDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.InterventionMapper;
 import com.amacom.amacom.model.Intervention;
 import com.amacom.amacom.service.interfaces.IDiagnosisService;
 import com.amacom.amacom.service.interfaces.IInterventionService;
+import com.amacom.amacom.util.ITools;
 
 @RestController
 @RequestMapping("/intervention")
@@ -29,6 +35,23 @@ public class InterventionController {
     private IInterventionService interventionService;
 
     private IDiagnosisService diagnosisService;
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "diagnosisId", required = true) UUID diagnosisId) {
+
+        try {
+            var subjectPage = this.interventionService.findIntervention(diagnosisId,
+                    ITools.getPageRequest(pageable, InterventionMapper.getSortKeys()));
+
+            return ResponseEntity.ok(new SuccessDTO(subjectPage
+                    .map(InterventionMapper.INSTANCE::toInterventionDTO)));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<InterventionDTO> findById(
