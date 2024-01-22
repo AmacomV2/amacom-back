@@ -42,7 +42,7 @@ public class ResultHasIndicatorController {
     @GetMapping("/search")
     public ResponseEntity<ResponseDTO> findPageable(
             Pageable pageable,
-            @RequestParam(name = "interventionId", required = true) UUID resultId) {
+            @RequestParam(name = "resultId", required = true) UUID resultId) {
 
         try {
             var data = this.resultHasIndicatorService.findResultIndicators(
