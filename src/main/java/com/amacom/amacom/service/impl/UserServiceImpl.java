@@ -75,6 +75,7 @@ public class UserServiceImpl implements IUserService {
         userDB.setRol(user.getRol());
         userDB.setEnumRol(user.getRol().getEnumRol());
         userDB.setUsername(user.getUsername());
+        userDB.setPassword(passwordEncoder.encode(user.getPassword()));
         userDB.setEmail(user.getEmail());
         return this.userRepository.save(userDB);
     }

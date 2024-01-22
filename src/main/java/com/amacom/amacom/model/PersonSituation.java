@@ -49,6 +49,9 @@ public class PersonSituation extends BaseModel {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "personSituation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PersonSituationHasFeelings> feelings;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "personSituation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PersonSituationHasAlarmSigns> alarmSigns;
+
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 

@@ -22,8 +22,6 @@ public class SubjectDTO implements Serializable {
 
     private UUID parentId;
 
-    private SubjectDTO parent;
-
     private UUID associatedResultId;
 
     private String name;

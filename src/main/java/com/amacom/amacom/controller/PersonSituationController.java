@@ -29,8 +29,8 @@ import com.amacom.amacom.dto.PersonSituationDTO;
 import com.amacom.amacom.dto.response.ErrorDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
+import com.amacom.amacom.mapper.PersonSituationCustomMapper;
 import com.amacom.amacom.mapper.PersonSituationMapper;
-import com.amacom.amacom.mapper.PersonSituationMapperVar;
 import com.amacom.amacom.model.AlarmSign;
 import com.amacom.amacom.model.EConsultationAlert;
 import com.amacom.amacom.model.EConsultationStatus;
@@ -40,6 +40,7 @@ import com.amacom.amacom.model.PersonSituationHasAlarmSigns;
 import com.amacom.amacom.model.PersonSituationHasFeelings;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IAlarmSignService;
+import com.amacom.amacom.service.interfaces.IDiagnosisService;
 import com.amacom.amacom.service.interfaces.IFeelingsService;
 import com.amacom.amacom.service.interfaces.IPersonService;
 import com.amacom.amacom.service.interfaces.IPersonSituationHasAlarmSignsService;
@@ -55,6 +56,8 @@ public class PersonSituationController {
     private IPersonSituationService personSituationService;
 
     private IPersonService personService;
+
+    private IDiagnosisService diagnosisService;
 
     private IFeelingsService feelingsService;
     private IAlarmSignService alarmSignsService;
@@ -122,7 +125,7 @@ public class PersonSituationController {
         if (personSituationBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity
-                .ok(new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD)));
+                .ok(new SuccessDTO(PersonSituationCustomMapper.INSTANCE.toPersonSituationDTO(personSituationBD)));
     }
 
     @GetMapping("/search")
@@ -143,7 +146,27 @@ public class PersonSituationController {
                     query, personId,
                     ITools.getPageRequest(pageable, PersonSituationMapper.getSortKeys()));
             return new ResponseEntity<>(new SuccessDTO(page
-                    .map(PersonSituationMapperVar.INSTANCE::toPersonSituationDTO)), HttpStatus.OK);
+                    .map(PersonSituationMapper.INSTANCE::toPersonSituationDTO)), HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/searchAll")
+    public ResponseEntity<ResponseDTO> searchAll(
+            Pageable pageable,
+            @RequestParam(name = "personId", required = false) @Nullable UUID personId,
+            @RequestParam(name = "consultationAlert", required = false) @Nullable EConsultationAlert consultationAlert,
+            @RequestParam(name = "consultationStatus", required = false) @Nullable EConsultationStatus consultationStatus,
+            @RequestParam(name = "query", required = false, defaultValue = "") String query) {
+        try {
+
+            Page<PersonSituation> page = this.personSituationService.search(consultationAlert, consultationStatus,
+                    query, personId,
+                    ITools.getPageRequest(pageable, PersonSituationMapper.getSortKeys()));
+            return new ResponseEntity<>(new SuccessDTO(page
+                    .map(PersonSituationMapper.INSTANCE::toPersonSituationDTO)), HttpStatus.OK);
         } catch (Exception e) {
 
             return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -154,17 +177,14 @@ public class PersonSituationController {
     public ResponseEntity<ResponseDTO> update(
             @Valid @RequestBody PersonSituationDTO personSituationDTO) {
         PersonSituation personSituation = PersonSituationMapper.INSTANCE.toPersonSituation(personSituationDTO);
-
+        personSituation.setId(personSituationDTO.getId());
         personSituation.setPerson(this.personService.getPersonFromUUID(personSituationDTO.getPersonId()));
         personSituation.setSubject(this.subjectService.getEntityFromUUID(personSituationDTO.getSubjectId()));
-
-        personSituation.setFeelings(this.toPersonSituationFeelings(personSituationDTO, personSituation));
+        personSituation.setCurrentDiagnosis(
+                this.diagnosisService.getEntityFromUUID(personSituationDTO.getCurrentDiagnosisId()));
         var personSituationBD = this.personSituationService.update(personSituation);
-        if (personSituationBD == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(
-                new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituationBD)),
+                new SuccessDTO(PersonSituationCustomMapper.INSTANCE.toPersonSituationDTO(personSituationBD)),
                 HttpStatus.OK);
     }
 
@@ -207,6 +227,12 @@ public class PersonSituationController {
     public void setPersonSituationHasAlarmSignsService(
             IPersonSituationHasAlarmSignsService personSituationHasAlarmSignsService) {
         this.personSituationHasAlarmSignsService = personSituationHasAlarmSignsService;
+    }
+
+    @Autowired
+    public void setDiagnosisService(
+            IDiagnosisService diagnosisService) {
+        this.diagnosisService = diagnosisService;
     }
 
     @Autowired

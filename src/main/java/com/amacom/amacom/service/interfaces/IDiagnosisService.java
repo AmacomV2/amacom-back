@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.interfaces;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;

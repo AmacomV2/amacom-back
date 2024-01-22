@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.amacom.amacom.model.PersonSituationHasFeelings;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.amacom.amacom.dto.PersonSituationDTO;
 import com.amacom.amacom.model.PersonSituation;
+import com.amacom.amacom.model.PersonSituationHasFeelings;
 
 @Mapper
 public interface PersonSituationMapper {
@@ -20,11 +20,11 @@ public interface PersonSituationMapper {
     PersonSituationMapper INSTANCE = Mappers.getMapper(PersonSituationMapper.class);
 
     @Mapping(target = "feelings", ignore = true)
-    //@Mapping(target = "feelings.feelings.id", source = "feelings")
-    //@Mapping(target = "feelings.personSituation.id", source = "id")
+    // @Mapping(target = "feelings.personSituation.id", source = "id")
     PersonSituation toPersonSituation(PersonSituationDTO personSituationDTO);
 
     @Mapping(target = "personId", source = "person.id")
+    @Mapping(target = "personName", source = "person.fullName")
     @Mapping(target = "createdById", source = "createdBy.id")
     @Mapping(target = "currentDiagnosis", source = "currentDiagnosis")
     @Mapping(target = "affectationDegree", source = "affectationDegree")
@@ -34,11 +34,12 @@ public interface PersonSituationMapper {
 
     /**
      * Mapper para enviar los feelings de una situacion al DTO de situacion
+     *
      * @param feelingsList
      * @return
      */
-    static List<UUID> toFeelingsDTO(List<PersonSituationHasFeelings> feelingsList){
-        return feelingsList.stream().map((val)->{
+    static List<UUID> toFeelingsDTO(List<PersonSituationHasFeelings> feelingsList) {
+        return feelingsList.stream().map((val) -> {
             return val.getFeelings().getId();
         }).collect(Collectors.toList());
     }

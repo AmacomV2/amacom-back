@@ -4,27 +4,33 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.amacom.amacom.dto.response.ErrorDTO;
-import com.amacom.amacom.mapper.FeelingsMapper;
-import com.amacom.amacom.model.Feelings;
-import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.DiagnosisDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.DiagnosisMapper;
+import com.amacom.amacom.mapper.FeelingsMapper;
 import com.amacom.amacom.model.Diagnosis;
 import com.amacom.amacom.model.PersonSituation;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IDiagnosisService;
 import com.amacom.amacom.service.interfaces.IPersonSituationService;
+import com.amacom.amacom.util.ITools;
 
 @RestController
 @RequestMapping("/diagnosis")
@@ -48,13 +54,12 @@ public class DiagnosisController {
     public ResponseEntity<ResponseDTO> findPageable(
             Pageable pageable,
             @RequestParam(name = "query", required = false) String query,
-            @RequestParam(name = "situationId", required = false) UUID situacionId)
-    {
-            Page<Diagnosis> page = this.diagnosisService.search(query,
-                    situacionId,
-                    ITools.getPageRequest(pageable, FeelingsMapper.getSortKeys()));
-            return new ResponseEntity<>(new SuccessDTO(page
-                    .map(DiagnosisMapper.INSTANCE::toDiagnosisDTO)), HttpStatus.OK);
+            @RequestParam(name = "situationId", required = false) UUID situacionId) {
+        Page<Diagnosis> page = this.diagnosisService.search(query,
+                situacionId,
+                ITools.getPageRequest(pageable, FeelingsMapper.getSortKeys()));
+        return new ResponseEntity<>(new SuccessDTO(page
+                .map(DiagnosisMapper.INSTANCE::toDiagnosisDTO)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -99,6 +104,12 @@ public class DiagnosisController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO> delete(
             @PathVariable(value = "id") UUID id) {
+        Diagnosis dData = this.diagnosisService.findById(id);
+        PersonSituation pS = this.personSituationService.getEntityFromUUID(dData.getPersonSituation().getId());
+        if (pS != null) {
+            pS.setCurrentDiagnosis(null);
+            this.personSituationService.update(pS);
+        }
         this.diagnosisService.deleteById(id);
         return ResponseEntity.ok(new SuccessDTO());
     }

@@ -28,4 +28,10 @@ public class SupportMaterialFiles extends BaseModel {
     @Column(name = "PATH")
     private String path;
 
+    @Column(name = "NAME", nullable = false)
+    private String name;
+
+    @Column(name = "DESCRIPTION")
+    private String description;
+
 }

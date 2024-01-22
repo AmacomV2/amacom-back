@@ -21,6 +21,7 @@ public interface UsersMapper {
 
     @Mapping(target = "personId", source = "person.id")
     @Mapping(target = "idRol", source = "rol.id")
+    @Mapping(target = "password", ignore = true)
     UsersDTO toUsersDTO(User usuario);
 
     static Map<String, String> getSortKeys() {

@@ -1,6 +1,5 @@
 package com.amacom.amacom.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;

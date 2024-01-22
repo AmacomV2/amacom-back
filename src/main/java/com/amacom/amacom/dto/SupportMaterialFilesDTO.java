@@ -24,8 +24,12 @@ public class SupportMaterialFilesDTO implements Serializable {
 
     @NotNull(message = "Field cannot be null")
     private UUID idSupportMaterial;
-
+    @NotNull(message = "Field cannot be null")
     private String path;
+    @NotNull(message = "Field cannot be null")
+    private String name;
+
+    private String description;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date createdAt;
