@@ -19,6 +19,8 @@ public interface InterventionHasActivitiesMapper {
 
     @Mapping(target = "idActivity", source = "activity.id")
     @Mapping(target = "idIntervention", source = "intervention.id")
+    @Mapping(target = "activityName", source = "activity.name")
+    @Mapping(target = "activityDescription", source = "activity.description")
     InterventionHasActivitiesDTO toInterventionHasActivitiesDTO(InterventionHasActivities interventionHasActivities);
 
     static Map<String, String> getSortKeys() {
