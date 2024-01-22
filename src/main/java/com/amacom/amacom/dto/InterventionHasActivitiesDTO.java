@@ -21,10 +21,14 @@ public class InterventionHasActivitiesDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID idActivity;
 
+    private String activityName;
+
+    private String activityDescription;
+
     @NotNull(message = "Field cannot be null")
     private UUID idIntervention;
 
-    private String status;
+    private boolean status;
 
     private String description;
 

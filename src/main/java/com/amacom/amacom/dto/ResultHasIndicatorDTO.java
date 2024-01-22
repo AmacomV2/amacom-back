@@ -24,4 +24,8 @@ public class ResultHasIndicatorDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID idIndicator;
 
+    private String indicatorName;
+
+    private String indicatorDescription;
+
 }
