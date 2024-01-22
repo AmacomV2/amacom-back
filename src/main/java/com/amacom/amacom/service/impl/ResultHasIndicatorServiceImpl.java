@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,8 +61,7 @@ public class ResultHasIndicatorServiceImpl implements IResultHasIndicatorService
         Page<ResultHasIndicator> dataPage;
 
         if (pageable.getSort().isUnsorted()) {
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("createdAt").descending());
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         }
 
         dataPage = this.resultHasIndicatorRepository.findResultIndicators(resultId, pageable);

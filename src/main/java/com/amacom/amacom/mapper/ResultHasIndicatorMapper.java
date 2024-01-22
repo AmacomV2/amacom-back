@@ -25,7 +25,6 @@ public interface ResultHasIndicatorMapper {
 
     static Map<String, String> getSortKeys() {
         Map<String, String> keysToSort = new HashMap<>();
-        keysToSort.put("createdAt", "createdAt");
         return keysToSort;
     }
 }
