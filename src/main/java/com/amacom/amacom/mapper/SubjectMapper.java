@@ -18,7 +18,6 @@ public interface SubjectMapper {
     Subject toSubject(SubjectDTO subjectDTO);
 
     @Mapping(target = "parentId", source = "parent.id")
-    @Mapping(target = "parent", source = "parent")
     @Mapping(target = "associatedResultId", source = "associatedResult.id")
     SubjectDTO toSubjectDTO(Subject subject);
 

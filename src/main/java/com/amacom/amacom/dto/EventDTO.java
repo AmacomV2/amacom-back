@@ -43,11 +43,11 @@ public class EventDTO implements Serializable {
     private boolean allDay = false;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND)
     private Date start;
 
     @NotNull(message = "Field cannot be null")
-    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND, timezone = ITools.TIME_ZONE_BOGOTA)
+    @JsonFormat(pattern = ITools.PATTERN_DATE_TIME_SECOND)
     private Date end;
 
     private Set<EventHasPersonsDTO> participants;
