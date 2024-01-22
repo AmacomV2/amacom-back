@@ -5,6 +5,10 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +69,20 @@ public class InterventionServiceImpl implements IInterventionService {
     @Autowired
     public void setInterventionRepository(IInterventionRepository interventionRepository) {
         this.interventionRepository = interventionRepository;
+    }
+
+    @Override
+    public Page<Intervention> findIntervention(UUID diagnosisId, Pageable pageable) {
+        Page<Intervention> interventionsPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+
+        interventionsPage = this.interventionRepository.findInterventions(diagnosisId, pageable);
+
+        return interventionsPage;
     }
 
 }

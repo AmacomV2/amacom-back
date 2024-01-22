@@ -5,6 +5,10 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,5 +74,21 @@ public class InterventionHasActivitiesServiceImpl implements IInterventionHasAct
     public void setInterventionHasActivitiesRepository(
             IInterventionHasActivitiesRepository interventionHasActivitiesRepository) {
         this.interventionHasActivitiesRepository = interventionHasActivitiesRepository;
+    }
+
+    @Override
+    public Page<InterventionHasActivities> findInterventionActivities(UUID interventionId, String query, boolean status,
+            Pageable pageable) {
+        Page<InterventionHasActivities> interventionsPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+
+        interventionsPage = this.interventionHasActivitiesRepository.findInterventionActivities(interventionId, query,
+                status, pageable);
+
+        return interventionsPage;
     }
 }
