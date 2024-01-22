@@ -22,7 +22,7 @@ public class Indicator extends BaseModel {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "NAME", nullable = true, columnDefinition = "TEXT")
+    @Column(name = "DESCRIPTION", nullable = true, columnDefinition = "TEXT")
     private String description;
 
 }
