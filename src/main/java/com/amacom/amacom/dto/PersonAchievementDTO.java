@@ -32,6 +32,8 @@ public class PersonAchievementDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID personId;
 
+    private AchievementDTO achievement;
+
     @NotNull(message = "Field cannot be null")
     private UUID idAchievement;
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.AchievementMapper;
 import com.amacom.amacom.model.Achievement;
+import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IAchievementService;
 import com.amacom.amacom.service.interfaces.ISubjectService;
 import com.amacom.amacom.util.ITools;
@@ -44,6 +46,29 @@ public class AchievementController {
 
         try {
             var achievementPage = this.achievementService.findAchievement(subjectId, query,
+                    ITools.getPageRequest(pageable, AchievementMapper.getSortKeys()));
+
+            return new ResponseEntity<>(new SuccessDTO(achievementPage
+                    .map(AchievementMapper.INSTANCE::toAchievementDTO)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/searchNotAchieved")
+    public ResponseEntity<ResponseDTO> notAchievedByPerson(
+            Pageable pageable,
+            @RequestParam(name = "subjectId", required = false) UUID subjectId,
+            @RequestParam(name = "personId", required = false) UUID personId,
+            @RequestParam(name = "query", required = false) String query) {
+
+        try {
+            if (personId == null) {
+                var authData = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = User.class.cast(authData);
+                personId = user.getPerson().getId();
+            }
+            var achievementPage = this.achievementService.findNotAchieved(subjectId, personId, query,
                     ITools.getPageRequest(pageable, AchievementMapper.getSortKeys()));
 
             return new ResponseEntity<>(new SuccessDTO(achievementPage

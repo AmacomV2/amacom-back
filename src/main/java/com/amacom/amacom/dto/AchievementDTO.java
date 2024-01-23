@@ -27,7 +27,10 @@ public class AchievementDTO implements Serializable {
 
     private String subjectName;
 
+    @NotNull(message = "Field cannot be null")
     private String name;
+
+    private String description;
 
     @JsonFormat(pattern = ITools.PATTERN_DATE_TIME, timezone = ITools.TIME_ZONE_BOGOTA)
     private Date createdAt;

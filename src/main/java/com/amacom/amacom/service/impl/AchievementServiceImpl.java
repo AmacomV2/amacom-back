@@ -48,6 +48,18 @@ public class AchievementServiceImpl implements IAchievementService {
     }
 
     @Override
+    public Page<Achievement> findNotAchieved(UUID subjectId, UUID personId, String query, Pageable pageable) {
+        Page<Achievement> achievementPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("name").ascending().and(Sort.by("createdAt").descending()));
+        }
+        achievementPage = this.achievementRepository.findNotAchieved(subjectId, personId, query, pageable);
+        return achievementPage;
+    }
+
+    @Override
     public Achievement findById(UUID id) {
         return this.achievementRepository.findById(id).orElseThrow(DataNotFoundException::new);
     }

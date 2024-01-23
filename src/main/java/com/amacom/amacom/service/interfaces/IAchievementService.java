@@ -15,6 +15,8 @@ public interface IAchievementService {
 
     Page<Achievement> findAchievement(UUID subjectId, String query, Pageable pageable);
 
+    Page<Achievement> findNotAchieved(UUID subjectId, UUID personId, String query, Pageable pageable);
+
     Achievement create(Achievement achievement);
 
     Achievement update(Achievement achievement);
