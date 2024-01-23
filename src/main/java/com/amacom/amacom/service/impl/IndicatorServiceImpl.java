@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,11 @@ public class IndicatorServiceImpl implements IIndicatorService {
     @Override
     public Indicator findById(UUID id) {
         return this.indicatorRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<Indicator> search(String query, Pageable pageable) {
+        return this.indicatorRepository.search(query, pageable);
     }
 
     @Transactional

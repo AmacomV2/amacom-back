@@ -2,6 +2,8 @@ package com.amacom.amacom.service.interfaces;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.amacom.amacom.model.Activity;
@@ -10,6 +12,8 @@ import com.amacom.amacom.model.Activity;
 public interface IActivityService {
 
     Activity findById(UUID id);
+
+    Page<Activity> search(String query, Pageable pageable);
 
     Activity create(Activity activity);
 
