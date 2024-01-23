@@ -6,6 +6,10 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +77,20 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
     @Autowired
     public void setPersonAchievementRepository(IPersonAchievementRepository personAchievementRepository) {
         this.personAchievementRepository = personAchievementRepository;
+    }
+
+    @Override
+    public Page<PersonAchievement> search(UUID personId, UUID subjectId, String query, Pageable pageable) {
+        Page<PersonAchievement> dataPage;
+
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("createdAt").descending());
+        }
+
+        dataPage = this.personAchievementRepository.findPersonAchievements(personId, subjectId, query, pageable);
+
+        return dataPage;
     }
 
 }

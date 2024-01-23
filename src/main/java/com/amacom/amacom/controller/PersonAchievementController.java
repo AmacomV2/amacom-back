@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +23,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.PersonAchievementDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonAchievementMapper;
+import com.amacom.amacom.mapper.SubjectMapper;
 import com.amacom.amacom.model.PersonAchievement;
+import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IAchievementService;
 import com.amacom.amacom.service.interfaces.IPersonAchievementService;
 import com.amacom.amacom.service.interfaces.IPersonService;
+import com.amacom.amacom.util.ITools;
 
 @RestController
 @RequestMapping("/personAchievement")
@@ -47,6 +54,25 @@ public class PersonAchievementController {
         return new ResponseEntity<>(personAchievementList.stream()
                 .map(PersonAchievementMapper.INSTANCE::toPersonAchievementDTO).collect(Collectors.toList()),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> findPageable(
+            Pageable pageable,
+            @RequestParam(name = "personId", required = false) UUID personId,
+            @RequestParam(name = "subjectId", required = false) UUID subjectId,
+            @RequestParam(name = "query", required = false) String query) {
+        if (personId == null) {
+            var authData = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = User.class.cast(authData);
+            personId = user.getPerson().getId();
+        }
+
+        var data = this.personAchievementService.search(personId, subjectId, query,
+                ITools.getPageRequest(pageable, SubjectMapper.getSortKeys()));
+
+        return ResponseEntity.ok(new SuccessDTO(data
+                .map(PersonAchievementMapper.INSTANCE::toPersonAchievementDTO)));
     }
 
     @GetMapping("/{id}")

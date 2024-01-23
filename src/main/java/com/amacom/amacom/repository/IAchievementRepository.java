@@ -27,4 +27,15 @@ public interface IAchievementRepository extends JpaRepository<Achievement, UUID>
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<Achievement> findAchievement(UUID subjectId, String query, Pageable pageable);
 
+        @Query("SELECT t " +
+                        "FROM Achievement t " +
+                        "LEFT JOIN PersonAchievement pa " +
+                        "ON (pa.achievement.id = t.id AND pa.person.id = :personId) " +
+                        "WHERE (t.subject.id = :subjectId OR :subjectId IS NULL) " +
+                        "AND (pa.achievement.id = NULL AND pa.person.id = NULL) " +
+                        "AND CONCAT(UPPER(REPLACE(t.name , 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.subject.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
+                        +
+                        "LIKE UPPER(CONCAT('%', :query, '%'))")
+        Page<Achievement> findNotAchieved(UUID subjectId, UUID personId, String query, Pageable pageable);
+
 }
