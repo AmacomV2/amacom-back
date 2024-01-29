@@ -16,5 +16,9 @@ public interface SupportMaterialHasSubjectMapper {
 
     @Mapping(target = "subjectId", source = "subject.id")
     @Mapping(target = "idSupportMaterial", source = "supportMaterial.id")
+    @Mapping(target = "subjectName", source = "subject.name")
+    @Mapping(target = "subjectDescription", source = "subject.description")
+    @Mapping(target = "materialName", source = "supportMaterial.name")
+    @Mapping(target = "materialDescription", source = "supportMaterial.description")
     SupportMaterialHasSubjectDTO toSupportMaterialHasSubjectDTO(SupportMaterialHasSubject supportMaterialHasSubject);
 }
