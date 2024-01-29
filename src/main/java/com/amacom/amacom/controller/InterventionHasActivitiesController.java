@@ -43,7 +43,7 @@ public class InterventionHasActivitiesController {
         public ResponseEntity<ResponseDTO> findPageable(
                         Pageable pageable,
                         @RequestParam(name = "interventionId", required = true) UUID diagnosisId,
-                        @RequestParam(name = "status", required = false) boolean status,
+                        @RequestParam(name = "status", required = false, defaultValue = "true") boolean status,
                         @RequestParam(name = "query", required = false) String query) {
 
                 try {

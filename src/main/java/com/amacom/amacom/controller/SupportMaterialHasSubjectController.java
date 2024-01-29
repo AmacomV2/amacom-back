@@ -4,17 +4,16 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.amacom.amacom.dto.response.ErrorDTO;
+import com.amacom.amacom.dto.response.ResponseDTO;
+import com.amacom.amacom.dto.response.SuccessDTO;
+import com.amacom.amacom.mapper.InterventionHasActivitiesMapper;
+import com.amacom.amacom.util.ITools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.amacom.amacom.dto.SupportMaterialHasSubjectDTO;
 import com.amacom.amacom.mapper.SupportMaterialHasSubjectMapper;
@@ -32,6 +31,26 @@ public class SupportMaterialHasSubjectController {
         private ISupportMaterialService supportMaterialService;
 
         private ISubjectService subjectService;
+
+        @GetMapping("/search")
+        public ResponseEntity<ResponseDTO> findPageable(
+                Pageable pageable,
+                @RequestParam(name = "idSupportMaterial", required = false) UUID idSupportMaterial,
+                @RequestParam(name = "query", required = false) String query) {
+
+                try {
+                        var interventionsPage = this.supportMaterialHasSubjectService
+                                .find(idSupportMaterial,
+                                        query,
+                                        pageable);
+
+                        return ResponseEntity.ok(new SuccessDTO(interventionsPage
+                                .map(SupportMaterialHasSubjectMapper.INSTANCE::toSupportMaterialHasSubjectDTO)));
+                } catch (Exception e) {
+                        return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()),
+                                HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+        }
 
         @GetMapping("/{id}")
         public ResponseEntity<SupportMaterialHasSubjectDTO> findById(

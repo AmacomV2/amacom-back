@@ -24,4 +24,13 @@ public class SupportMaterialHasSubjectDTO implements Serializable {
     @NotNull(message = "Field cannot be null")
     private UUID subjectId;
 
+    private String materialName;
+
+    private String materialDescription;
+
+    private String subjectName;
+
+    private String subjectDescription;
+
+
 }
