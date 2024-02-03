@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amacom.amacom.dto.PersonAchievementDTO;
+import com.amacom.amacom.dto.response.ErrorDTO;
 import com.amacom.amacom.dto.response.ResponseDTO;
 import com.amacom.amacom.dto.response.SuccessDTO;
 import com.amacom.amacom.mapper.PersonAchievementMapper;
 import com.amacom.amacom.mapper.SubjectMapper;
 import com.amacom.amacom.model.PersonAchievement;
+import com.amacom.amacom.model.PersonAchievementsScore;
 import com.amacom.amacom.model.auth.User;
 import com.amacom.amacom.service.interfaces.IAchievementService;
 import com.amacom.amacom.service.interfaces.IPersonAchievementService;
@@ -54,6 +56,17 @@ public class PersonAchievementController {
         return new ResponseEntity<>(personAchievementList.stream()
                 .map(PersonAchievementMapper.INSTANCE::toPersonAchievementDTO).collect(Collectors.toList()),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/personRanking")
+    public ResponseEntity<ResponseDTO> personRanking(
+            @RequestParam(name = "personId", required = true) UUID personId) {
+        try {
+            List<PersonAchievementsScore> ranking = this.personAchievementService.getPersonRanking(personId);
+            return ResponseEntity.ok(new SuccessDTO(ranking));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO(e.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/search")
@@ -101,6 +114,33 @@ public class PersonAchievementController {
         if (personAchievementBD == null)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         return ResponseEntity.ok(PersonAchievementMapper.INSTANCE.toPersonAchievementDTO(personAchievementBD));
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<ResponseDTO> save(
+            @Valid @RequestBody PersonAchievementDTO personAchievementDTO) {
+
+        PersonAchievement personAchievementBD = this.personAchievementService
+                .searchByProperties(personAchievementDTO.getPersonId(), personAchievementDTO.getIdAchievement());
+        if (personAchievementBD != null) {
+            personAchievementBD
+                    .setScore(personAchievementDTO.getScore());
+            personAchievementBD = this.personAchievementService.update(personAchievementBD);
+        } else {
+            PersonAchievement personAchievement = PersonAchievementMapper.INSTANCE
+                    .toPersonAchievement(personAchievementDTO);
+
+            personAchievement.setPerson(this.personService.getPersonFromUUID(personAchievementDTO.getPersonId()));
+            personAchievement
+                    .setAchievement(this.achievementService.getEntityFromUUID(personAchievementDTO.getIdAchievement()));
+
+            personAchievementBD = this.personAchievementService.create(personAchievement);
+            if (personAchievementBD == null)
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        return ResponseEntity
+                .ok(new SuccessDTO(PersonAchievementMapper.INSTANCE.toPersonAchievementDTO(personAchievementBD)));
+
     }
 
     @PutMapping

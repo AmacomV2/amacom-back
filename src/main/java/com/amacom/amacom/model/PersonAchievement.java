@@ -2,8 +2,6 @@ package com.amacom.amacom.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,9 +21,8 @@ public class PersonAchievement extends BaseModel {
 
     private static final long serialVersionUID = -6424297099692066046L;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "SCORE")
-    private EScore score;
+    @Column(name = "SCORE", nullable = false, columnDefinition = "INT DEFAULT '0'")
+    private Integer score;
 
     @ManyToOne
     @JoinColumn(name = "PERSONA_ID", referencedColumnName = "ID")

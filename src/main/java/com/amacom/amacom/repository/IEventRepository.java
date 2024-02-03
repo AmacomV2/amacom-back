@@ -44,6 +44,6 @@ public interface IEventRepository extends JpaRepository<Event, UUID> {
                         "OR (:to IS NULL AND :from IS NULL)) " +
                         "AND CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.eventType.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
-                        "LIKE UPPER(CONCAT('%', :query, '%'))")
+                        "LIKE UPPER(CONCAT('%', :query, '%')) " + "ORDER BY t.start ASC")
         List<Event> findPersonEvents(UUID personId, Date from, Date to, String query);
 }

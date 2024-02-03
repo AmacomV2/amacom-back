@@ -82,6 +82,7 @@ public class AchievementServiceImpl implements IAchievementService {
                 .orElseThrow(DataNotFoundException::new);
         achievementBD.setSubject(achievement.getSubject());
         achievementBD.setName(achievement.getName());
+        achievementBD.setDescription(achievement.getDescription());
         return this.achievementRepository.save(achievementBD);
     }
 

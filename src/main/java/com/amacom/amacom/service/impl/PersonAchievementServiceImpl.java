@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.amacom.amacom.exception.DataNotFoundException;
 import com.amacom.amacom.model.PersonAchievement;
+import com.amacom.amacom.model.PersonAchievementsScore;
 import com.amacom.amacom.repository.IPersonAchievementRepository;
 import com.amacom.amacom.service.interfaces.IPersonAchievementService;
 
@@ -91,6 +92,16 @@ public class PersonAchievementServiceImpl implements IPersonAchievementService {
         dataPage = this.personAchievementRepository.findPersonAchievements(personId, subjectId, query, pageable);
 
         return dataPage;
+    }
+
+    @Override
+    public List<PersonAchievementsScore> getPersonRanking(UUID personId) {
+        return this.personAchievementRepository.getPersonRanking(personId);
+    }
+
+    @Override
+    public PersonAchievement searchByProperties(UUID personId, UUID achievementId) {
+        return this.personAchievementRepository.searchByProperties(personId, achievementId);
     }
 
 }

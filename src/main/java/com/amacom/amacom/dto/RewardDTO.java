@@ -23,14 +23,17 @@ public class RewardDTO implements Serializable {
     private UUID id;
 
     @NotNull(message = "Field cannot be null")
-    private UUID subjectId;
-
     private String name;
 
     private String description;
 
+    @NotNull(message = "Field cannot be null")
+    private String image;
+
+    @NotNull(message = "Field cannot be null")
     private Integer minScore;
 
+    @NotNull(message = "Field cannot be null")
     private Integer maxScore;
 
     private String level;

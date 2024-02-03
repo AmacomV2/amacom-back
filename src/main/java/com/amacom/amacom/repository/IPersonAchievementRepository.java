@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.amacom.amacom.model.PersonAchievement;
+import com.amacom.amacom.model.PersonAchievementsScore;
 
 @Repository
 public interface IPersonAchievementRepository extends JpaRepository<PersonAchievement, UUID> {
@@ -19,6 +20,11 @@ public interface IPersonAchievementRepository extends JpaRepository<PersonAchiev
                         "WHERE (t.person.id = :personId OR :personId IS NULL )")
         List<PersonAchievement> findAllByPersonId(UUID personId);
 
+        @Query("SELECT pa " +
+                        "FROM PersonAchievement pa " +
+                        "WHERE (pa.person.id = :personId AND pa.achievement.id = :achievementId)")
+        PersonAchievement searchByProperties(UUID personId, UUID achievementId);
+
         @Query("SELECT t " +
                         "FROM PersonAchievement t " +
                         "WHERE (t.person.id = :personId OR :personId IS NULL) " +
@@ -27,5 +33,14 @@ public interface IPersonAchievementRepository extends JpaRepository<PersonAchiev
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
         Page<PersonAchievement> findPersonAchievements(UUID personId, UUID subjectId, String query, Pageable pageable);
+
+        @Query("SELECT SUM(pa.score) AS personAchievementCount, pa.achievement.subject.id AS subjectId, "
+                        + "pa.achievement.subject.name AS subjectName, COUNT(a) AS achievementCount "
+                        +
+                        "FROM PersonAchievement pa " +
+                        "RIGHT JOIN Achievement a " +
+                        "ON a.subject.id = pa.achievement.subject.id " +
+                        "GROUP BY pa.achievement.subject.id")
+        List<PersonAchievementsScore> getPersonRanking(UUID personId);
 
 }
