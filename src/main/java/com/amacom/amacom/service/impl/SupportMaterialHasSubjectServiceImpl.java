@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,11 @@ public class SupportMaterialHasSubjectServiceImpl implements ISupportMaterialHas
     @Override
     public SupportMaterialHasSubject findById(UUID id) {
         return this.supportMaterialHasSubjectRepository.findById(id).orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public Page<SupportMaterialHasSubject> find(UUID idSupportMaterial, String query, Pageable pageable) {
+        return this.supportMaterialHasSubjectRepository.findPageable(idSupportMaterial, query, pageable);
     }
 
     @Transactional
