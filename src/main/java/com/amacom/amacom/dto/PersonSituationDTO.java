@@ -46,6 +46,8 @@ public class PersonSituationDTO implements Serializable {
 
     private DiagnosisDTO currentDiagnosis;
 
+    private SubjectDTO subjectData;
+
     private UUID currentDiagnosisId;
 
     @NotNull(message = "Field cannot be null")
