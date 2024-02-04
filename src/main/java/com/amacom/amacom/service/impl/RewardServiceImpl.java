@@ -1,5 +1,6 @@
 package com.amacom.amacom.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -49,7 +50,6 @@ public class RewardServiceImpl implements IRewardService {
     public Reward update(Reward reward) {
         this.validateCreation(reward);
         var rewardBD = this.rewardRepository.findById(reward.getId()).orElseThrow(DataNotFoundException::new);
-        rewardBD.setSubject(reward.getSubject());
         rewardBD.setName(reward.getName());
         rewardBD.setDescription(reward.getDescription());
         rewardBD.setMinScore(reward.getMinScore());
@@ -80,4 +80,10 @@ public class RewardServiceImpl implements IRewardService {
     public void setRewardRepository(IRewardRepository rewardRepository) {
         this.rewardRepository = rewardRepository;
     }
+
+    @Override
+    public List<Reward> getRankings() {
+        return this.rewardRepository.findAll();
+    }
+
 }

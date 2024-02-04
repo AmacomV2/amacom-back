@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
-import com.amacom.amacom.model.EScore;
 import com.amacom.amacom.util.ITools;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -26,8 +23,7 @@ public class PersonAchievementDTO implements Serializable {
     private UUID id;
 
     @NotNull(message = "Field cannot be null")
-    @Enumerated(EnumType.STRING)
-    private EScore score;
+    private Integer score;
 
     @NotNull(message = "Field cannot be null")
     private UUID personId;

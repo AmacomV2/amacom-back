@@ -22,4 +22,19 @@ public class Params extends BaseModel {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "TERMS_AND_CONDITIONS", nullable = false, columnDefinition = "TEXT")
+    private String termsAndConditions;
+
+    @Column(name = "MAIL_HOST", nullable = false)
+    private String mailHost;
+
+    @Column(name = "MAIL_PORT", nullable = false)
+    private Integer mailPort;
+
+    @Column(name = "MAIL_USERNAME", nullable = false)
+    private String mailUsername;
+
+    @Column(name = "MAIL_PASSWORD", nullable = false)
+    private String mailPassword;
+
 }

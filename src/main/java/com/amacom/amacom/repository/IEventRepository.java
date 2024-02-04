@@ -23,7 +23,8 @@ public interface IEventRepository extends JpaRepository<Event, UUID> {
 
         @Query("SELECT t " +
                         "FROM Event t " +
-                        "WHERE (t.person.id = :userId OR :userId IS NULL) " +
+                        "WHERE (t.person.id = :personId OR :personId IS NULL) " +
+                        "AND (t.createdBy.id = :userId OR :userId IS NULL) " +
                         "AND ((:to >= t.end  AND :from <= t.start) " +
                         "OR (:from <= t.start AND :to IS NULL) " +
                         "OR (:to >= t.end AND :from IS NULL) " +
@@ -31,7 +32,7 @@ public interface IEventRepository extends JpaRepository<Event, UUID> {
                         "AND CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.eventType.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
                         "LIKE UPPER(CONCAT('%', :query, '%'))")
-        Page<Event> findEvent(UUID userId, Date from, Date to, String query, Pageable pageable);
+        Page<Event> findEvent(UUID personId, UUID userId, Date from, Date to, String query, Pageable pageable);
 
         @Query("SELECT t " +
                         "FROM Event t " +
@@ -44,6 +45,6 @@ public interface IEventRepository extends JpaRepository<Event, UUID> {
                         "OR (:to IS NULL AND :from IS NULL)) " +
                         "AND CONCAT(UPPER(REPLACE(t.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU')), UPPER(REPLACE(t.eventType.name, 'áéíóúÁÉÍÓÚ', 'aeiouAEIOU'))) "
                         +
-                        "LIKE UPPER(CONCAT('%', :query, '%'))")
+                        "LIKE UPPER(CONCAT('%', :query, '%')) " + "ORDER BY t.start ASC")
         List<Event> findPersonEvents(UUID personId, Date from, Date to, String query);
 }

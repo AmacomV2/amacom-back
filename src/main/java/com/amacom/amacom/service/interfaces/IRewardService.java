@@ -1,5 +1,6 @@
 package com.amacom.amacom.service.interfaces;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -18,5 +19,7 @@ public interface IRewardService {
     void deleteById(UUID id);
 
     Reward getEntityFromUUID(UUID uuid);
+
+    List<Reward> getRankings();
 
 }

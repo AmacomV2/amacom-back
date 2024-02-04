@@ -54,21 +54,14 @@ public class EventServiceImpl implements IEventService {
         Page<Event> eventPage;
 
         if (pageable.getSort().isUnsorted()) {
-            Pageable pageableDefault = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by("name").ascending().and(Sort.by("start").descending()));
-            if (idCreatedBy != null) {
-                eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageableDefault);
-            } else {
-                eventPage = this.eventRepository.findEvent(personID, from, to, query, pageableDefault);
-            }
-        } else {
-            if (idCreatedBy != null) {
-                eventPage = this.eventRepository.findEvent(idCreatedBy, from, to, query, pageable);
-            } else {
-                eventPage = this.eventRepository.findEvent(personID, from, to, query, pageable);
-            }
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("start").ascending());
+
         }
+        eventPage = this.eventRepository.findEvent(personID, idCreatedBy, from, to, query, pageable);
+
         return eventPage;
+
     }
 
     @Transactional

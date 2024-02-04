@@ -75,7 +75,7 @@ public class PersonSituationController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(
-                new SuccessDTO(PersonSituationMapper.INSTANCE.toPersonSituationDTO(personSituation)),
+                new SuccessDTO(PersonSituationCustomMapper.INSTANCE.toPersonSituationDTO(personSituation)),
                 HttpStatus.OK);
     }
 

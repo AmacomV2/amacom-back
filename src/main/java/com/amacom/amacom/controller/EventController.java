@@ -51,8 +51,8 @@ public class EventController {
             Pageable pageable,
             @RequestParam(name = "idCreatedBy", required = false) UUID idCreatedBy,
             @RequestParam(name = "personId", required = false) UUID personId,
-            @RequestParam(name = "from", required = false) Date from,
-            @RequestParam(name = "to", required = false) Date to,
+            @RequestParam(name = "from", required = false) @DateTimeFormat(pattern = ITools.PATTERN_DATE) Date from,
+            @RequestParam(name = "to", required = false) @DateTimeFormat(pattern = ITools.PATTERN_DATE) Date to,
             @RequestParam(name = "query", required = false) String query) {
 
         var eventPage = this.eventService.findEvent(idCreatedBy, personId, from, to, query,

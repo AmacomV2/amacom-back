@@ -27,6 +27,8 @@ public class PersonSituationCustomMapper {
                 .map(f -> AlarmSignMapper.INSTANCE.toAlarmSignDTO(f.getAlarmSign())).collect(Collectors.toList()));
         personSituationDTO
                 .setCurrentDiagnosis(DiagnosisMapper.INSTANCE.toDiagnosisDTO(personSituation.getCurrentDiagnosis()));
+        personSituationDTO
+                .setSubjectData(SubjectMapper.INSTANCE.toSubjectDTO(personSituation.getSubject()));
         return personSituationDTO;
     }
 
