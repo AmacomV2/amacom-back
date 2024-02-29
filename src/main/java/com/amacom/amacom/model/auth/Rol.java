@@ -1,39 +1,31 @@
 package com.amacom.amacom.model.auth;
 
-import com.amacom.amacom.model.auth.ERole;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import com.amacom.amacom.model.BaseModel;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@Table(name = "ROLES")
-public class Rol implements Serializable {
+@Table(name = "ROL")
+public class Rol extends BaseModel {
 
     private static final long serialVersionUID = 4448364954833682456L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "NAME")
+    private String name;
 
-    @Column(name = "NOMBRE")
-    private String nombre;
-
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "FECHA_HORA_CREACION", nullable = false)
-    private Date fechaHoraCreacion;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "FECHA_HORA_MODIFICACION")
-    private Date fechaHoraModificacion;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
